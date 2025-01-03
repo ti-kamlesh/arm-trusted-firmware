@@ -19,4 +19,12 @@ $(eval $(call add_define,K3_HW_CONFIG_BASE))
 include drivers/ti/clk/ti_clk.mk
 include drivers/ti/pd/ti_pd.mk
 include ${PLAT_PATH}/board/am62lx/pm/soc_pm.mk
+include ${PLAT_PATH}/../common/scmi/ti_scmi.mk
+BL31_SOURCES		+=	\
+				plat/ti/common/k3_svc.c		\
+				drivers/scmi-msg/base.c		\
+				drivers/scmi-msg/entry.c	\
+				drivers/scmi-msg/smt.c		\
+				drivers/scmi-msg/clock.c	\
+				drivers/scmi-msg/power_domain.c \
 
