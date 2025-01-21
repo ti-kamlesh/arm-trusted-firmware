@@ -6,7 +6,7 @@
 
 #include <clk_soc_hfosc0.h>
 #include <lib/io.h>
-#include <compiler.h>
+#include <cdefs.h>
 
 #define AM6_WKUP_CTRL_MMR	0x43010000UL
 #define AM6_MAIN_DEVSTAT	0x30UL
@@ -17,7 +17,7 @@
  * HF Oscillator 0
  * 19.2, 20, 24, 25, 26, 27MHz
  */
-static uint32_t clk_soc_hfosc0_get_freq(struct clk *clk_ptr UNUSED)
+static uint32_t clk_soc_hfosc0_get_freq(struct clk *clk_ptr __unused)
 {
 	const uint32_t freq_table[] = {
 		FREQ_MHZ(19.2),
@@ -39,7 +39,7 @@ static uint32_t clk_soc_hfosc0_get_freq(struct clk *clk_ptr UNUSED)
 	return ret;
 }
 
-static uint32_t clk_soc_hfosc0_get_state(struct clk *clk_ptr UNUSED)
+static uint32_t clk_soc_hfosc0_get_state(struct clk *clk_ptr __unused)
 {
 	return CLK_HW_STATE_ENABLED;
 }

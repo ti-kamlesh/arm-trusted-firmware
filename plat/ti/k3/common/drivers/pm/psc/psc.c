@@ -780,7 +780,7 @@ bool lpsc_module_get_local_reset(struct device *dev, struct lpsc_module *module)
 	return ret;
 }
 
-bool lpsc_module_get_module_reset(struct device *dev UNUSED, struct lpsc_module *module)
+bool lpsc_module_get_module_reset(struct device *dev __unused, struct lpsc_module *module)
 {
 	return module->mrst_active == 1U;
 }

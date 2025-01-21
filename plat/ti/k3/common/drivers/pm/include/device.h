@@ -7,7 +7,7 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
-#include <compiler.h>
+#include <cdefs.h>
 #include <device_limits.h>
 #include <hosts.h>
 #include <lib/container_of.h>
@@ -399,7 +399,7 @@ bool pm_devgroup_is_enabled(devgrp_t groups);
  *
  * \param groups A bitfield of devgroups to enable (unused).
  */
-static inline void pm_devgroup_set_enabled(devgrp_t groups UNUSED)
+static inline void pm_devgroup_set_enabled(devgrp_t groups __unused)
 {
 }
 /**
@@ -410,7 +410,7 @@ static inline void pm_devgroup_set_enabled(devgrp_t groups UNUSED)
  * \param groups A bitfield of devgroups to test (unused).
  * \return Always true
  */
-static inline bool pm_devgroup_is_enabled(devgrp_t groups UNUSED)
+static inline bool pm_devgroup_is_enabled(devgrp_t groups __unused)
 {
 	return true;
 }

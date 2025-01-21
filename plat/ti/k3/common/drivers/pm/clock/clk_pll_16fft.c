@@ -12,7 +12,7 @@
 #include <clk_mux.h>
 #include <clk_div.h>
 #include <div64.h>
-#include <compiler.h>
+#include <cdefs.h>
 #include <lib/trace.h>
 #include <drivers/delay_timer.h>
 #include <osal/osal_clock_user.h>
@@ -90,15 +90,15 @@
 #define PLL_16FFT_HSDIV_CTRL_HSDIV_SHIFT	0UL
 #define PLL_16FFT_HSDIV_CTRL_HSDIV_MASK		(0x7fUL << 0UL)
 
-static bool pll_16fft_pllm_valid(struct clk *clock_ptr UNUSED, uint32_t pllm, bool is_frac);
+static bool pll_16fft_pllm_valid(struct clk *clock_ptr __unused, uint32_t pllm, bool is_frac);
 
-static int32_t pll_16fft_bin(struct clk *clock_ptr UNUSED, uint32_t plld UNUSED,
-			     uint32_t pllm UNUSED, bool is_frac, uint32_t clkod UNUSED);
+static int32_t pll_16fft_bin(struct clk *clock_ptr __unused, uint32_t plld __unused,
+			     uint32_t pllm __unused, bool is_frac, uint32_t clkod __unused);
 
-static uint32_t pll_16fft_vco_fitness(struct clk *clock_ptr UNUSED, uint32_t vco,
-				      bool is_frac UNUSED);
+static uint32_t pll_16fft_vco_fitness(struct clk *clock_ptr __unused, uint32_t vco,
+				      bool is_frac __unused);
 
-static bool pll_16fft_clkod_valid(struct clk *clock_ptr UNUSED, uint32_t clkod);
+static bool pll_16fft_clkod_valid(struct clk *clock_ptr __unused, uint32_t clkod);
 
 static const struct pll_data pll_16fft_raw_data = {
 	.plld_max	= 1U,
@@ -208,7 +208,7 @@ static void clk_pll_16fft_disable_cal(const struct clk_data_pll_16fft *pll __may
  *
  * \return true if pllm value is valid, false otherwise
  */
-static bool pll_16fft_pllm_valid(struct clk *clock_ptr UNUSED, uint32_t pllm, bool is_frac)
+static bool pll_16fft_pllm_valid(struct clk *clock_ptr __unused, uint32_t pllm, bool is_frac)
 {
 	bool ret = true;
 
@@ -225,8 +225,8 @@ static bool pll_16fft_pllm_valid(struct clk *clock_ptr UNUSED, uint32_t pllm, bo
 }
 
 /* Prefer non-fractional configuration if possible */
-static int32_t pll_16fft_bin(struct clk *clock_ptr UNUSED, uint32_t plld UNUSED,
-			     uint32_t pllm UNUSED, bool is_frac, uint32_t clkod UNUSED)
+static int32_t pll_16fft_bin(struct clk *clock_ptr __unused, uint32_t plld __unused,
+			     uint32_t pllm __unused, bool is_frac, uint32_t clkod __unused)
 {
 	int32_t ret;
 
@@ -240,8 +240,8 @@ static int32_t pll_16fft_bin(struct clk *clock_ptr UNUSED, uint32_t plld UNUSED,
 }
 
 /* Prefer higher VCO frequencies */
-static uint32_t pll_16fft_vco_fitness(struct clk *clock_ptr UNUSED, uint32_t vco,
-				      bool is_frac UNUSED)
+static uint32_t pll_16fft_vco_fitness(struct clk *clock_ptr __unused, uint32_t vco,
+				      bool is_frac __unused)
 {
 	return vco;
 }
@@ -1391,7 +1391,7 @@ static const uint8_t postdiv_mapping[(7U * 7U) + 1U] = {
  *
  * \return true if clkod value is valid, false otherwise
  */
-static bool pll_16fft_clkod_valid(struct clk *clock_ptr UNUSED, uint32_t clkod)
+static bool pll_16fft_clkod_valid(struct clk *clock_ptr __unused, uint32_t clkod)
 {
 	return (clkod < ARRAY_SIZE(postdiv_mapping)) && (postdiv_mapping[clkod] != 0U);
 }
@@ -1430,7 +1430,7 @@ static uint32_t clk_pll_16fft_postdiv_set_freq(struct clk *clock_ptr,
 	return ret;
 }
 
-static bool clk_pll_16fft_postdiv_valid_div(struct clk *clock_ptr UNUSED, uint32_t d)
+static bool clk_pll_16fft_postdiv_valid_div(struct clk *clock_ptr __unused, uint32_t d)
 {
 	return (d < ARRAY_SIZE(postdiv_mapping)) && (postdiv_mapping[d] != 0U);
 }

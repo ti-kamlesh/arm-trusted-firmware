@@ -6,7 +6,7 @@
 
 #include <clk_soc_lfosc0.h>
 #include <lib/io.h>
-#include <compiler.h>
+#include <cdefs.h>
 
 #define AM62L_WKUP_RTCSS0_RTC_BASE    0x2b1f0000UL
 #define AM62L_WKUP_RTCSS0_LFXOSC_CTRL 0x80UL
@@ -16,7 +16,7 @@
  * LFXOSC_CTRL - Low Frequency Oscillator Control Register
  * 32.768 KHz
  */
-static uint32_t clk_soc_lfosc0_get_freq(struct clk *clk_ptr UNUSED)
+static uint32_t clk_soc_lfosc0_get_freq(struct clk *clk_ptr __unused)
 {
 	uint32_t ret = 0;
 	uint32_t v;
@@ -30,7 +30,7 @@ static uint32_t clk_soc_lfosc0_get_freq(struct clk *clk_ptr UNUSED)
 	return ret;
 }
 
-static uint32_t clk_soc_lfosc0_get_state(struct clk *clk_ptr UNUSED)
+static uint32_t clk_soc_lfosc0_get_state(struct clk *clk_ptr __unused)
 {
 	return CLK_HW_STATE_ENABLED;
 }

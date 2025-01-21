@@ -7,7 +7,7 @@
 #include <clk_fixed.h>
 #include <lib/container_of.h>
 #include <lib/io.h>
-#include <compiler.h>
+#include <cdefs.h>
 
 static uint32_t clk_fixed_get_freq(struct clk *clkp)
 {
@@ -25,7 +25,7 @@ static uint32_t clk_fixed_get_freq(struct clk *clkp)
 	return ret;
 }
 
-static uint32_t clk_fixed_get_state(struct clk *clkp UNUSED)
+static uint32_t clk_fixed_get_state(struct clk *clkp __unused)
 {
 	return CLK_HW_STATE_ENABLED;
 }

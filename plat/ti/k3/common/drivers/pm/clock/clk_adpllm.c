@@ -11,7 +11,7 @@
 #include <clk_pll.h>
 #include <clk_mux.h>
 #include <div64.h>
-#include <compiler.h>
+#include <cdefs.h>
 #include <lib/trace.h>
 
 /*
@@ -534,7 +534,7 @@ struct adpllm_program_data {
  *
  * \return true if pllm value is valid, false otherwise
  */
-static bool adpllm_dcc_pllm_valid(struct clk *clkp UNUSED, uint32_t pllm, bool is_frac)
+static bool adpllm_dcc_pllm_valid(struct clk *clkp __unused, uint32_t pllm, bool is_frac)
 {
 	bool ret = true;
 	bool m4x;
@@ -577,7 +577,7 @@ static bool adpllm_dcc_pllm_valid(struct clk *clkp UNUSED, uint32_t pllm, bool i
  *
  * \return stride size between multipliers
  */
-static uint32_t adpllm_dcc_pllm_stride(struct clk *clkp UNUSED, uint32_t pllm)
+static uint32_t adpllm_dcc_pllm_stride(struct clk *clkp __unused, uint32_t pllm)
 {
 	uint32_t ret;
 
@@ -590,8 +590,8 @@ static uint32_t adpllm_dcc_pllm_stride(struct clk *clkp UNUSED, uint32_t pllm)
 	return ret;
 }
 
-static int32_t adpllm_bin(struct clk *clkp UNUSED, uint32_t plld UNUSED,
-			  uint32_t pllm UNUSED, bool do_frac, uint32_t clkod UNUSED)
+static int32_t adpllm_bin(struct clk *clkp __unused, uint32_t plld __unused,
+			  uint32_t pllm __unused, bool do_frac, uint32_t clkod __unused)
 {
 	/* Prefer a non-fractional configuration if possible */
 	int32_t ret;
@@ -605,7 +605,7 @@ static int32_t adpllm_bin(struct clk *clkp UNUSED, uint32_t plld UNUSED,
 }
 
 /* Prefer higher VCO frequencies */
-static uint32_t adpllm_vco_fitness(struct clk *clkp UNUSED, uint32_t vco, bool do_frac UNUSED)
+static uint32_t adpllm_vco_fitness(struct clk *clkp __unused, uint32_t vco, bool do_frac __unused)
 {
 	return vco;
 }
@@ -629,7 +629,7 @@ static const struct pll_data adpllm_dcc_data = {
  *
  * \return true if pllm value is valid, false otherwise
  */
-static bool adpllm_pllm_valid(struct clk *clkp UNUSED, uint32_t pllm, bool is_frac)
+static bool adpllm_pllm_valid(struct clk *clkp __unused, uint32_t pllm, bool is_frac)
 {
 	bool ret = true;
 	bool m4x;
@@ -676,7 +676,7 @@ static bool adpllm_pllm_valid(struct clk *clkp UNUSED, uint32_t pllm, bool is_fr
  *
  * \return stride size between multipliers
  */
-static uint32_t adpllm_pllm_stride(struct clk *clkp UNUSED, uint32_t pllm)
+static uint32_t adpllm_pllm_stride(struct clk *clkp __unused, uint32_t pllm)
 {
 	uint32_t ret;
 
@@ -697,7 +697,7 @@ static uint32_t adpllm_pllm_stride(struct clk *clkp UNUSED, uint32_t pllm)
  *
  * \return true if clkod value is valid, false otherwise
  */
-static bool adpllm_clkod_valid(struct clk *clkp UNUSED, uint32_t clkod)
+static bool adpllm_clkod_valid(struct clk *clkp __unused, uint32_t clkod)
 {
 	/* Only even numbers are allowed. */
 	bool ret;
@@ -726,7 +726,7 @@ static const struct pll_data adpllm_data = {
  *
  * \return true if pllm value is valid, false otherwise
  */
-static bool adpllj_pllm_valid(struct clk *clkp UNUSED, uint32_t pllm, bool is_frac)
+static bool adpllj_pllm_valid(struct clk *clkp __unused, uint32_t pllm, bool is_frac)
 {
 	bool ret = true;
 

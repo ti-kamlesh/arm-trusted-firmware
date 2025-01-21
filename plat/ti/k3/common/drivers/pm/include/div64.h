@@ -6,7 +6,7 @@
 #ifndef DIV64_H
 #define DIV64_H
 
-#include <compiler.h>
+#include <cdefs.h>
 #include <stdint.h>
 
 /**
@@ -58,7 +58,7 @@ static inline uint64_t div64(uint64_t a, uint32_t b)
  */
 static inline uint64_t mod64(uint64_t a, uint32_t b)
 {
-	uint64_t temp UNUSED;
+	uint64_t temp __unused;
 
 	temp = pm_div64(&a, b);
 	return a;

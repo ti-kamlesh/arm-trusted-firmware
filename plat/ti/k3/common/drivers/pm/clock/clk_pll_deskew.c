@@ -11,7 +11,7 @@
 #include <clk_pll.h>
 #include <clk_mux.h>
 #include <div64.h>
-#include <compiler.h>
+#include <cdefs.h>
 #include <lib/trace.h>
 #include <drivers/delay_timer.h>
 #include <osal/osal_clock_user.h>
@@ -62,17 +62,17 @@
  *
  * \return true if pllm value is valid, false otherwise
  */
-static bool pll_deskew_pllm_valid(struct clk *clock_ptr UNUSED, uint32_t pllm, bool is_frac UNUSED)
+static bool pll_deskew_pllm_valid(struct clk *clock_ptr __unused, uint32_t pllm, bool is_frac __unused)
 {
 	return (pllm == 1U) || (pllm == 2U) || (pllm == 4U);
 }
 
-static bool pll_deskew_plld_valid(struct clk *clock_ptr UNUSED, uint32_t plld)
+static bool pll_deskew_plld_valid(struct clk *clock_ptr __unused, uint32_t plld)
 {
 	return (plld == 1U) || (plld == 2U) || (plld == 4U);
 }
 
-static bool pll_deskew_clkod_valid(struct clk *clock_ptr UNUSED, uint32_t clkod)
+static bool pll_deskew_clkod_valid(struct clk *clock_ptr __unused, uint32_t clkod)
 {
 	return (clkod == 4U) || (clkod == 8U) || (clkod == 16U) ||
 		(clkod == 32U) || (clkod == 64U) || (clkod == 128U) ||
@@ -80,15 +80,15 @@ static bool pll_deskew_clkod_valid(struct clk *clock_ptr UNUSED, uint32_t clkod)
 }
 
 /* Binning not yet supported/needed */
-static int32_t pll_deskew_bin(struct clk *clock_ptr UNUSED, uint32_t plld UNUSED,
-			      uint32_t pllm UNUSED, bool is_frac UNUSED, uint32_t clkod UNUSED)
+static int32_t pll_deskew_bin(struct clk *clock_ptr __unused, uint32_t plld __unused,
+			      uint32_t pllm __unused, bool is_frac __unused, uint32_t clkod __unused)
 {
 	return 0;
 }
 
 /* Prefer higher VCO frequencies */
-static uint32_t pll_deskew_vco_fitness(struct clk *clock_ptr UNUSED, uint32_t vco,
-				       bool is_frac UNUSED)
+static uint32_t pll_deskew_vco_fitness(struct clk *clock_ptr __unused, uint32_t vco,
+				       bool is_frac __unused)
 {
 	return vco;
 }
