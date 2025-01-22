@@ -18,3 +18,4 @@ $(eval $(call add_define,K3_HW_CONFIG_BASE))
 
 include drivers/ti/clk/ti_clk.mk
 include drivers/ti/pd/ti_pd.mk
+include ${PLAT_PATH}/board/am62lx/pm/ti_soc_pm.mk
