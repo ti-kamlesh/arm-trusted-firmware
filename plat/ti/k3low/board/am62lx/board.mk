@@ -15,3 +15,6 @@ $(eval $(call add_define,PRELOADED_BL33_BASE))
 
 K3_HW_CONFIG_BASE ?= 0x88000000
 $(eval $(call add_define,K3_HW_CONFIG_BASE))
+
+include drivers/ti/clk/ti_clk.mk
+
