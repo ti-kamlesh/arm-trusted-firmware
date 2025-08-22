@@ -374,19 +374,15 @@ uint32_t clk_get_state(struct clk *clkp)
 bool clk_set_state(struct clk *clkp, bool enable)
 {
 	const struct clk_data *clk_data_p = clk_get_data(clkp);
-	bool ret;
+	bool ret = true;
 
-	if (clk_data_p != NULL) {
-		if ((clkp->flags & CLK_FLAG_INITIALIZED) == 0U) {
-			/* defer action */
-			ret = true;
-		} else if (clk_data_p->drv->set_state == NULL) {
-			ret = true;
-		} else {
-			ret = clk_data_p->drv->set_state(clkp, enable);
-		}
-	} else {
-		ret = true;
+	if ((clkp->flags & CLK_FLAG_INITIALIZED) == 0U) {
+		/* defer action */
+		return ret;
+	}
+
+	if (clk_data_p->drv->set_state != NULL) {
+		ret = clk_data_p->drv->set_state(clkp, enable);
 	}
 
 	return ret;
