@@ -533,7 +533,7 @@ void clk_drop_pwr_up_en(void)
 
 	for (i = 0U; i < soc_clock_count; i++) {
 		if ((soc_clocks[i].flags & CLK_FLAG_PWR_UP_EN) != 0U) {
-			clk_put(soc_clocks + i);
+			clk_put(&soc_clocks[i]);
 			soc_clocks[i].flags &= (uint8_t) ~CLK_FLAG_PWR_UP_EN;
 		}
 	}
@@ -581,7 +581,7 @@ int32_t clk_deinit_pm_devgrp(uint8_t pm_devgrp)
 	 */
 	if (ret == SUCCESS) {
 		for (i = clk_id_start; i < clk_id_end; i++) {
-			struct clk *clkp = soc_clocks + i;
+			struct clk *clkp = &soc_clocks[i];
 
 			/* Clear the power up flag */
 			if ((clkp->flags & CLK_FLAG_PWR_UP_EN) != 0U) {
@@ -594,7 +594,7 @@ int32_t clk_deinit_pm_devgrp(uint8_t pm_devgrp)
 		 * is zero as expected.
 		 */
 		for (i = clk_id_start; i < clk_id_end; i++) {
-			struct clk *clkp = soc_clocks + i;
+			struct clk *clkp = &soc_clocks[i];
 
 			/* Clear the initialized flag */
 			clkp->flags &= (uint8_t) ~CLK_FLAG_INITIALIZED;
@@ -634,8 +634,8 @@ int32_t clk_init(void)
 
 	/* Loop through all the clocks to initialize them */
 	for (i = 0U; i < clock_count; i++) {
-		struct clk *clkp = soc_clocks + i;
-		const struct clk_data *clk_data_p = soc_clock_data + i;
+		struct clk *clkp = &soc_clocks[i];
+		const struct clk_data *clk_data_p = &soc_clock_data[i];
 		int32_t curr;
 
 		if (((clkp->flags & CLK_FLAG_INITIALIZED) == 0U) && (clk_data_p->drv != NULL)) {
@@ -653,7 +653,7 @@ int32_t clk_init(void)
 	if (progress) {
 		for (i = 0U; i < clock_count; i++) {
 			if ((soc_clocks[i].flags & CLK_FLAG_PWR_UP_EN) != 0U) {
-				if (!clk_get(soc_clocks + i)) {
+				if (!clk_get(&soc_clocks[i])) {
 					/* clk_get failed for one of the clocks */
 					ret = -EFAIL;
 					break;
