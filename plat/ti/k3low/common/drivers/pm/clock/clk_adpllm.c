@@ -1000,21 +1000,8 @@ static uint32_t clk_adpllm_get_freq_internal(struct clk *clkp,
 	parent_freq_hz = clk_get_parent_freq(clkp);
 	ret = ((uint64_t) (parent_freq_hz / clkod_plld) * (uint64_t) (pllm * mul_p));
 	rem = ((uint64_t) (parent_freq_hz % clkod_plld) * (uint64_t) (pllm * mul_p));
-	if (rem > (uint64_t) ULONG_MAX) {
-		/*
-		 * Remainder should always fit within 32 bits. We add this
-		 * in case of a programming error or unexpected input.
-		 *
-		 * clkod_plld - 16 bits
-		 * pllm	 -	12 bits
-		 * mul_p -	4 bits (up to 8)
-		 * total -	32 bits (should not need div64)
-		 */
-		ret += pm_div64(&rem, clkod_plld);
-	} else {
-		ret += (uint64_t) (((uint32_t) rem) / clkod_plld);
-		rem = (rem % (uint64_t) clkod_plld);
-	}
+        ret += (uint64_t) (((uint32_t) rem) / clkod_plld);
+        rem = (rem % (uint64_t) clkod_plld);
 
 	if (pllfm != 0U) {
 		uint64_t fret;	     /* Fraction return value */
@@ -1024,45 +1011,14 @@ static uint32_t clk_adpllm_get_freq_internal(struct clk *clkp,
 		/* Calculate fractional component of frequency */
 		fret = ((uint64_t) (parent_freq_hz / clkod_plld) * pllfm);
 		frem = (uint64_t) ((parent_freq_hz % clkod_plld) * pllfm);
-		if (frem > (uint64_t) ULONG_MAX) {
-			/*
-			 * pllfm - 18 bits
-			 * clkod_plld - 16 bits
-			 * total - 34 bits
-			 *
-			 * NB: Overflow, 64 bit div may be required.
-			 *
-			 * plld max - 127
-			 * clkod max - 256
-			 * pllfm max - 0x3ffff
-			 * max clkod = ULONG_MAX / (0x3ffff * 127) = 129
-			 *
-			 * Max remainder combined with plld max gives a max
-			 * clkod value of 129. Any values over 100 lead to
-			 * an invalid combination of CLKIN/REFCLK
-			 * frequences. Hitting this div64 is very unlikely,
-			 * but possible.
-			 */
-			fret += pm_div64(&frem, clkod_plld);
-		} else {
-			fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
-			frem = (uint64_t) (((uint64_t) frem) % clkod_plld);
-		}
+                fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
+                frem = (uint64_t) (((uint64_t) frem) % clkod_plld);
 
 		/* Fold in multiplier */
 		fret *= mul_p;
 		frem *= mul_p;
-		if (frem > (uint64_t) ULONG_MAX) {
-			/*
-			 * clkod_plld - 16 bits
-			 * mul_p - 4 bits
-			 * total - 20 bits (should not need div64)
-			 */
-			fret += pm_div64(&frem, clkod_plld);
-		} else {
-			fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
-			frem = (uint64_t) (((uint32_t) frem) % clkod_plld);
-		}
+                fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
+                frem = (uint64_t) (((uint32_t) frem) % clkod_plld);
 
 		/* Fold back into return/remainder */
 		frem += (fret & (uint64_t) mask) * clkod_plld;
@@ -1074,10 +1030,6 @@ static uint32_t clk_adpllm_get_freq_internal(struct clk *clkp,
 		rem = (uint64_t) (((uint32_t) rem) % clkod_plld);
 	}
 
-	if (ret > (uint64_t) ULONG_MAX) {
-		/* FIXME: Handle PLL value overflow */
-		ret = (uint64_t) ULONG_MAX;
-	}
 	return (uint32_t) ret;
 }
 
@@ -1630,18 +1582,9 @@ static int32_t clk_adpllm_init_internal(struct clk *clkp)
 
 static int32_t clk_adpllm_init(struct clk *clkp)
 {
-	const struct clk_data *clk_datap = clk_get_data(clkp);
-	const struct clk_data_pll *data_pll;
 	int32_t ret;
 
-	data_pll = container_of(clk_datap->data, const struct clk_data_pll,
-				data);
-
-	if (pm_devgroup_is_enabled(data_pll->devgrp)) {
-		ret = clk_adpllm_init_internal(clkp);
-	} else {
-		ret = -EDEFER;
-	}
+	ret = clk_adpllm_init_internal(clkp);
 
 	return ret;
 }
