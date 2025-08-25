@@ -715,7 +715,7 @@ static bool adpllm_clkod_valid(struct clk *clkp __unused, uint32_t clkod)
 	/* Only even numbers are allowed. */
 	bool ret;
 
-	ret = !(clkod & 1U);
+	ret = ((clkod & 1U) == 0U);
 	return ret;
 }
 
