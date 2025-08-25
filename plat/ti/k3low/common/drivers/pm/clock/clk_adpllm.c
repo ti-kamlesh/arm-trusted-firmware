@@ -1188,7 +1188,10 @@ static void clk_adpllm_program_freq(struct adpllm_program_data *data)
 	if (data->pll_clk->ref_count != 0U) {
 		/* Take the PLL out of IDLE bypass */
 		clk_adpllm_bypass(data->pll_clk, false);
-		clk_adpllm_wait_for_lock(data->pll_clk);
+		if (!clk_adpllm_wait_for_lock(data->pll_clk)) {
+		    /* Handle lock failure */
+		    return;
+		}
 	}
 }
 
@@ -1500,7 +1503,10 @@ static bool clk_adpllm_set_state(struct clk *clkp, bool enabled)
 	clk_adpllm_bypass(clkp, !enabled);
 
 	if (enabled) {
-		clk_adpllm_wait_for_lock(clkp);
+		if (!clk_adpllm_wait_for_lock(clkp)) {
+		    /* Handle lock failure */
+		    return false;
+		}
 	}
 
 	return true;
@@ -1609,7 +1615,11 @@ static int32_t clk_adpllm_init_internal(struct clk *clkp)
 				struct clk *sub_clk = soc_clocks + i;
 
 				if (clk_adpllm_hsdiv_get_pll_root(sub_clk) == clkp) {
-					sub_data->drv->init(clkp);
+					int32_t init_ret = sub_data->drv->init(clkp);
+					if (init_ret < 0) {
+					    /* Handle initialization error */
+					    return init_ret;
+					}
 				}
 			}
 		}
@@ -1831,11 +1841,23 @@ static bool clk_adpllm_hsdiv4_notify_freq(struct clk *clkp,
 				       const struct clk_drv_div, drv);
 
 		if (lower && (i != div_var)) {
-			drv_div->set_div(clkp, i);
+			bool div_set = drv_div->set_div(clkp, i);
+			if (!div_set) {
+			    /* Handle error case */
+			    return false;
+			}
 		}
-		clk_notify_children_freq(clkp, new_freq, false);
+		bool notify_ok = clk_notify_children_freq(clkp, new_freq, false);
+		if (!notify_ok) {
+		    /* Handle notification failure */
+		    return false;
+		}
 		if (raise_var && (i != div_var)) {
-			drv_div->set_div(clkp, i);
+			bool div_set = drv_div->set_div(clkp, i);
+			if (!div_set) {
+			    /* Handle error case */
+			    return false;
+			}
 		}
 	}
 
