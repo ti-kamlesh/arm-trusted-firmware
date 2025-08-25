@@ -31,12 +31,12 @@
  */
 #define container_of(member_ptr, containing_type, member)		\
 	 ((containing_type *)						\
-	  ((char *)(member_ptr)						\
+	  ((void *)(member_ptr)						\
 	   - container_off(containing_type, member)))
 
 #define container_of_const(member_ptr, containing_type, member)		\
 	 ((const containing_type *)					\
-	  ((const char *)(member_ptr)					\
+	  ((const void *)(member_ptr)					\
 	   - container_off(containing_type, member)))
 
 /**
