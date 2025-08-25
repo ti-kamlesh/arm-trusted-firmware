@@ -772,9 +772,9 @@ static bool clk_adpllm_check_lock(struct clk *clkp)
 	uint32_t stat;
 
 	clk_datap = clk_get_data(clkp);
-	data_pll = container_of(clk_datap->data, const struct clk_data_pll,
+	data_pll = container_of_const(clk_datap->data, const struct clk_data_pll,
 				data);
-	pll = container_of(data_pll, const struct clk_data_pll_adpllm,
+	pll = container_of_const(data_pll, const struct clk_data_pll_adpllm,
 			   data_pll);
 
 	stat = readl(pll->base + ADPLLM_PLL_STAT(pll->idx));
