@@ -31,13 +31,13 @@
  */
 #define container_of(member_ptr, containing_type, member)		\
 	 ((containing_type *)						\
-	  ((void *)(member_ptr)						\
-	   - container_off(containing_type, member)))
+	  (((void *)(member_ptr))					\
+	   - (container_off(containing_type, member))))
 
 #define container_of_const(member_ptr, containing_type, member)		\
 	 ((const containing_type *)					\
-	  ((const void *)(member_ptr)					\
-	   - container_off(containing_type, member)))
+	  (((const void *)(member_ptr))					\
+	   - (container_off(containing_type, member))))
 
 /**
  * container_of_or_null - get pointer to enclosing structure, or NULL
