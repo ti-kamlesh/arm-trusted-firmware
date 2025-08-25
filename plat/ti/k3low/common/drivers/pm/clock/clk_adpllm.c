@@ -153,24 +153,24 @@
 #define ADPLLM_MMR_CFG0			((uint32_t) 0x08U)
 #define ADPLLM_MMR_CFG1			((uint32_t) 0x0cU)
 
-#define ADPLLM_PLL_KICK0(idx)		((idx * 0x1000U) + 0x10U)
-#define ADPLLM_PLL_KICK1(idx)		((idx * 0x1000U) + 0x14U)
-#define ADPLLM_PLL_FREQ_CTRL0(idx)	((idx * 0x1000U) + 0x20U)
-#define ADPLLM_PLL_FREQ_CTRL1(idx)	((idx * 0x1000U) + 0x24U)
-#define ADPLLM_PLL_CLKDIV(idx)		((idx * 0x1000U) + 0x28U)
-#define ADPLLM_PLL_PROG(idx)		((idx * 0x1000U) + 0x2cU)
-#define ADPLLM_PLL_CTRL(idx)		((idx * 0x1000U) + 0x30U)
-#define ADPLLM_PLL_STAT(idx)		((idx * 0x1000U) + 0x34U)
-#define ADPLLM_PLL_PWR_CTRL(idx)	((idx * 0x1000U) + 0x38U)
-#define ADPLLM_PLL_PWR_STAT(idx)	((idx * 0x1000U) + 0x3cU)
-#define ADPLLM_PLL_SS_SPREAD(idx)	((idx * 0x1000U) + 0x40U)
-#define ADPLLM_PLL_SS_MODFREQ(idx)	((idx * 0x1000U) + 0x44U)
+static inline uint32_t ADPLLM_PLL_KICK0(uint32_t idx) { return (idx * 0x1000U) + 0x10U; }
+static inline uint32_t ADPLLM_PLL_KICK1(uint32_t idx) { return (idx * 0x1000U) + 0x14U; }
+static inline uint32_t ADPLLM_PLL_FREQ_CTRL0(uint32_t idx) { return (idx * 0x1000U) + 0x20U; }
+static inline uint32_t ADPLLM_PLL_FREQ_CTRL1(uint32_t idx) { return (idx * 0x1000U) + 0x24U; }
+static inline uint32_t ADPLLM_PLL_CLKDIV(uint32_t idx) { return (idx * 0x1000U) + 0x28U; }
+static inline uint32_t ADPLLM_PLL_PROG(uint32_t idx) { return (idx * 0x1000U) + 0x2cU; }
+static inline uint32_t ADPLLM_PLL_CTRL(uint32_t idx) { return (idx * 0x1000U) + 0x30U; }
+static inline uint32_t ADPLLM_PLL_STAT(uint32_t idx) { return (idx * 0x1000U) + 0x34U; }
+static inline uint32_t ADPLLM_PLL_PWR_CTRL(uint32_t idx) { return (idx * 0x1000U) + 0x38U; }
+static inline uint32_t ADPLLM_PLL_PWR_STAT(uint32_t idx) { return (idx * 0x1000U) + 0x3cU; }
+static inline uint32_t ADPLLM_PLL_SS_SPREAD(uint32_t idx) { return (idx * 0x1000U) + 0x40U; }
+static inline uint32_t ADPLLM_PLL_SS_MODFREQ(uint32_t idx) { return (idx * 0x1000U) + 0x44U; }
 
-#define ADPLLM_HSDIV_CLKDIV(idx)	((idx * 0x1000U) + 0x120U)
-#define ADPLLM_HSDIV_CTRL(idx)		((idx * 0x1000U) + 0x124U)
-#define ADPLLM_HSDIV_STAT(idx)		((idx * 0x1000U) + 0x128U)
-#define ADPLLM_HSDIV_PWR_CTRL(idx)	((idx * 0x1000U) + 0x12cU)
-#define ADPLLM_HSDIV_PWR_STAT(idx)	((idx * 0x1000U) + 0x130U)
+static inline uint32_t ADPLLM_HSDIV_CLKDIV(uint32_t idx) { return (idx * 0x1000U) + 0x120U; }
+static inline uint32_t ADPLLM_HSDIV_CTRL(uint32_t idx) { return (idx * 0x1000U) + 0x124U; }
+static inline uint32_t ADPLLM_HSDIV_STAT(uint32_t idx) { return (idx * 0x1000U) + 0x128U; }
+static inline uint32_t ADPLLM_HSDIV_PWR_CTRL(uint32_t idx) { return (idx * 0x1000U) + 0x12cU; }
+static inline uint32_t ADPLLM_HSDIV_PWR_STAT(uint32_t idx) { return (idx * 0x1000U) + 0x130U; }
 
 /* PLL_KICK */
 #define ADPLLM_PLL_KICK0_VALUE		0x68ef3490U
@@ -435,8 +435,8 @@
  * Divide value = DIVx+1. Max DIVx=62 for DIV1,DIV2, DIV3. For DIV4 value of
  * 63 is mapped to divide by 2.5 (idx 1-4)
  */
-#define ADPLLM_HSDIV_CLKDIV_SHIFT(n)		((n - 1U) * 8U)
-#define ADPLLM_HSDIV_CLKDIV_MASK(n)		(((uint32_t) 0x3fU) << ((n - 1U) * 8U))
+static inline uint32_t ADPLLM_HSDIV_CLKDIV_SHIFT(uint32_t n) { return (n - 1U) * 8U; }
+static inline uint32_t ADPLLM_HSDIV_CLKDIV_MASK(uint32_t n) { return ((uint32_t) 0x3fU) << ((n - 1U) * 8U); }
 
 #define ADPLLM_HSDIV_CTRL_TENABLEDIV		BIT(31)
 #define ADPLLM_HSDIV_CTRL_SPAREIN_SHIFT		16U
