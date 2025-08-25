@@ -443,7 +443,10 @@ static inline uint32_t ADPLLM_HSDIV_CLKDIV_MASK(uint32_t n) { return ((uint32_t)
 #define ADPLLM_HSDIV_CTRL_SPAREIN_MASK		(((uint32_t) 0x1fU) << 16U)
 
 /* Synchronously enables/disables CLKOUTx (idx 1-4) */
-#define ADPLLM_HSDIV_CTRL_CLKOUT_EN(n)		BIT((n - 1U))
+static inline uint32_t ADPLLM_HSDIV_CTRL_CLKOUT_EN(uint32_t n) 
+{
+    return BIT((n - 1U));
+}
 /* HSDIV_STAT */
 #define ADPLLM_HSDIV_STAT_SPAREOUT_SHIFT	16U
 #define ADPLLM_HSDIV_STAT_SPAREOUT_MASK		(((uint32_t) 0x1fU) << 16U)
@@ -454,9 +457,15 @@ static inline uint32_t ADPLLM_HSDIV_CLKDIV_MASK(uint32_t n) { return ((uint32_t)
  */
 #define ADPLLM_HSDIV_STAT_LOCK			BIT(15)
 /* Acknowledge flag indicating on the fly change of DIVx divider is done */
-#define ADPLLM_HSDIV_STAT_DIV_CHANGE_ACK(n)	BIT((n) + 8)
+static inline uint32_t ADPLLM_HSDIV_STAT_DIV_CHANGE_ACK(uint32_t n)
+{
+    return BIT((n) + 8);
+}
 /* Indicates enable/disable condition of CLKOUTx */
-#define ADPLLM_HSDIV_STAT_CLKOUT_EN_ACK(n)	BIT((n))
+static inline uint32_t ADPLLM_HSDIV_STAT_CLKOUT_EN_ACK(uint32_t n)
+{
+    return BIT((n));
+}
 
 /* HSDIV_PWR_CTRL */
 /* Poweron control for weak power switch */
