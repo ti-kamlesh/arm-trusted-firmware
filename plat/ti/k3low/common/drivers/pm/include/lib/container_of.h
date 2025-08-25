@@ -35,6 +35,12 @@
 	   - container_off(containing_type, member))			\
 	  + check_types_match(*(member_ptr), ((containing_type *)0)->member))
 
+#define container_of_const(member_ptr, containing_type, member)		\
+	 ((const containing_type *)					\
+	  ((const char *)(member_ptr)					\
+	   - container_off(containing_type, member))			\
+	  + check_types_match(*(member_ptr), ((containing_type *)0)->member))
+
 /**
  * container_of_or_null - get pointer to enclosing structure, or NULL
  * @member_ptr: pointer to the structure member
