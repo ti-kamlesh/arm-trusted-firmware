@@ -199,10 +199,10 @@ static inline uint32_t ADPLLM_HSDIV_PWR_STAT(uint32_t idx) { return (idx * 0x100
  * FREQ_CTRL1
  * DCO frequency range selector, ADPLLJ only
  */
-#define ADPLLM_FREQ_CTRL1_SEL_FREQ_DCO_SHIFT	24U
-#define ADPLLM_FREQ_CTRL1_SEL_FREQ_DCO_MASK	(((uint32_t) 7U) << 24U)
-#define ADPLLM_FREQ_CTRL1_SEL_FREQ_DCO_1500MHZ	(((uint32_t) 2U) << 24U)
-#define ADPLLM_FREQ_CTRL1_SEL_FREQ_DCO_2500MHZ	(((uint32_t) 4U) << 24U)
+#define ADPLLM_FREQ_CTRL1_SEL_DCO_SHIFT	24U
+#define ADPLLM_FREQ_CTRL1_SEL_DCO_MASK	(((uint32_t) 7U) << 24U)
+#define ADPLLM_FREQ_CTRL1_SEL_DCO_1500	(((uint32_t) 2U) << 24U)
+#define ADPLLM_FREQ_CTRL1_SEL_DCO_2500	(((uint32_t) 4U) << 24U)
 /*
  * Fractional part of the M divider, 0 disables.
  * Fractional multiplier M.f is not supported for M < 20 and M > 2045 for type
@@ -407,8 +407,8 @@ static inline uint32_t ADPLLM_HSDIV_PWR_STAT(uint32_t idx) { return (idx * 0x100
  * SS_SPREAD
  * Integer part of Frequency Spread control.
  */
-#define ADPLLM_SS_SPREAD_DELTA_MSTEP_INT_SHIFT	24U
-#define ADPLLM_SS_SPREAD_DELTA_MSTEP_INT_MASK	(((uint32_t) 0x7U) << 24U)
+#define ADPLLM_SS_SPREAD_DELTA_INT_SHIFT	24U
+#define ADPLLM_SS_SPREAD_DELTA_INT_MASK	(((uint32_t) 0x7U) << 24U)
 /* Fraction part of Frequency Spread control. */
 #define ADPLLM_SS_SPREAD_DELTA_MSTEP_FRAC_SHIFT 0U
 #define ADPLLM_SS_SPREAD_DELTA_MSTEP_FRAC_MASK	0x3ffffU
@@ -1127,11 +1127,11 @@ static void clk_adpllm_program_freq(struct adpllm_program_data *data)
 		freq_ctrl0 &= ~ADPLLM_FREQ_CTRL0_SD_DIV_MASK;
 		freq_ctrl0 |= sdd << ADPLLM_FREQ_CTRL0_SD_DIV_SHIFT;
 
-		freq_ctrl1 &= ~ADPLLM_FREQ_CTRL1_SEL_FREQ_DCO_MASK;
+		freq_ctrl1 &= ~ADPLLM_FREQ_CTRL1_SEL_DCO_MASK;
 		if (dco < cutoff) {
-			freq_ctrl1 |= ADPLLM_FREQ_CTRL1_SEL_FREQ_DCO_1500MHZ;
+			freq_ctrl1 |= ADPLLM_FREQ_CTRL1_SEL_DCO_1500;
 		} else {
-			freq_ctrl1 |= ADPLLM_FREQ_CTRL1_SEL_FREQ_DCO_2500MHZ;
+			freq_ctrl1 |= ADPLLM_FREQ_CTRL1_SEL_DCO_2500;
 		}
 	} else {
 		/* ADPLLM */
