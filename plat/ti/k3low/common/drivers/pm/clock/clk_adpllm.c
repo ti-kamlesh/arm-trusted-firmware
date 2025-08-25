@@ -411,7 +411,7 @@ static inline uint32_t ADPLLM_HSDIV_PWR_STAT(uint32_t idx) { return (idx * 0x100
 #define ADPLLM_SS_SPREAD_DELTA_MASK	(((uint32_t) 0x7U) << 24U)
 /* Fraction part of Frequency Spread control. */
 #define ADPLLM_SS_SPREAD_DELTA_MSTEP_FRAC_SHIFT 0U
-#define ADPLLM_SS_SPREAD_DELTA_MSTEP_FRAC_MASK	0x3ffffU
+#define ADPLLM_SS_SPREAD_DELTA_MSTEP_FRAC_MASKVAL	0x3ffffU
 
 /*
  * SS_MODFREQ
