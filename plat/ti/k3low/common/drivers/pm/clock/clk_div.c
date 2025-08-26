@@ -37,7 +37,7 @@ bool clk_div_notify_freq(struct clk *clkp, uint32_t parent_freq_hz, bool query)
 
 	data_div = container_of(clk_datap->data, const struct clk_data_div,
 				data);
-	drv_div = container_of((clk_datap->drv), const struct clk_drv_div, drv);
+	drv_div = (const struct clk_drv_div *)container_of((const void *)clk_datap->drv, const struct clk_drv_div, drv);
 
 	/* Just find a frequency that works for all children */
 
@@ -583,7 +583,7 @@ static uint32_t clk_div_fixed_get_div(struct clk *clkp)
 	const struct clk_data *clk_datap = clk_get_data(clkp);
 	const struct clk_data_div *data_div;
 
-	data_div = container_of((clk_datap->data), const struct clk_data_div, data);
+	data_div = (const struct clk_data_div *)container_of((const void *)clk_datap->data, const struct clk_data_div, data);
 	return (uint32_t) data_div->n;
 }
 
