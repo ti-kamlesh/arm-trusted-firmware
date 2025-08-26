@@ -98,7 +98,7 @@ static uint32_t clk_div_set_freq_dyn_parent(struct clk *clkp, uint32_t target_hz
 
 	data_div = container_of(clk_datap->data, const struct clk_data_div,
 				data);
-	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
+	drv_div = container_of((clk_datap->drv), const struct clk_drv_div, drv);
 
 	/* p and clk_lookup verified by caller */
 	if (p != NULL) {
@@ -381,7 +381,7 @@ int32_t clk_div_init(struct clk *clkp)
 	int32_t ret = SUCCESS;
 	bool skip_hw_init = false;
 
-	data_div = container_of(clk_datap->data, const struct clk_data_div, data);
+	data_div = container_of((clk_datap->data), const struct clk_data_div, data);
 	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
 
 	if ((clk_datap->flags & CLK_DATA_FLAG_NO_HW_REINIT) != 0U) {
@@ -517,7 +517,7 @@ uint32_t clk_div_reg_go_get_div(struct clk *clkp)
 			n -= 1U;
 		}
 		v = readl(data_reg->reg) >> data_reg->bit;
-		v &= (uint32_t) ((1U << ilog32(n)) - 1U);
+		v &= (uint32_t) ((1U << (ilog32(n))) - 1U);
 		v += 1U;
 	}
 
