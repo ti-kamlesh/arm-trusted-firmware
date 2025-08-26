@@ -1588,18 +1588,12 @@ static int32_t clk_adpllm_init(struct clk *clkp)
 	return ret;
 }
 
-static int32_t (*const clk_adpllm_init_fn)(struct clk *) = clk_adpllm_init;
-static uint32_t (*const clk_adpllm_get_freq_fn)(struct clk *) = clk_adpllm_get_freq;
-static uint32_t (*const clk_adpllm_set_freq_fn)(struct clk *, uint32_t, uint32_t, uint32_t, bool, bool *) = clk_adpllm_set_freq;
-static bool (*const clk_adpllm_set_state_fn)(struct clk *, bool) = clk_adpllm_set_state;
-static uint32_t (*const clk_adpllm_get_state_fn)(struct clk *) = clk_adpllm_get_state;
-
 const struct clk_drv clk_drv_adpllm = {
-	.init = clk_adpllm_init_fn,
-	.get_freq = clk_adpllm_get_freq_fn,
-	.set_freq = clk_adpllm_set_freq_fn,
-	.set_state = clk_adpllm_set_state_fn,
-	.get_state = clk_adpllm_get_state_fn,
+	.init = (int32_t (*)(struct clk *))clk_adpllm_init,
+	.get_freq = clk_adpllm_get_freq,
+	.set_freq = clk_adpllm_set_freq,
+	.set_state = clk_adpllm_set_state,
+	.get_state = clk_adpllm_get_state,
 };
 
 static bool clk_adpllm_hsdiv_set_div(struct clk *clkp, uint32_t d)
