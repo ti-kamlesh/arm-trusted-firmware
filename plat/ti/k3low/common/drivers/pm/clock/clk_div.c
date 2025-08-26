@@ -382,7 +382,7 @@ int32_t clk_div_init(struct clk *clkp)
 	bool skip_hw_init = false;
 
 	data_div = container_of((clk_datap->data), const struct clk_data_div, data);
-	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
+	drv_div = (const struct clk_drv_div *)container_of((const void *)clk_datap->drv, const struct clk_drv_div, drv);
 
 	if ((clk_datap->flags & CLK_DATA_FLAG_NO_HW_REINIT) != 0U) {
 		if (drv_div->get_div != NULL) {
