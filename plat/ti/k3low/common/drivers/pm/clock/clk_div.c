@@ -278,7 +278,7 @@ uint32_t clk_div_set_freq_static_parent(struct clk *clkp, uint32_t target_hz,
 	div0 = parent_freq_hz / target_hz;
 
 	data_div = container_of((clk_datap->data), const struct clk_data_div, data);
-	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
+	drv_div = container_of((clk_datap->drv), const struct clk_drv_div, drv);
 
 	n = data_div->n;
 
@@ -583,7 +583,7 @@ static uint32_t clk_div_fixed_get_div(struct clk *clkp)
 	const struct clk_data *clk_datap = clk_get_data(clkp);
 	const struct clk_data_div *data_div;
 
-	data_div = container_of(clk_datap->data, const struct clk_data_div, data);
+	data_div = container_of((clk_datap->data), const struct clk_data_div, data);
 	return (uint32_t) data_div->n;
 }
 
