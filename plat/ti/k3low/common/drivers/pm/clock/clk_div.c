@@ -37,7 +37,7 @@ bool clk_div_notify_freq(struct clk *clkp, uint32_t parent_freq_hz, bool query)
 
 	data_div = container_of(clk_datap->data, const struct clk_data_div,
 				data);
-	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
+	drv_div = container_of((clk_datap->drv), const struct clk_drv_div, drv);
 
 	/* Just find a frequency that works for all children */
 
@@ -277,7 +277,7 @@ uint32_t clk_div_set_freq_static_parent(struct clk *clkp, uint32_t target_hz,
 	/* Calculate 2 best potential frequencies */
 	div0 = parent_freq_hz / target_hz;
 
-	data_div = container_of(clk_datap->data, const struct clk_data_div, data);
+	data_div = container_of((clk_datap->data), const struct clk_data_div, data);
 	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
 
 	n = data_div->n;
@@ -429,7 +429,7 @@ uint32_t clk_div_reg_get_div(struct clk *clkp)
 		}
 		v = readl(data_reg->reg) >> data_reg->bit;
 
-		v &= (uint32_t) ((1U << ilog32(n)) - 1U);
+		v &= (uint32_t) ((1U << (ilog32(n))) - 1U);
 		if (data_reg->start_at_1 == 0U) {
 			v += 1U;
 		}
@@ -551,7 +551,7 @@ bool clk_div_reg_go_set_div(struct clk *clkp, uint32_t d)
 		}
 
 		v = readl(data_reg->reg);
-		v &= (uint32_t) ~(((1U << ilog32(n)) - 1U) << data_reg->bit);
+		v &= (uint32_t) ~(((1U << (ilog32(n))) - 1U) << (data_reg->bit));
 		v &= (uint32_t) ~BIT(data_reg->go);
 		v |= d_val_p << data_reg->bit;
 		ti_clk_writel(v, data_reg->reg);
