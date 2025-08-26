@@ -1076,8 +1076,12 @@ static void clk_adpllm_program_freq(struct adpllm_program_data *data)
 		/* Program the Sigma-Delta Divider */
 
 		/* sdd = ceil(parent_freq_hz * pllm / (plld * FREQ_MHZ(250))) */
-		sdd = (uint32_t) ((dco + (uint64_t) (FREQ_MHZ(250) * data->plld) - 1ULL)
-				  / (uint64_t) FREQ_MHZ(250));
+		if (FREQ_MHZ(250) != 0) {
+			sdd = (uint32_t) ((dco + (uint64_t) (FREQ_MHZ(250) * data->plld) - 1ULL)
+					  / (uint64_t) FREQ_MHZ(250));
+		} else {
+			sdd = 0;
+		}
 		/*
 		 * 250MHz * plld doesn't fit in 32 bits, do two divisions by
 		 * a uint32_t rather than one by a uint64_t.
