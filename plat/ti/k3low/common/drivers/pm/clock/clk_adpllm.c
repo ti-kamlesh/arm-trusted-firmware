@@ -949,13 +949,13 @@ static uint32_t clk_adpllm_get_freq_internal(struct clk *clkp,
 	uint32_t plld;
 	uint32_t pllm;
 	uint32_t pllfm;
-	uint64_t ret;	     /* Return frequency */
-	uint64_t rem;	     /* Return frequency remainder */
+	static uint64_t ret;	     /* Return frequency */
+	static uint64_t rem;	     /* Return frequency remainder */
 	bool m4x;      /* M4X enabled */
 	bool dcc;      /* DC corrector enabled */
-	uint32_t clkod_plld; /* clkod * plld */
+	static uint32_t clkod_plld; /* clkod * plld */
 	uint32_t parent_freq_hz;
-	uint32_t mul_p = multiplier;
+        uint32_t mul_p = multiplier;
 
 	data_pll = container_of(clk_datap->data, const struct clk_data_pll,
 				data);
@@ -1004,9 +1004,9 @@ static uint32_t clk_adpllm_get_freq_internal(struct clk *clkp,
         rem = (rem % (uint64_t) clkod_plld);
 
 	if (pllfm != 0U) {
-		uint64_t fret;	     /* Fraction return value */
-		uint64_t frem;	     /* Fraction remainder */
-		const uint32_t mask = (1UL << ADPLLM_FREQ_CTRL1_M_FRAC_MULT_BITS) - 1UL;
+		static uint64_t fret;	     /* Fraction return value */
+		static uint64_t frem;	     /* Fraction remainder */
+		static const uint32_t mask = (1UL << ADPLLM_FREQ_CTRL1_M_FRAC_MULT_BITS) - 1UL;
 
 		/* Calculate fractional component of frequency */
 		fret = ((uint64_t) (parent_freq_hz / clkod_plld) * pllfm);
