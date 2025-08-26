@@ -32,7 +32,7 @@ static uint32_t clk_from_device_get_state(struct clk *clkp)
 	struct device *dev;
 	uint32_t ret;
 
-	from_device = container_of(clk_datap->data,
+	from_device = container_of((const struct clk_drv_data *)clk_datap->data,
 				   const struct clk_data_from_dev, data);
 
 	dev = device_lookup(from_device->dev);
