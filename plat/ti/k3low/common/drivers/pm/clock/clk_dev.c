@@ -37,7 +37,7 @@ static uint32_t clk_from_device_get_state(struct clk *clkp)
 
 	dev = device_lookup(from_device->dev);
 
-	if ((dev == NULL) || (dev->initialized == 0U)) {
+	if ((dev == NULL) || ((dev->initialized) == 0U)) {
 		ret = CLK_HW_STATE_DISABLED;
 	} else {
 		uint32_t state;
