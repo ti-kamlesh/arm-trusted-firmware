@@ -277,7 +277,7 @@ uint32_t clk_div_set_freq_static_parent(struct clk *clkp, uint32_t target_hz,
 	/* Calculate 2 best potential frequencies */
 	div0 = parent_freq_hz / target_hz;
 
-	data_div = container_of((clk_datap->data), const struct clk_data_div, data);
+	data_div = (const struct clk_data_div *)container_of((const void *)clk_datap->data, const struct clk_data_div, data);
 	drv_div = container_of((clk_datap->drv), const struct clk_drv_div, drv);
 
 	n = data_div->n;
