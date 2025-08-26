@@ -1004,9 +1004,9 @@ static uint32_t clk_adpllm_get_freq_internal(struct clk *clkp,
         rem = (rem % (uint64_t) clkod_plld);
 
 	if (pllfm != 0U) {
-		uint64_t fret;	     /* Fraction return value */
-		uint64_t frem;	     /* Fraction remainder */
-		const uint32_t mask = (1UL << ADPLLM_FREQ_CTRL1_M_FRAC_MULT_BITS) - 1UL;
+		static uint64_t fret;	     /* Fraction return value */
+		static uint64_t frem;	     /* Fraction remainder */
+		static const uint32_t mask = (1UL << ADPLLM_FREQ_CTRL1_M_FRAC_MULT_BITS) - 1UL;
 
 		/* Calculate fractional component of frequency */
 		fret = ((uint64_t) (parent_freq_hz / clkod_plld) * pllfm);
