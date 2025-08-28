@@ -465,7 +465,7 @@ bool clk_div_reg_set_div(struct clk *clkp, uint32_t d)
 		}
 
 		v = readl(data_reg->reg);
-		v &= (uint32_t) (~(((1U << (uint32_t) ilog32(n)) - 1U) << data_reg->bit));
+		v &= ~(((1U << (uint32_t) ilog32(n)) - 1U) << data_reg->bit);
 		v |= d_val_p << data_reg->bit;
 		ti_clk_writel(v, (uint32_t) data_reg->reg);
 		ret = true; /* HARD CODED */
