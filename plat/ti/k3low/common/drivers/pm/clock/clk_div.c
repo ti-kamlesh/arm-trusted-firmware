@@ -37,7 +37,7 @@ bool clk_div_notify_freq(struct clk *clkp, uint32_t parent_freq_hz, bool query)
 
 	data_div = container_of(clk_datap->data, const struct clk_data_div,
 				data);
-	drv_div = (const struct clk_drv_div *)container_of((const void *)clk_datap->drv, const struct clk_drv_div, drv);
+	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
 
 	/* Just find a frequency that works for all children */
 
@@ -62,12 +62,12 @@ bool clk_div_notify_freq(struct clk *clkp, uint32_t parent_freq_hz, bool query)
 	if (found && !query) {
 		if (i > divp) {
 			/* Frequency going down */
-			drv_div->set_div(clkp, i);
+			(void)drv_div->set_div(clkp, i);
 		}
-		clk_notify_children_freq(clkp, parent_freq_hz / i, false);
+		(void)clk_notify_children_freq(clkp, parent_freq_hz / i, false);
 		if (i < divp) {
 			/* Frequency going up */
-			drv_div->set_div(clkp, i);
+			(void)drv_div->set_div(clkp, i);
 		}
 	}
 
@@ -98,7 +98,7 @@ static uint32_t clk_div_set_freq_dyn_parent(struct clk *clkp, uint32_t target_hz
 
 	data_div = container_of(clk_datap->data, const struct clk_data_div,
 				data);
-	drv_div = container_of((clk_datap->drv), const struct clk_drv_div, drv);
+	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
 
 	/* p and clk_lookup verified by caller */
 	if (p != NULL) {
@@ -233,18 +233,18 @@ static uint32_t clk_div_set_freq_dyn_parent(struct clk *clkp, uint32_t target_hz
 	if ((best_div != 0U) && !query) {
 		/* Actually program out parents */
 		if (best_changed) {
-			clk_set_freq(parent, best_parent_freq, best_min_hz,
+			(void)clk_set_freq(parent, best_parent_freq, best_min_hz,
 				     best_max_hz, false, changed);
 		}
 
 		/* Actually program our own register */
 		if (old_div != best_div) {
-			drv_div->set_div(clkp, best_div);
+			(void)drv_div->set_div(clkp, best_div);
 		}
 
 		/* Assign new rate to siblings */
 		if (best_changed) {
-			clk_notify_sibling_freq(clkp, parent,
+			(void)clk_notify_sibling_freq(clkp, parent,
 						best_parent_freq, false);
 		}
 
@@ -277,8 +277,8 @@ uint32_t clk_div_set_freq_static_parent(struct clk *clkp, uint32_t target_hz,
 	/* Calculate 2 best potential frequencies */
 	div0 = parent_freq_hz / target_hz;
 
-	data_div = (const struct clk_data_div *)container_of((const void *)clk_datap->data, const struct clk_data_div, data);
-	drv_div = container_of((clk_datap->drv), const struct clk_drv_div, drv);
+	data_div = container_of(clk_datap->data, const struct clk_data_div, data);
+	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
 
 	n = data_div->n;
 
@@ -337,7 +337,7 @@ uint32_t clk_div_set_freq_static_parent(struct clk *clkp, uint32_t target_hz,
 
 	if (div0_ok && !query) {
 		/* Actually program our own register */
-		drv_div->set_div(clkp, div0);
+		(void)drv_div->set_div(clkp, div0);
 	}
 
 	return div0_hz;
@@ -381,8 +381,8 @@ int32_t clk_div_init(struct clk *clkp)
 	int32_t ret = SUCCESS;
 	bool skip_hw_init = false;
 
-	data_div = (const struct clk_data_div *)container_of((const void *)clk_datap->data, const struct clk_data_div, data);
-	drv_div = (const struct clk_drv_div *)container_of((const void *)clk_datap->drv, const struct clk_drv_div, drv);
+	data_div = container_of(clk_datap->data, const struct clk_data_div, data);
+	drv_div = container_of(clk_datap->drv, const struct clk_drv_div, drv);
 
 	if ((clk_datap->flags & CLK_DATA_FLAG_NO_HW_REINIT) != 0U) {
 		if (drv_div->get_div != NULL) {
@@ -429,7 +429,7 @@ uint32_t clk_div_reg_get_div(struct clk *clkp)
 		}
 		v = readl(data_reg->reg) >> data_reg->bit;
 
-		v &= (uint32_t) ((1UL << (ilog32(n))) - 1UL);
+		v &= (uint32_t) (((1UL << (ilog32(n))) - 1UL));
 		if (data_reg->start_at_1 == 0U) {
 			v += 1U;
 		}
@@ -465,7 +465,7 @@ bool clk_div_reg_set_div(struct clk *clkp, uint32_t d)
 		}
 
 		v = readl(data_reg->reg);
-		v &= (uint32_t) ~(((1U << (uint32_t) ilog32(n)) - 1U) << data_reg->bit);
+		v &= (uint32_t) (~(((1U << (uint32_t) ilog32(n)) - 1U) << data_reg->bit));
 		v |= d_val_p << data_reg->bit;
 		ti_clk_writel(v, (uint32_t) data_reg->reg);
 		ret = true; /* HARD CODED */
@@ -517,7 +517,7 @@ uint32_t clk_div_reg_go_get_div(struct clk *clkp)
 			n -= 1U;
 		}
 		v = readl(data_reg->reg) >> data_reg->bit;
-		v &= (uint32_t) ((1UL << (ilog32(n))) - 1UL);
+		v &= (uint32_t) (((1UL << (ilog32(n))) - 1UL));
 		v += 1U;
 	}
 
@@ -551,7 +551,7 @@ bool clk_div_reg_go_set_div(struct clk *clkp, uint32_t d)
 		}
 
 		v = readl(data_reg->reg);
-		v &= (uint32_t) ~(((1UL << (ilog32(n))) - 1UL) << (data_reg->bit));
+		v &= (uint32_t) (~(((1UL << (ilog32(n))) - 1UL) << (data_reg->bit)));
 		v &= (uint32_t) ~BIT(data_reg->go);
 		v |= d_val_p << data_reg->bit;
 		ti_clk_writel(v, data_reg->reg);
@@ -583,7 +583,7 @@ static uint32_t clk_div_fixed_get_div(struct clk *clkp)
 	const struct clk_data *clk_datap = clk_get_data(clkp);
 	const struct clk_data_div *data_div;
 
-	data_div = (const struct clk_data_div *)container_of((const void *)clk_datap->data, const struct clk_data_div, data);
+	data_div = container_of(clk_datap->data, const struct clk_data_div, data);
 	return (uint32_t) data_div->n;
 }
 
