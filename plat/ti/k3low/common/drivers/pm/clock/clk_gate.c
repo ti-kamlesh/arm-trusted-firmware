@@ -16,7 +16,7 @@ static bool clk_gate_set_state(struct clk *clkp, bool enable)
 	uint32_t v;
 	bool ret = true;
 
-	reg = container_of(clk_datap->data, const struct clk_data_reg, data);
+	reg = container_of((clk_datap->data), const struct clk_data_reg, data);
 
 	v = readl(reg->reg);
 	if (enable) {
@@ -52,7 +52,7 @@ static uint32_t clk_gate_get_state(struct clk *clkp)
 		const struct clk_data_reg *reg;
 
 		/* Parent is enabled, are we gating it? */
-		reg = container_of(clk_datap->data, const struct clk_data_reg,
+		reg = container_of((clk_datap->data), const struct clk_data_reg,
 				   data);
 		if (0U == (readl(reg->reg) & BIT(reg->bit))) {
 			ret = CLK_HW_STATE_DISABLED;
