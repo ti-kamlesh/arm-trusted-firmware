@@ -429,7 +429,7 @@ uint32_t clk_div_reg_get_div(struct clk *clkp)
 		}
 		v = readl(data_reg->reg) >> data_reg->bit;
 
-		v &= (uint32_t) (((1UL << (ilog32(n))) - 1UL));
+		v &= (uint32_t) (((1UL << (uint32_t)ilog32(n)) - 1UL));
 		if (data_reg->start_at_1 == 0U) {
 			v += 1U;
 		}
@@ -517,7 +517,7 @@ uint32_t clk_div_reg_go_get_div(struct clk *clkp)
 			n -= 1U;
 		}
 		v = readl(data_reg->reg) >> data_reg->bit;
-		v &= (uint32_t) (((1UL << (ilog32(n))) - 1UL));
+		v &= (uint32_t) (((1UL << (uint32_t)ilog32(n)) - 1UL));
 		v += 1U;
 	}
 
@@ -551,7 +551,7 @@ bool clk_div_reg_go_set_div(struct clk *clkp, uint32_t d)
 		}
 
 		v = readl(data_reg->reg);
-		v &= (uint32_t) (~(((1UL << (ilog32(n))) - 1UL) << (data_reg->bit)));
+		v &= (uint32_t) (~(((1UL << (uint32_t)ilog32(n)) - 1UL) << (data_reg->bit)));
 		v &= (uint32_t) ~BIT(data_reg->go);
 		v |= d_val_p << data_reg->bit;
 		ti_clk_writel(v, data_reg->reg);
