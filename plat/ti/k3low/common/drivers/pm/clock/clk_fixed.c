@@ -13,15 +13,11 @@ static uint32_t clk_fixed_get_freq(struct clk *clkp)
 {
 	const struct clk_data *clk_datap;
 	const struct clk_range *range;
-	uint32_t ret = 0;
 
 	clk_datap = clk_get_data(clkp);
 	range = clk_get_range(clk_datap->range_idx);
-	if (range != NULL) {
-		ret = range->min_hz;
-	}
-
-	return ret;
+	
+	return range->min_hz;
 }
 
 static uint32_t clk_fixed_get_state(struct clk *clkp __unused)
