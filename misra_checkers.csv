@@ -1,0 +1,27 @@
+Checker name,Description,Rule,Version
+ABV.ANY_SIZE_ARRAY,Buffer Overflow - Array Index Out of Bounds,Dir. 4.1,Pre-2020.1
+ABV.GENERAL,Buffer Overflow - Array Index Out of Bounds,18.1 Dir. 4.1,Pre-2020.1
+ABV.GENERAL.MULTIDIMENSION,Buffer Overflow - Array Index Out of Bounds,18.1 Dir. 4.1,2022.3
+ABV.ITERATOR,Buffer Overflow - Array Index may be out of Bounds,Dir. 4.1,Pre-2020.1
+ABV.MEMBER,Buffer Overflow - Array Index Out of Bounds,Dir. 4.1,Pre-2020.1
+ABV.STACK,Buffer Overflow - Local Array Index Out of Bounds,18.1 Dir. 4.1,Pre-2020.1
+ABV.UNICODE.BOUND_MAP,Buffer overflow in mapping character function,Dir. 4.1,Pre-2020.1
+ABV.UNICODE.FAILED_MAP,Mapping function failed,Dir. 4.1,Pre-2020.1
+ABV.UNICODE.NNTS_MAP,Buffer overflow in mapping character function,Dir. 4.1,Pre-2020.1
+ABV.UNICODE.SELF_MAP,Mapping function failed,Dir. 4.1,Pre-2020.1
+ABV.UNKNOWN_SIZE,Buffer Overflow - Array Index Out of Bounds,Dir. 4.1,Pre-2020.1
+DBZ.CONST,Division by a zero constant occurs,Dir. 4.1,2020.2
+DBZ.CONST.CALL,The value '0' is passed to function that can use this value as divisor,Dir. 4.1,Pre-2020.1
+DBZ.GENERAL,Division by zero might occur,Dir. 4.1,Pre-2020.1
+DBZ.ITERATOR,Division by zero might occur in a loop iterator,Dir. 4.1,Pre-2020.1
+DBZ.ITERATOR.CALL,Division by zero might occur in a function call,Dir. 4.1,Pre-2020.1
+EFFECT,Statement has no effect,2.2,Pre-2020.1
+FMM.MIGHT,Freeing Mismatched Memory - possible,22.2,Pre-2020.1
+FMM.MUST,Freeing Mismatched Memory,22.2,Pre-2020.1
+FNH.MIGHT,Freeing Non-Heap Memory - possible,22.2,Pre-2020.1
+FNH.MUST,Freeing Non-Heap Memory,22.2,Pre-2020.1
+FREE.INCONSISTENT,Inconsistent Freeing of Memory,22.1,Pre-2020.1
+FUM.GEN.MIGHT,Freeing Unallocated Memory - possible,22.2,Pre-2020.1
+FUM.GEN.MUST,Freeing Unallocated Memory,22.2,Pre-2020.1
+FUNCRET.GEN,Non-void function does not return value,17.4,Pre-2020.1
+FUNCRET.IMPLICIT,Non-void function implicitly returning int does not return value,17.4,Pre-2020.1
