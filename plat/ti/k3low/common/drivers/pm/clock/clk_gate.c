@@ -20,9 +20,9 @@ static bool clk_gate_set_state(struct clk *clkp, bool enable)
 
 	v = readl(reg->reg);
 	if (enable) {
-		v |= BIT(reg->bit);
+		v |= (uint32_t)BIT(reg->bit);
 	} else {
-		v &= ~BIT(reg->bit);
+		v &= ~(uint32_t)BIT(reg->bit);
 	}
 	ti_clk_writel(v, reg->reg);
 
