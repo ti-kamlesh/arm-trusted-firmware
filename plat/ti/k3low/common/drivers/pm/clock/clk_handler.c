@@ -131,10 +131,6 @@ int32_t get_clock_handler(struct tisci_msg_get_clock_req *msg_recv)
 			resp->hdr.flags |= TISCI_MSG_FLAG_CLOCK_ALLOW_SSC;
 		}
 
-		if (device_clk_get_hw_ssc(dev, clkidx)) {
-			resp->hdr.flags |= TISCI_MSG_FLAG_CLOCK_SSC_ACTIVE;
-		}
-
 		if (device_clk_get_freq_change(dev, clkidx)) {
 			resp->hdr.flags |= TISCI_MSG_FLAG_CLOCK_ALLOW_FREQ_CHANGE;
 		}
@@ -316,22 +312,13 @@ int32_t set_freq_handler(struct tisci_msg_set_freq_req *msg_recv)
 
 	ret = device_prepare_exclusive(req->hdr.host, id, NULL, &dev);
 	if (ret == SUCCESS) {
-		if ((min_freq_hz > (uint64_t) ULONG_MAX)
-		    || (min_freq_hz > target_freq_hz)
+		if ((min_freq_hz > target_freq_hz)
 		    || (target_freq_hz > max_freq_hz)) {
 			ret = -EINVAL;
 		}
 	}
 
 	if (ret == SUCCESS) {
-		if (max_freq_hz > (uint64_t) ULONG_MAX) {
-			max_freq_hz = ULONG_MAX;
-		}
-
-		if (target_freq_hz > (uint64_t) ULONG_MAX) {
-			target_freq_hz = ULONG_MAX;
-		}
-
 		if (!device_clk_set_freq(dev, clkidx, (uint32_t) min_freq_hz,
 					 (uint32_t) target_freq_hz,
 					 (uint32_t) max_freq_hz)) {
@@ -372,22 +359,13 @@ int32_t query_freq_handler(uint32_t *msg_recv)
 
 	ret = device_prepare_exclusive(req->hdr.host, id, NULL, &dev);
 	if (ret == SUCCESS) {
-		if ((min_freq_hz > (uint64_t) ULONG_MAX)
-		    || (min_freq_hz > target_freq_hz)
+		if ((min_freq_hz > target_freq_hz)
 		    || (target_freq_hz > max_freq_hz)) {
 			ret = -EINVAL;
 		}
 	}
 
 	if (ret == SUCCESS) {
-		if (max_freq_hz > (uint64_t) ULONG_MAX) {
-			max_freq_hz = ULONG_MAX;
-		}
-
-		if (target_freq_hz > (uint64_t) ULONG_MAX) {
-			target_freq_hz = ULONG_MAX;
-		}
-
 		freq_hz = device_clk_query_freq(dev, clkidx,
 						(uint32_t) min_freq_hz,
 						(uint32_t) target_freq_hz,
