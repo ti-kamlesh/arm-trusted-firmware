@@ -25,10 +25,10 @@ static const struct clk_parent *clk_pllctrl_mux_get_parent(struct clk *clkp)
 	mux = container_of(clk_datap->data, const struct clk_data_mux, data);
 	reg = container_of(mux, const struct clk_data_mux_reg, data_mux);
 
-	v = readl(reg->reg + PLLCTRL_PLLCTRL);
+	v = (uint32_t)readl(reg->reg + PLLCTRL_PLLCTRL);
 	if ((v & PLLCTRL_PLLCTRL_PLLENSRC) != 0U) {
 		/* When set, mux is controlled by lock state of PLL */
-		v = readl(reg->reg + PLLCTRL_PLLSTAT);
+		v = (uint32_t)readl(reg->reg + PLLCTRL_PLLSTAT);
 		if ((v & PLLCTRL_PLLSTAT_LOCK) != 0U) {
 			/* PLL is locked */
 			parent = &mux->parents[1];
