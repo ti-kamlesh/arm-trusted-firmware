@@ -612,7 +612,6 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 	uint32_t div_ctrl;
 	uint32_t ctrl;
 	bool ret = true;
-	int32_t err;
 	uint32_t cfg;
 	uint32_t pll_type;
 
@@ -620,18 +619,12 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 
 	if (!clk_pll_16fft_is_bypass(pll)) {
 		/* Put the PLL into bypass */
-		err = clk_pll_16fft_bypass(pll_clk, true);
-		if (err != SUCCESS) {
-			ret = false;
-		}
+		(void)clk_pll_16fft_bypass(pll_clk, true);
 	}
 
 	if (ret) {
 		/* Disable the PLL */
-		err = clk_pll_16fft_disable_pll(pll);
-		if (err != SUCCESS) {
-			ret = false;
-		}
+		(void)clk_pll_16fft_disable_pll(pll);
 	}
 
 	cfg = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CFG(pll->idx));
@@ -730,20 +723,14 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 	 */
 	if (ret) {
 		osal_delay(1UL);
-		err = clk_pll_16fft_enable_pll(pll);
-		if (err != SUCCESS) {
-			ret = false;
-		}
+		(void)clk_pll_16fft_enable_pll(pll);
 	}
 
 	if ((pll_clk->ref_count != 0U) && ret) {
 		/* Take the PLL out of bypass */
 		ret = clk_pll_16fft_wait_for_lock(pll_clk);
 		if (ret) {
-			err = clk_pll_16fft_bypass(pll_clk, false);
-			if (err != SUCCESS) {
-				ret = false;
-			}
+			(void)clk_pll_16fft_bypass(pll_clk, false);
 		}
 	}
 
@@ -1117,13 +1104,8 @@ static bool clk_pll_16fft_set_state(struct clk *clock_ptr, bool enabled)
 	}
 
 	if (ret) {
-		int32_t err;
-
 		clock_ptr->flags &= (uint8_t) ~CLK_FLAG_CACHED;
-		err = clk_pll_16fft_bypass(clock_ptr, !enabled);
-		if (err != SUCCESS) {
-			ret = false;
-		}
+		(void)clk_pll_16fft_bypass(clock_ptr, !enabled);
 	}
 
 	return ret;
