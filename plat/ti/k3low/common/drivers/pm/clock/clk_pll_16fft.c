@@ -324,9 +324,7 @@ static int32_t clk_pll_16fft_enable_pll(const struct clk_data_pll_16fft *pll)
 	if ((ctrl & PLL_16FFT_CTRL_PLL_EN) == 0U) {
 		ctrl |= PLL_16FFT_CTRL_PLL_EN;
 		ti_clk_writel(ctrl, pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
-		if (err == SUCCESS) {
-			osal_delay(1UL); /* Wait 1us */
-		}
+		osal_delay(1UL); /* Wait 1us */
 	}
 
 	return err;
@@ -342,9 +340,7 @@ static int32_t clk_pll_16fft_disable_pll(const struct clk_data_pll_16fft *pll)
 	if ((ctrl & PLL_16FFT_CTRL_PLL_EN) != 0U) {
 		ctrl &= ~PLL_16FFT_CTRL_PLL_EN;
 		ti_clk_writel(ctrl, pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
-		if (err == SUCCESS) {
-			osal_delay(1UL); /* Wait 1us */
-		}
+		osal_delay(1UL); /* Wait 1us */
 	}
 
 	return err;
@@ -567,21 +563,8 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 		parent_freq_hz = clk_get_parent_freq(clock_ptr);
 		ret64 = (uint64_t) ((parent_freq_hz / clkod_plld) * pllm);
 		rem = (uint64_t) ((parent_freq_hz % clkod_plld) * pllm);
-		if (rem > (uint64_t) ULONG_MAX) {
-			/*
-			 * Remainder should always fit within 32 bits.
-			 * We add this in case of a programming error
-			 * or unexpected input.
-			 *
-			 * clkod_plld - 12 bits
-			 * pllm -	12 bits
-			 * total -	24 bits (should not need div64)
-			 */
-			ret64 += pm_div64(&rem, clkod_plld);
-		} else {
-			ret64 += rem / (uint64_t) clkod_plld;
-			rem = rem % (uint64_t) clkod_plld;
-		}
+		ret64 += rem / (uint64_t) clkod_plld;
+		rem = rem % (uint64_t) clkod_plld;
 
 		if (m_frac_mult != 0UL) {
 			uint64_t fret;	     /* Fraction return value */
@@ -592,27 +575,8 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 			/* Calculate fractional component of frequency */
 			fret = ((uint64_t) (parent_freq_hz / clkod_plld)) * m_frac_mult;
 			frem = ((uint64_t) (parent_freq_hz % clkod_plld)) * m_frac_mult;
-			if (frem > (uint64_t) ULONG_MAX) {
-				/*
-				 * m_frac_mult - 24 bits
-				 * clkod_plld - 12 bits
-				 * total - 36 bits
-				 *
-				 * NB: Overflow, 64 bit div may be required.
-				 *
-				 * plld max - 63
-				 * clkod max - 7*7 = 49
-				 * m_frac_mult max - 0xffffff
-				 * max clkod = ULONG_MAX / 0xffffff = 255
-				 *
-				 * Any combined plld/clkod value over 255 may
-				 * lead to pm_div64 being required.
-				 */
-				fret += pm_div64(&frem, clkod_plld);
-			} else {
-				fret += frem / (uint64_t) clkod_plld;
-				frem = frem % (uint64_t) clkod_plld;
-			}
+			fret += frem / (uint64_t) clkod_plld;
+			frem = frem % (uint64_t) clkod_plld;
 
 			/* Fold back into return/remainder */
 			frem += (fret & (uint64_t) mask) * clkod_plld;
@@ -627,12 +591,7 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 			rem = ((uint64_t) rem) % clkod_plld;
 		}
 
-		if (ret64 > (uint64_t) ULONG_MAX) {
-			/* FIXME: Handle PLL value overflow */
-			ret = (uint32_t) ULONG_MAX;
-		} else {
-			ret = (uint32_t) ret64;
-		}
+		ret = (uint32_t) ret64;
 	}
 
 	return ret;
@@ -727,16 +686,10 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 	if (ret) {
 		ti_clk_writel(freq_ctrl0,
 			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
-	}
-	if (ret) {
 		ti_clk_writel(freq_ctrl1,
 			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
-	}
-	if (ret) {
 		ti_clk_writel(div_ctrl,
 			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
-	}
-	if (ret) {
 		ti_clk_writel(ctrl,
 			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 	}
@@ -944,19 +897,8 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 			rem64 = ((uint64_t) (input % clkod_plld)) *
 				soc_pll_table[data_pll->pll_entries[i]].pllm;
 
-			if (rem64 > (uint64_t) ULONG_MAX) {
-				/*
-				 * Note: This is only true if clkod * plld * pllm >
-				 * ULONG_MAX. This is not true for any currently
-				 * supported PLLs, this 64 bit division is only
-				 * included for completeness
-				 */
-				actual64 += pm_div64(&rem64, clkod_plld);
-				rem = (uint32_t) rem64;
-			} else {
-				actual64 += (uint64_t) (((uint32_t) rem64) / clkod_plld);
-				rem = ((uint32_t) rem64) % clkod_plld;
-			}
+			actual64 += (uint64_t) (((uint32_t) rem64) / clkod_plld);
+			rem = ((uint32_t) rem64) % clkod_plld;
 
 			if (soc_pll_table[data_pll->pll_entries[i]].pllfm != 0UL) {
 				uint64_t fret;
@@ -981,23 +923,15 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 					soc_pll_table[data_pll->pll_entries[i]].pllfm;
 				frem = ((uint64_t) (input % clkod_plld)) *
 					soc_pll_table[data_pll->pll_entries[i]].pllfm;
-				if (frem > (uint64_t) ULONG_MAX) {
-					fret += pm_div64(&frem, clkod_plld);
-				} else if (frem >= clkod_plld) {
+				if (frem >= clkod_plld) {
 					fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
 					frem =	(uint64_t) (((uint32_t) frem) % clkod_plld);
-				} else {
-					/* Do Nothing */
 				}
 				fret *= stride;
 				frem *= stride;
-				if (frem > (uint64_t) ULONG_MAX) {
-					fret += pm_div64(&frem, clkod_plld);
-				} else if (frem >= clkod_plld) {
+				if (frem >= clkod_plld) {
 					fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
 					frem =	(uint64_t) (((uint32_t) frem) % clkod_plld);
-				} else {
-					/* Do Nothing */
 				}
 				frem += (uint64_t) (((uint32_t) (fret & pllfm_mask)) * clkod_plld);
 
@@ -1009,11 +943,7 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 				rem += ((uint32_t) rem) % clkod_plld;
 			}
 
-			if (actual64 > (uint64_t) ULONG_MAX) {
-				pll_consider_done = true;
-			} else {
-				actual = (uint32_t) actual64;
-			}
+			actual = (uint32_t) actual64;
 		}
 
 		/* Calculate 2 best potential dividers for HSDIV */
@@ -1373,18 +1303,9 @@ static int32_t clk_pll_16fft_init_internal(struct clk *clock_ptr)
 
 static int32_t clk_pll_16fft_init(struct clk *clock_ptr)
 {
-	const struct clk_data *clock_data = clk_get_data(clock_ptr);
-	const struct clk_data_pll *data_pll;
 	int32_t ret;
 
-	data_pll = container_of(clock_data->data, const struct clk_data_pll,
-				data);
-
-	if (pm_devgroup_is_enabled(data_pll->devgrp)) {
-		ret = clk_pll_16fft_init_internal(clock_ptr);
-	} else {
-		ret = -EDEFER;
-	}
+	ret = clk_pll_16fft_init_internal(clock_ptr);
 
 	return ret;
 }
