@@ -74,14 +74,14 @@ static inline uint32_t PLL_16FFT_FREQ_CTRL0(uint32_t idx)
 	return (0x1000UL * idx) + 0x30UL;
 }
 #define PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT	0UL
-#define PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MSK	(0xfffUL << 0UL)
+#define PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK	(0xfffUL << 0UL)
 
 static inline uint32_t PLL_16FFT_FREQ_CTRL1(uint32_t idx)
 {
 	return (0x1000UL * idx) + 0x34UL;
 }
 #define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT	0UL
-#define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MSK	(0xffffffUL << 0UL)
+#define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK	(0xffffffUL << 0UL)
 #define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_BITS	24UL
 
 static inline uint32_t PLL_16FFT_DIV_CTRL(uint32_t idx)
@@ -543,10 +543,10 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 	freq_ctrl1 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
 	div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 
-	pllm = freq_ctrl0 & PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MSK;
+	pllm = freq_ctrl0 & PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK;
 	pllm >>= PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT;
 
-	m_frac_mult = freq_ctrl1 & PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MSK;
+	m_frac_mult = freq_ctrl1 & PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK;
 	m_frac_mult >>= PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT;
 
 	plld = div_ctrl & PLL_16FFT_DIV_CTRL_REF_DIV_MASK;
@@ -642,10 +642,10 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 	freq_ctrl1 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
 	div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 
-	freq_ctrl0 &= ~PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MSK;
+	freq_ctrl0 &= ~PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK;
 	freq_ctrl0 |= pllm << PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT;
 
-	freq_ctrl1 &= ~PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MSK;
+	freq_ctrl1 &= ~PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK;
 	freq_ctrl1 |= pllfm << PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT;
 
 	div_ctrl &= ~PLL_16FFT_DIV_CTRL_REF_DIV_MASK;
@@ -789,10 +789,10 @@ static uint32_t clk_pll_16fft_internal_set_freq(struct clk *pll_clk,
 	div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 
 	/* Check current values */
-	prev_pllm = freq_ctrl0 & PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MSK;
+	prev_pllm = freq_ctrl0 & PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK;
 	prev_pllm >>= PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT;
 
-	prev_pllfm = freq_ctrl1 & PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MSK;
+	prev_pllfm = freq_ctrl1 & PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK;
 	prev_pllfm >>= PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT;
 
 	prev_plld = div_ctrl & PLL_16FFT_DIV_CTRL_REF_DIV_MASK;
