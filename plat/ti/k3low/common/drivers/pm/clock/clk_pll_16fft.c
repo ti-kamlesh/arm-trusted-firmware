@@ -1246,12 +1246,12 @@ static int32_t clk_pll_16fft_init_internal(struct clk *clock_ptr)
 			if ((sub_data->drv == &clk_drv_div_reg.drv) &&
 			    sub_data->drv->init) {
 				if (clk_pll_16fft_postdiv_get_pll_root(sub_clk) == clock_ptr) {
-					sub_data->drv->init(sub_clk);
+					(void)sub_data->drv->init(sub_clk);
 				}
 			} else if ((sub_data->drv == &clk_drv_div_pll_16fft_hsdiv.drv) &&
 				   sub_data->drv->init) {
 				if (clk_pll_16fft_hsdiv_get_pll_root(sub_clk) == clock_ptr) {
-					sub_data->drv->init(sub_clk);
+					(void)sub_data->drv->init(sub_clk);
 				}
 			} else {
 				/* Do Nothing */
