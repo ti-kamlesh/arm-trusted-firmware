@@ -197,10 +197,10 @@ static int32_t clk_pll_deskew_bypass(struct clk *clock_ptr, bool bypass)
 	ctrl = (uint32_t)readl((uintptr_t)pll->base + (uintptr_t)PLL_DESKEW_CTRL(pll->idx));
 	if (bypass) {
 		/* Enable bypass */
-		ctrl |= PLL_DESKEW_CTRL_BYPASS_EN;
+		ctrl |= (uint32_t)PLL_DESKEW_CTRL_BYPASS_EN;
 	} else {
 		/* Disable bypass */
-		ctrl &= ~PLL_DESKEW_CTRL_BYPASS_EN;
+		ctrl &= (uint32_t)~PLL_DESKEW_CTRL_BYPASS_EN;
 	}
 	ti_clk_writel(ctrl, (uintptr_t)pll->base + (uintptr_t)PLL_DESKEW_CTRL(pll->idx));
 	return SUCCESS;
@@ -268,9 +268,9 @@ static bool clk_pll_deskew_program_freq(struct clk *clock_ptr,
 	/* Start with vco output divider */
 	if (clkod_val_p > 2UL) {
 		clkod_val_p /= 2UL;
-		ctrl &= ~PLL_DESKEW_CTRL_VCO_SEL;
+		ctrl &= (uint32_t)~PLL_DESKEW_CTRL_VCO_SEL;
 	} else {
-		ctrl |= PLL_DESKEW_CTRL_VCO_SEL;
+		ctrl |= (uint32_t)PLL_DESKEW_CTRL_VCO_SEL;
 	}
 
 	/* Find the log2 for clkod setting */
@@ -593,8 +593,8 @@ static int32_t clk_pll_deskew_init_internal(struct clk *clock_ptr)
 
 	/* Prefer glitchless bypass */
 	if ((ctrl & PLL_DESKEW_CTRL_INTL_BYP_EN) != 0U) {
-		ctrl |= PLL_DESKEW_CTRL_BYPASS_EN;
-		ctrl &= ~PLL_DESKEW_CTRL_INTL_BYP_EN;
+		ctrl |= (uint32_t)PLL_DESKEW_CTRL_BYPASS_EN;
+		ctrl &= (uint32_t)~PLL_DESKEW_CTRL_INTL_BYP_EN;
 	}
 
 	ti_clk_writel(ctrl, (uintptr_t)pll->base + (uintptr_t)PLL_DESKEW_CTRL(pll->idx));
