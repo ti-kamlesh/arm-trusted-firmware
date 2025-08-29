@@ -1240,8 +1240,8 @@ static int32_t clk_pll_16fft_init_internal(struct clk *clock_ptr)
 		 * with the hsdiv driver who have this PLL for a parent.
 		 */
 		for (i = 0; (i < soc_clock_count) && (ret == SUCCESS); i++) {
-			const struct clk_data *sub_data = soc_clock_data + i;
-			struct clk *sub_clk = soc_clocks + i;
+			const struct clk_data *sub_data = &soc_clock_data[i];
+			struct clk *sub_clk = &soc_clocks[i];
 
 			if ((sub_data->drv == &clk_drv_div_reg.drv) &&
 			    sub_data->drv->init) {
