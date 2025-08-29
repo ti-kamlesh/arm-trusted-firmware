@@ -67,6 +67,7 @@ static bool clk_mux_set_parent(struct clk *clkp, uint8_t new_parent)
 	uint32_t v;
 	uint32_t parent_val;
 	uint32_t mask;
+	uint32_t inverted_mask;
 	uint32_t trace_val;
 	uint32_t trace_id;
 	uint32_t n_minus_one;
@@ -88,7 +89,8 @@ static bool clk_mux_set_parent(struct clk *clkp, uint8_t new_parent)
 		shift_bits = (uint32_t)ilog32(n_minus_one);
 		reg_bit = (uint32_t)reg->bit;
 		mask = (((1U << shift_bits) - 1U) << reg_bit);
-		v &= ~mask;
+		inverted_mask = ~mask;
+		v &= inverted_mask;
 		parent_val = (uint32_t)new_parent << reg_bit;
 		v |= parent_val;
 		ti_clk_writel(v, reg->reg);
