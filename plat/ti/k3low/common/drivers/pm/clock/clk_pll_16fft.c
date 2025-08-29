@@ -588,7 +588,6 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 			rem += frem >> PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_BITS;
 
 			ret64 += ((uint64_t) rem) / clkod_plld;
-			rem = ((uint64_t) rem) % clkod_plld;
 		}
 
 		ret = (uint32_t) ret64;
@@ -919,7 +918,6 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 				rem += (uint32_t) (frem >> pllfm_bits);
 
 				actual64 += ((uint64_t) rem) / clkod_plld;
-				rem += ((uint32_t) rem) % clkod_plld;
 			}
 
 		actual = (uint32_t) actual64;
