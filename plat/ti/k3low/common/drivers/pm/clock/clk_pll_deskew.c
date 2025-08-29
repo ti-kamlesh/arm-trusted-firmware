@@ -213,7 +213,6 @@ static bool clk_pll_deskew_program_freq(struct clk *clock_ptr,
 					uint32_t clkod)
 {
 	bool ret = true;
-	int32_t err;
 	uint64_t div_ctrl;
 	uint32_t ctrl;
 	uint64_t i;
@@ -225,10 +224,7 @@ static bool clk_pll_deskew_program_freq(struct clk *clock_ptr,
 
 	if (!clk_pll_deskew_is_bypass(clock_ptr)) {
 		/* Put the PLL into bypass */
-		err = clk_pll_deskew_bypass(clock_ptr, true);
-		if (err != SUCCESS) {
-			ret = false;
-		}
+		(void)clk_pll_deskew_bypass(clock_ptr, true);
 	}
 
 	/* Program the new rate */
@@ -294,10 +290,7 @@ static bool clk_pll_deskew_program_freq(struct clk *clock_ptr,
 		/* Take the PLL out of bypass */
 		ret = clk_pll_deskew_wait_for_lock(clock_ptr);
 		if (ret) {
-			err = clk_pll_deskew_bypass(clock_ptr, false);
-			if (err != SUCCESS) {
-				ret = false;
-			}
+			(void)clk_pll_deskew_bypass(clock_ptr, false);
 		}
 	}
 
@@ -461,28 +454,11 @@ static uint32_t clk_pll_deskew_get_freq_internal(struct clk *clock_ptr)
 		parent_freq_hz = (uint64_t) clk_get_parent_freq(clock_ptr);
 		ret64 = (parent_freq_hz / clkod_plld) * pllm;
 		rem = (parent_freq_hz % clkod_plld) * pllm;
-		if (rem > (uint64_t) ULONG_MAX) {
-			/*
-			 * Remainder should always fit within 32 bits.
-			 * We add this in case of a programming error
-			 * or unexpected input.
-			 *
-			 * clkod_plld - 13 bits
-			 * pllm -	3 bits
-			 * total -	16 bits (should not need div64)
-			 */
-			ret64 += pm_div64(&rem, (uint32_t) clkod_plld);
-		} else {
-			ret64 += rem / clkod_plld;
-			rem = rem % clkod_plld;
-		}
+		/* Remainder should always fit within 32 bits based on bit analysis */
+		ret64 += rem / clkod_plld;
 
-		if (ret64 > (uint64_t) ULONG_MAX) {
-			/* Cap overflow */
-			ret = (uint32_t) ULONG_MAX;
-		} else {
-			ret = (uint32_t) ret64;
-		}
+		/* Based on calculation constraints, overflow is not possible */
+		ret = (uint32_t) ret64;
 	}
 
 	return ret;
@@ -532,12 +508,7 @@ static bool clk_pll_deskew_set_state(struct clk *clock_ptr, bool enabled)
 	}
 
 	if (ret) {
-		int32_t err;
-
-		err = clk_pll_deskew_bypass(clock_ptr, !enabled);
-		if (err != SUCCESS) {
-			ret = false;
-		}
+		(void)clk_pll_deskew_bypass(clock_ptr, !enabled);
 	}
 
 	return ret;
@@ -649,18 +620,9 @@ static int32_t clk_pll_deskew_init_internal(struct clk *clock_ptr)
 
 static int32_t clk_pll_deskew_init(struct clk *clock_ptr)
 {
-	const struct clk_data *clock_data = clk_get_data(clock_ptr);
-	const struct clk_data_pll *data_pll;
 	int32_t ret;
 
-	data_pll = container_of(clock_data->data, const struct clk_data_pll,
-				data);
-
-	if (pm_devgroup_is_enabled(data_pll->devgrp)) {
-		ret = clk_pll_deskew_init_internal(clock_ptr);
-	} else {
-		ret = -EDEFER;
-	}
+	ret = clk_pll_deskew_init_internal(clock_ptr);
 
 	return ret;
 }
