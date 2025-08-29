@@ -17,9 +17,19 @@
 #include <drivers/delay_timer.h>
 #include <osal/osal_clock_user.h>
 
-#define PLL_16FFT_PID	(idx)			((0x1000UL * (idx)) + 0x00UL)
-#define PLL_16FFT_CFG(idx)			((0x1000UL * (idx)) + 0x08UL)
-#define PLL_16FFT_CFG_HSDIV_PRSNC(n)		BIT((n) + 16UL)
+static inline uint32_t PLL_16FFT_PID(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x00UL;
+}
+
+static inline uint32_t PLL_16FFT_CFG(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x08UL;
+}
+static inline uint32_t PLL_16FFT_CFG_HSDIV_PRSNC(uint32_t n)
+{
+	return BIT(n + 16UL);
+}
 #define PLL_16FFT_CFG_SSM			BIT(11)
 #define PLL_16FFT_CFG_SSM_WVTBL			BIT(8)
 #define PLL_16FFT_CFG_PLL_TYPE_SHIFT		(0UL)
@@ -28,13 +38,22 @@
 #define PLL_16FFT_CFG_PLL_TYPE_FRACF		1UL
 #define PLL_16FFT_CFG_PLL_TYPE_DESKEW		2UL
 
-#define PLL_16FFT_LOCKKEY0(idx)			((0x1000UL * (idx)) + 0x10UL)
+static inline uint32_t PLL_16FFT_LOCKKEY0(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x10UL;
+}
 #define PLL_16FFT_LOCKKEY0_VALUE		0x68EF3490UL
 
-#define PLL_16FFT_LOCKKEY1(idx)			((0x1000UL * (idx)) + 0x14UL)
+static inline uint32_t PLL_16FFT_LOCKKEY1(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x14UL;
+}
 #define PLL_16FFT_LOCKKEY1_VALUE		0xD172BC5AUL
 
-#define PLL_16FFT_CTRL(idx)			((0x1000UL * (idx)) + 0x20UL)
+static inline uint32_t PLL_16FFT_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x20UL;
+}
 #define PLL_16FFT_CTRL_BYPASS_EN		BIT(31)
 #define PLL_16FFT_CTRL_BYP_ON_LOCKLOSS		BIT(16)
 #define PLL_16FFT_CTRL_PLL_EN			BIT(15)
@@ -44,19 +63,31 @@
 #define PLL_16FFT_CTRL_DSM_EN			BIT(1)
 #define PLL_16FFT_CTRL_DAC_EN			BIT(0)
 
-#define PLL_16FFT_STAT(idx)			((0x1000UL * (idx)) + 0x24UL)
+static inline uint32_t PLL_16FFT_STAT(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x24UL;
+}
 #define PLL_16FFT_STAT_LOCK			BIT(0)
 
-#define PLL_16FFT_FREQ_CTRL0(idx)		((0x1000UL * (idx)) + 0x30UL)
+static inline uint32_t PLL_16FFT_FREQ_CTRL0(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x30UL;
+}
 #define PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT	0UL
 #define PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK	(0xfffUL << 0UL)
 
-#define PLL_16FFT_FREQ_CTRL1(idx)		((0x1000UL * (idx)) + 0x34UL)
+static inline uint32_t PLL_16FFT_FREQ_CTRL1(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x34UL;
+}
 #define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT	0UL
 #define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK	(0xffffffUL << 0UL)
 #define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_BITS	24UL
 
-#define PLL_16FFT_DIV_CTRL(idx)			((0x1000UL * (idx)) + 0x38UL)
+static inline uint32_t PLL_16FFT_DIV_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x38UL;
+}
 #define PLL_16FFT_DIV_CTRL_POST_DIV2_SHIFT	24UL
 #define PLL_16FFT_DIV_CTRL_POST_DIV2_MASK	(0x7UL << 24UL)
 #define PLL_16FFT_DIV_CTRL_POST_DIV1_SHIFT	16UL
@@ -64,10 +95,20 @@
 #define PLL_16FFT_DIV_CTRL_REF_DIV_SHIFT	0UL
 #define PLL_16FFT_DIV_CTRL_REF_DIV_MASK		(0x3fUL << 0UL)
 
-#define PLL_16FFT_SS_CTRL(idx)			((0x1000UL * (idx)) + 0x40UL)
-#define PLL_16FFT_SS_SPREAD(idx)		((0x1000UL * (idx)) + 0x44UL)
+static inline uint32_t PLL_16FFT_SS_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x40UL;
+}
 
-#define PLL_16FFT_CAL_CTRL(idx)			((0x1000UL * (idx)) + 0x60UL)
+static inline uint32_t PLL_16FFT_SS_SPREAD(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x44UL;
+}
+
+static inline uint32_t PLL_16FFT_CAL_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x60UL;
+}
 #define PLL_16FFT_CAL_CTRL_CAL_EN		BIT(31)
 #define PLL_16FFT_CAL_CTRL_FAST_CAL		BIT(20)
 #define PLL_16FFT_CAL_CTRL_CAL_CNT_SHIFT	16UL
@@ -76,14 +117,20 @@
 #define PLL_16FFT_CAL_CTRL_CAL_IN_SHIFT		0U
 #define PLL_16FFT_CAL_CTRL_CAL_IN_MASK		(0xFFFU << 0U)
 
-#define PLL_16FFT_CAL_STAT(idx)			((0x1000U * (idx)) + 0x64U)
+static inline uint32_t PLL_16FFT_CAL_STAT(uint32_t idx)
+{
+	return (0x1000U * idx) + 0x64U;
+}
 #define PLL_16FFT_CAL_STAT_CAL_LOCK		BIT(31)
 #define PLL_16FFT_CAL_STAT_LOCK_CNT_SHIFT	16U
 #define PLL_16FFT_CAL_STAT_LOCK_CNT_MASK	(0xFU << 16U)
 #define PLL_16FFT_CAL_STAT_CAL_OUT_SHIFT	0U
 #define PLL_16FFT_CAL_STAT_CAL_OUT_MASK		(0xFFFU)
 
-#define PLL_16FFT_HSDIV_CTRL(idx, n)		((0x1000UL * (idx)) + 0x80UL + ((n) * 4UL))
+static inline uint32_t PLL_16FFT_HSDIV_CTRL(uint32_t idx, uint32_t n)
+{
+	return (0x1000UL * idx) + 0x80UL + (n * 4UL);
+}
 #define PLL_16FFT_HSDIV_CTRL_RESET		BIT(31)
 #define PLL_16FFT_HSDIV_CTRL_CLKOUT_EN		BIT(15)
 #define PLL_16FFT_HSDIV_CTRL_SYNC_DIS		BIT(8)
@@ -1358,7 +1405,7 @@ const struct clk_drv clk_drv_pll_16fft = {
  * Note that this means that even though that there are 6 bits used for
  * divider values, there are only 25 divider values (rather than 64).
  */
-#define PDV(pd1, pd2)		((pd1) | ((pd2) << 4UL))
+#define PDV(pd1, pd2) ((uint8_t)((pd1) | ((pd2) << 4UL)))
 #define PDV_ENTRY(div, pd1)[(div)] = PDV((pd1), (div) / (pd1))
 static const uint8_t postdiv_mapping[(7U * 7U) + 1U] = {
 	PDV_ENTRY(1U,  1U),
