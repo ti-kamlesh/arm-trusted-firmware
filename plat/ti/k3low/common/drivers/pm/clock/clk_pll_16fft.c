@@ -1417,7 +1417,7 @@ static bool clk_pll_16fft_postdiv_set_div(struct clk *clock_ptr, uint32_t d)
 		ti_clk_writel(div_ctrl, pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 	}
 
-	return SUCCESS;
+	return (bool)SUCCESS;
 }
 
 static uint32_t clk_pll_16fft_postdiv_get_div(struct clk *clock_ptr)
