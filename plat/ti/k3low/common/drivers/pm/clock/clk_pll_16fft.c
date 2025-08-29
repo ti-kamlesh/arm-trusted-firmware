@@ -683,7 +683,7 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 		      (uint32_t) pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 
 	/* Program output divider */
-	if (div_clk) {
+	if (div_clk != NULL) {
 		div_clk_data = clk_get_data(div_clk);
 		if (div_clk_data->drv != NULL) {
 			drv_div = container_of(div_clk_data->drv,
