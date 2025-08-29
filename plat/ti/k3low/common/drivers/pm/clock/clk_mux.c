@@ -47,12 +47,16 @@ static const struct clk_parent *clk_mux_get_parent(struct clk *clkp)
 	const struct clk_data *clk_datap = clk_get_data(clkp);
 	const struct clk_data_mux *mux;
 	uint32_t v;
+	bool valid_parent;
+	bool valid_div;
 
 	mux = container_of(clk_datap->data, const struct clk_data_mux, data);
 	v = clk_mux_get_parent_value(clkp);
 
-	return ((v < mux->n) && (mux->parents[v].div != 0U)) ?
-		&mux->parents[v] : NULL;
+	valid_parent = (v < mux->n);
+	valid_div = (mux->parents[v].div != 0U);
+
+	return (valid_parent && valid_div) ? &mux->parents[v] : NULL;
 }
 
 static bool clk_mux_set_parent(struct clk *clkp, uint8_t new_parent)
@@ -113,14 +117,18 @@ const struct clk_parent *clk_get_parent(struct clk *clkp)
 {
 	const struct clk_data *clk_datap = clk_get_data(clkp);
 	const struct clk_parent *ret = NULL;
+	bool is_mux_type;
 
-	if (clk_datap->type == CLK_TYPE_MUX) {
+	is_mux_type = (clk_datap->type == CLK_TYPE_MUX);
+
+	if (is_mux_type) {
 		const struct clk_drv_mux *mux;
 
 		mux = container_of(clk_datap->drv, const struct clk_drv_mux, drv);
 		ret = mux->get_parent(clkp);
 	} else {
-		ret = ((clk_datap->parent.div > 0U) ? &clk_datap->parent : NULL);
+		bool valid_div = (clk_datap->parent.div > 0U);
+		ret = valid_div ? &clk_datap->parent : NULL;
 	}
 
 	return ret;
