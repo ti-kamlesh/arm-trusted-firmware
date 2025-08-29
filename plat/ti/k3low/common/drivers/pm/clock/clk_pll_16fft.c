@@ -19,16 +19,16 @@
 
 static inline uint32_t PLL_16FFT_PID(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x00UL;
+	return (uint32_t)((0x1000UL * idx) + 0x00UL);
 }
 
 static inline uint32_t PLL_16FFT_CFG(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x08UL;
+	return (uint32_t)((0x1000UL * idx) + 0x08UL);
 }
 static inline uint32_t PLL_16FFT_CFG_HSDIV_PRSNC(uint32_t n)
 {
-	return BIT(n + 16UL);
+	return (uint32_t)BIT(n + 16UL);
 }
 #define PLL_16FFT_CFG_SSM			BIT(11)
 #define PLL_16FFT_CFG_SSM_WVTBL			BIT(8)
@@ -40,19 +40,19 @@ static inline uint32_t PLL_16FFT_CFG_HSDIV_PRSNC(uint32_t n)
 
 static inline uint32_t PLL_16FFT_LOCKKEY0(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x10UL;
+	return (uint32_t)((0x1000UL * idx) + 0x10UL);
 }
 #define PLL_16FFT_LOCKKEY0_VALUE		0x68EF3490UL
 
 static inline uint32_t PLL_16FFT_LOCKKEY1(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x14UL;
+	return (uint32_t)((0x1000UL * idx) + 0x14UL);
 }
 #define PLL_16FFT_LOCKKEY1_VALUE		0xD172BC5AUL
 
 static inline uint32_t PLL_16FFT_CTRL(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x20UL;
+	return (uint32_t)((0x1000UL * idx) + 0x20UL);
 }
 #define PLL_16FFT_CTRL_BYPASS_EN		BIT(31)
 #define PLL_16FFT_CTRL_BYP_ON_LOCKLOSS		BIT(16)
@@ -65,20 +65,20 @@ static inline uint32_t PLL_16FFT_CTRL(uint32_t idx)
 
 static inline uint32_t PLL_16FFT_STAT(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x24UL;
+	return (uint32_t)((0x1000UL * idx) + 0x24UL);
 }
 #define PLL_16FFT_STAT_LOCK			BIT(0)
 
 static inline uint32_t PLL_16FFT_FREQ_CTRL0(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x30UL;
+	return (uint32_t)((0x1000UL * idx) + 0x30UL);
 }
 #define PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT	0UL
 #define PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK	(0xfffUL << 0UL)
 
 static inline uint32_t PLL_16FFT_FREQ_CTRL1(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x34UL;
+	return (uint32_t)((0x1000UL * idx) + 0x34UL);
 }
 #define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT	0UL
 #define PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK	(0xffffffUL << 0UL)
@@ -86,7 +86,7 @@ static inline uint32_t PLL_16FFT_FREQ_CTRL1(uint32_t idx)
 
 static inline uint32_t PLL_16FFT_DIV_CTRL(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x38UL;
+	return (uint32_t)((0x1000UL * idx) + 0x38UL);
 }
 #define PLL_16FFT_DIV_CTRL_POST_DIV2_SHIFT	24UL
 #define PLL_16FFT_DIV_CTRL_POST_DIV2_MASK	(0x7UL << 24UL)
@@ -97,17 +97,17 @@ static inline uint32_t PLL_16FFT_DIV_CTRL(uint32_t idx)
 
 static inline uint32_t PLL_16FFT_SS_CTRL(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x40UL;
+	return (uint32_t)((0x1000UL * idx) + 0x40UL);
 }
 
 static inline uint32_t PLL_16FFT_SS_SPREAD(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x44UL;
+	return (uint32_t)((0x1000UL * idx) + 0x44UL);
 }
 
 static inline uint32_t PLL_16FFT_CAL_CTRL(uint32_t idx)
 {
-	return (0x1000UL * idx) + 0x60UL;
+	return (uint32_t)((0x1000UL * idx) + 0x60UL);
 }
 #define PLL_16FFT_CAL_CTRL_CAL_EN		BIT(31)
 #define PLL_16FFT_CAL_CTRL_FAST_CAL		BIT(20)
@@ -129,7 +129,7 @@ static inline uint32_t PLL_16FFT_CAL_STAT(uint32_t idx)
 
 static inline uint32_t PLL_16FFT_HSDIV_CTRL(uint32_t idx, uint32_t n)
 {
-	return (0x1000UL * idx) + 0x80UL + (n * 4UL);
+	return (uint32_t)((0x1000UL * idx) + 0x80UL + (n * 4UL));
 }
 #define PLL_16FFT_HSDIV_CTRL_RESET		BIT(31)
 #define PLL_16FFT_HSDIV_CTRL_CLKOUT_EN		BIT(15)
@@ -338,7 +338,7 @@ static int32_t clk_pll_16fft_disable_pll(const struct clk_data_pll_16fft *pll)
 	ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 
 	if ((ctrl & PLL_16FFT_CTRL_PLL_EN) != 0U) {
-		ctrl &= ~PLL_16FFT_CTRL_PLL_EN;
+		ctrl &= (uint32_t)~PLL_16FFT_CTRL_PLL_EN;
 		ti_clk_writel(ctrl, pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 		osal_delay(1UL); /* Wait 1us */
 	}
@@ -515,7 +515,7 @@ static int32_t clk_pll_16fft_bypass(struct clk *clock_ptr, bool bypass)
 		ctrl |= PLL_16FFT_CTRL_BYPASS_EN;
 	} else {
 		/* Disable bypass */
-		ctrl &= ~PLL_16FFT_CTRL_BYPASS_EN;
+		ctrl &= (uint32_t)~PLL_16FFT_CTRL_BYPASS_EN;
 	}
 	ti_clk_writel(ctrl, pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 	return SUCCESS;
@@ -632,26 +632,26 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 	freq_ctrl1 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
 	div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 
-	freq_ctrl0 &= ~PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK;
-	freq_ctrl0 |= pllm << PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT;
+	freq_ctrl0 &= (uint32_t)~PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MASK;
+	freq_ctrl0 |= (uint32_t)(pllm << PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT);
 
-	freq_ctrl1 &= ~PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK;
-	freq_ctrl1 |= pllfm << PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT;
+	freq_ctrl1 &= (uint32_t)~PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_MASK;
+	freq_ctrl1 |= (uint32_t)(pllfm << PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_SHIFT);
 
-	div_ctrl &= ~PLL_16FFT_DIV_CTRL_REF_DIV_MASK;
-	div_ctrl |= plld << PLL_16FFT_DIV_CTRL_REF_DIV_SHIFT;
+	div_ctrl &= (uint32_t)~PLL_16FFT_DIV_CTRL_REF_DIV_MASK;
+	div_ctrl |= (uint32_t)(plld << PLL_16FFT_DIV_CTRL_REF_DIV_SHIFT);
 
 	/* Make sure we have fractional support if required */
 	ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 
 	/* Don't use internal bypass,it is not glitch free. Always prefer glitchless bypass */
-	ctrl &= ~PLL_16FFT_CTRL_INTL_BYP_EN;
+	ctrl &= (uint32_t)~PLL_16FFT_CTRL_INTL_BYP_EN;
 
 	/* Always enable output if PLL */
 	ctrl |= PLL_16FFT_CTRL_CLK_POSTDIV_EN;
 
 	/* Currently unused by all PLLs */
-	ctrl &= ~PLL_16FFT_CTRL_CLK_4PH_EN;
+	ctrl &= (uint32_t)~PLL_16FFT_CTRL_CLK_4PH_EN;
 
 	/* Always bypass if we lose lock */
 	ctrl |= PLL_16FFT_CTRL_BYP_ON_LOCKLOSS;
@@ -662,8 +662,8 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 			ctrl |= PLL_16FFT_CTRL_DSM_EN;
 			ctrl |= PLL_16FFT_CTRL_DAC_EN;
 		} else {
-			ctrl &= ~PLL_16FFT_CTRL_DSM_EN;
-			ctrl &= ~PLL_16FFT_CTRL_DAC_EN;
+			ctrl &= (uint32_t)~PLL_16FFT_CTRL_DSM_EN;
+			ctrl &= (uint32_t)~PLL_16FFT_CTRL_DAC_EN;
 		}
 	}
 
@@ -1404,8 +1404,8 @@ static bool clk_pll_16fft_postdiv_set_div(struct clk *clock_ptr, uint32_t d)
 				   data_pll);
 
 		div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
-		div_ctrl &= ~PLL_16FFT_DIV_CTRL_POST_DIV2_MASK;
-		div_ctrl &= ~PLL_16FFT_DIV_CTRL_POST_DIV1_MASK;
+		div_ctrl &= (uint32_t)~PLL_16FFT_DIV_CTRL_POST_DIV2_MASK;
+		div_ctrl &= (uint32_t)~PLL_16FFT_DIV_CTRL_POST_DIV1_MASK;
 
 		v = postdiv_mapping[d];
 		post_div1 = (uint32_t) v & 0xFU;
@@ -1618,7 +1618,7 @@ static int32_t clk_pll_16fft_hsdiv_init(struct clk *clkp)
 	if (skip_hw_init == false) {
 		if (data_div->default_div && drv_div->set_div) {
 			/* Disable HSDIV */
-			hsdiv_ctrl &= ~PLL_16FFT_HSDIV_CTRL_CLKOUT_EN;
+			hsdiv_ctrl &= (uint32_t)~PLL_16FFT_HSDIV_CTRL_CLKOUT_EN;
 			ti_clk_writel(hsdiv_ctrl, data_reg->reg);
 
 			if (!drv_div->set_div(clkp, data_div->default_div)) {
