@@ -30,7 +30,7 @@ static uint32_t clk_mux_get_parent_value(struct clk *clkp)
 		v = readl(reg->reg);
 		v >>= reg->bit;
 
-		v &= (uint32_t) ((1U << ilog32(mux->n - 1U)) - 1U);
+		v &= (uint32_t) (((1U << ilog32(mux->n - 1U)) - 1U));
 	}
 
 	return v;
@@ -67,7 +67,7 @@ static bool clk_mux_set_parent(struct clk *clkp, uint8_t new_parent)
 		 */
 	} else {
 		v = readl(reg->reg);
-		v &= ~(((1U << ilog32(mux->n - 1U)) - 1U) << reg->bit);
+		v &= ~((((1U << ilog32(mux->n - 1U)) - 1U) << reg->bit));
 		v |= (uint32_t) (new_parent << reg->bit);
 		ti_clk_writel(v, reg->reg);
 		pm_trace(TRACE_PM_ACTION_CLOCK_SET_PARENT,
