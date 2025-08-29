@@ -717,10 +717,8 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 	 * Minimum VCO input frequency is 5MHz, therefore maximum
 	 * wait time for 1 ref clock is 0.2us.
 	 */
-	if (ret) {
-		osal_delay(1UL);
-		(void)clk_pll_16fft_enable_pll(pll);
-	}
+	osal_delay(1UL);
+	(void)clk_pll_16fft_enable_pll(pll);
 
 	if ((pll_clk->ref_count != 0U) && ret) {
 		/* Take the PLL out of bypass */
@@ -1096,10 +1094,8 @@ static bool clk_pll_16fft_set_state(struct clk *clock_ptr, bool enabled)
 		ret = clk_pll_16fft_wait_for_lock(clock_ptr);
 	}
 
-	if (ret) {
-		clock_ptr->flags &= (uint8_t) ~CLK_FLAG_CACHED;
-		(void)clk_pll_16fft_bypass(clock_ptr, !enabled);
-	}
+	clock_ptr->flags &= (uint8_t) ~CLK_FLAG_CACHED;
+	(void)clk_pll_16fft_bypass(clock_ptr, !enabled);
 
 	return ret;
 }
