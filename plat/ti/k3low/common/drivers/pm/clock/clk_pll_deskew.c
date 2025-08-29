@@ -16,26 +16,51 @@
 #include <drivers/delay_timer.h>
 #include <osal/osal_clock_user.h>
 
-#define PLL_DESKEW_PID	(idx)			((0x1000UL * (idx)) + 0x00UL)
-#define PLL_DESKEW_CFG(idx)			((0x1000UL * (idx)) + 0x08UL)
+static inline uint32_t PLL_DESKEW_PID(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x00UL;
+}
 
-#define PLL_DESKEW_LOCKKEY0(idx)		((0x1000UL * (idx)) + 0x10UL)
+static inline uint32_t PLL_DESKEW_CFG(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x08UL;
+}
+
+static inline uint32_t PLL_DESKEW_LOCKKEY0(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x10UL;
+}
+
 #define PLL_DESKEW_LOCKKEY0_VALUE		0x68EF3490UL
 
-#define PLL_DESKEW_LOCKKEY1(idx)		((0x1000UL * (idx)) + 0x14UL)
+static inline uint32_t PLL_DESKEW_LOCKKEY1(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x14UL;
+}
+
 #define PLL_DESKEW_LOCKKEY1_VALUE		0xD172BC5AUL
 
-#define PLL_DESKEW_CTRL(idx)			((0x1000UL * (idx)) + 0x20UL)
+static inline uint32_t PLL_DESKEW_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x20UL;
+}
 #define PLL_DESKEW_CTRL_BYPASS_EN		BIT(31)
 #define PLL_DESKEW_CTRL_BYP_ON_LOCKLOSS		BIT(16)
 #define PLL_DESKEW_CTRL_INTL_BYP_EN		BIT(8)
 #define PLL_DESKEW_CTRL_PD_EN			BIT(4)
 #define PLL_DESKEW_CTRL_VCO_SEL			BIT(0)
 
-#define PLL_DESKEW_STAT(idx)			((0x1000UL * (idx)) + 0x24UL)
+static inline uint32_t PLL_DESKEW_STAT(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x24UL;
+}
+
 #define PLL_DESKEW_STAT_LOCK			BIT(0)
 
-#define PLL_DESKEW_DIV_CTRL(idx)		((0x1000UL * (idx)) + 0x38UL)
+static inline uint32_t PLL_DESKEW_DIV_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x38UL;
+}
 #define PLL_DESKEW_DIV_CTRL_FB_DIV_SHIFT	12UL
 #define PLL_DESKEW_DIV_CTRL_FB_DIV_MASK		(0x3UL << 12UL)
 #define PLL_DESKEW_DIV_CTRL_POST_DIV_SHIFT	8UL
@@ -43,11 +68,25 @@
 #define PLL_DESKEW_DIV_CTRL_REF_DIV_SHIFT	0UL
 #define PLL_DESKEW_DIV_CTRL_REF_DIV_MASK	(0x3UL << 0UL)
 
-#define PLL_DESKEW_TEST_CTRL(idx)		((0x1000UL * (idx)) + 0x50UL)
-#define PLL_DESKEW_CAL_CTRL(idx)		((0x1000UL * (idx)) + 0x60UL)
-#define PLL_DESKEW_CAL_STAT(idx)		((0x1000UL * (idx)) + 0x64UL)
+static inline uint32_t PLL_DESKEW_TEST_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x50UL;
+}
 
-#define PLL_DESKEW_HSDIV_CTRL(idx, n)		((0x1000UL * (idx)) + 0x80UL + ((n) * 4UL))
+static inline uint32_t PLL_DESKEW_CAL_CTRL(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x60UL;
+}
+
+static inline uint32_t PLL_DESKEW_CAL_STAT(uint32_t idx)
+{
+	return (0x1000UL * idx) + 0x64UL;
+}
+
+static inline uint32_t PLL_DESKEW_HSDIV_CTRL(uint32_t idx, uint32_t n)
+{
+	return (0x1000UL * idx) + 0x80UL + (n * 4UL);
+}
 #define PLL_DESKEW_HSDIV_CTRL_RESET		BIT(31)
 #define PLL_DESKEW_HSDIV_CTRL_CLKOUT_EN		BIT(15)
 #define PLL_DESKEW_HSDIV_CTRL_SYNC_DIS		BIT(8)
