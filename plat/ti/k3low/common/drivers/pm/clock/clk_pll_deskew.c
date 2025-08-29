@@ -129,7 +129,7 @@ static bool clk_pll_deskew_check_lock(struct clk *clock_ptr)
 	pll = container_of(data_pll, const struct clk_data_pll_deskew,
 			   data_pll);
 
-	stat = readl(pll->base + PLL_DESKEW_STAT(pll->idx));
+	stat = (uint32_t)readl(pll->base + PLL_DESKEW_STAT(pll->idx));
 	return (stat & PLL_DESKEW_STAT_LOCK) != 0U;
 }
 
@@ -175,7 +175,7 @@ static bool clk_pll_deskew_is_bypass(struct clk *clock_ptr)
 			   data_pll);
 
 	/* IDLE Bypass */
-	ctrl = readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
 	ret = (ctrl & PLL_DESKEW_CTRL_BYPASS_EN) != 0U;
 
 	return ret;
@@ -194,7 +194,7 @@ static int32_t clk_pll_deskew_bypass(struct clk *clock_ptr, bool bypass)
 	pll = container_of(data_pll, const struct clk_data_pll_deskew,
 			   data_pll);
 
-	ctrl = readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
 	if (bypass) {
 		/* Enable bypass */
 		ctrl |= PLL_DESKEW_CTRL_BYPASS_EN;
@@ -232,8 +232,8 @@ static bool clk_pll_deskew_program_freq(struct clk *clock_ptr,
 	}
 
 	/* Program the new rate */
-	ctrl = readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
-	div_ctrl = readl(pll->base + PLL_DESKEW_DIV_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
+	div_ctrl = (uint64_t)readl(pll->base + PLL_DESKEW_DIV_CTRL(pll->idx));
 
 	div_ctrl &= ~PLL_DESKEW_DIV_CTRL_FB_DIV_MASK;
 	switch (pllm_val_p) {
@@ -334,8 +334,8 @@ static uint32_t clk_pll_deskew_set_freq(struct clk *clock_ptr,
 	pll = container_of(data_pll, const struct clk_data_pll_deskew,
 			   data_pll);
 
-	ctrl = readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
-	div_ctrl = readl(pll->base + PLL_DESKEW_DIV_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
+	div_ctrl = (uint64_t)readl(pll->base + PLL_DESKEW_DIV_CTRL(pll->idx));
 
 	/* Check current values */
 	prev_pllm = (uint64_t) div_ctrl & PLL_DESKEW_DIV_CTRL_FB_DIV_MASK;
@@ -412,8 +412,8 @@ static uint32_t clk_pll_deskew_get_freq_internal(struct clk *clock_ptr)
 
 	data_pll = container_of(clock_data->data, const struct clk_data_pll, data);
 	pll = container_of(data_pll, const struct clk_data_pll_deskew, data_pll);
-	ctrl = readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
-	div_ctrl = readl(pll->base + PLL_DESKEW_DIV_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
+	div_ctrl = (uint64_t)readl(pll->base + PLL_DESKEW_DIV_CTRL(pll->idx));
 
 	pllm = (uint64_t) div_ctrl & PLL_DESKEW_DIV_CTRL_FB_DIV_MASK;
 	pllm >>= PLL_DESKEW_DIV_CTRL_FB_DIV_SHIFT;
@@ -608,7 +608,7 @@ static int32_t clk_pll_deskew_init_internal(struct clk *clock_ptr)
 	ti_clk_writel(PLL_DESKEW_LOCKKEY1_VALUE,
 		      pll->base + PLL_DESKEW_LOCKKEY1(pll->idx));
 
-	ctrl = readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + PLL_DESKEW_CTRL(pll->idx));
 
 	/* Make sure PLL is enabled */
 	if ((ctrl & PLL_DESKEW_CTRL_PD_EN) == 0U) {
@@ -629,11 +629,11 @@ static int32_t clk_pll_deskew_init_internal(struct clk *clock_ptr)
 	ti_clk_writel(ctrl, pll->base + PLL_DESKEW_CTRL(pll->idx));
 
 	/* Enable all HSDIV outputs */
-	cfg = readl(pll->base + PLL_DESKEW_CFG(pll->idx));
+	cfg = (uint32_t)readl(pll->base + PLL_DESKEW_CFG(pll->idx));
 	for (i = 0U; (i < 16U); i++) {
 		/* Enable HSDIV output if present */
 		if (((1UL << (i + 16UL)) & cfg) != 0UL) {
-			ctrl = readl(pll->base + PLL_DESKEW_HSDIV_CTRL(pll->idx, i));
+			ctrl = (uint32_t)readl(pll->base + PLL_DESKEW_HSDIV_CTRL(pll->idx, i));
 			ctrl |= PLL_DESKEW_HSDIV_CTRL_CLKOUT_EN;
 			ti_clk_writel(ctrl, pll->base +
 				      PLL_DESKEW_HSDIV_CTRL(pll->idx, i));
