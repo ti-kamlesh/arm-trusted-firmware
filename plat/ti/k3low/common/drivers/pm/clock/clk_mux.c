@@ -59,6 +59,8 @@ static bool clk_mux_set_parent(struct clk *clkp, uint8_t new_parent)
 	uint32_t v;
 	uint32_t parent_val;
 	uint32_t mask;
+	uint32_t trace_val;
+	uint32_t trace_id;
 	bool ret = true;
 
 	mux = container_of(clk_datap->data, const struct clk_data_mux, data);
@@ -76,11 +78,13 @@ static bool clk_mux_set_parent(struct clk *clkp, uint8_t new_parent)
 		parent_val = (uint32_t)new_parent << reg->bit;
 		v |= parent_val;
 		ti_clk_writel(v, reg->reg);
-		pm_trace(TRACE_PM_ACTION_CLOCK_SET_PARENT,
-			 (((uint16_t) new_parent << TRACE_PM_VAL_CLOCK_VAL_SHIFT) &
-			  TRACE_PM_VAL_CLOCK_VAL_MASK) |
-			 ((clk_id(clkp) << TRACE_PM_VAL_CLOCK_ID_SHIFT) &
-			  TRACE_PM_VAL_CLOCK_ID_MASK));
+		
+		trace_val = ((uint32_t)new_parent << TRACE_PM_VAL_CLOCK_VAL_SHIFT) &
+			    TRACE_PM_VAL_CLOCK_VAL_MASK;
+		trace_id = (clk_id(clkp) << TRACE_PM_VAL_CLOCK_ID_SHIFT) &
+			   TRACE_PM_VAL_CLOCK_ID_MASK;
+		
+		pm_trace(TRACE_PM_ACTION_CLOCK_SET_PARENT, trace_val | trace_id);
 	}
 
 	return ret;
