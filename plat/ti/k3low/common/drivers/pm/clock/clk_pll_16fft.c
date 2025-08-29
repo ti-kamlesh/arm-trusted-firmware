@@ -561,8 +561,8 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 
 		/* Calculate non-fractional part */
 		parent_freq_hz = clk_get_parent_freq(clock_ptr);
-		ret64 = (uint64_t) ((parent_freq_hz / clkod_plld) * pllm);
-		rem = (uint64_t) ((parent_freq_hz % clkod_plld) * pllm);
+		ret64 = ((uint64_t) parent_freq_hz / clkod_plld) * pllm;
+		rem = ((uint64_t) parent_freq_hz % clkod_plld) * pllm;
 		ret64 += rem / (uint64_t) clkod_plld;
 		rem = rem % (uint64_t) clkod_plld;
 
@@ -573,8 +573,8 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 				1UL;
 
 			/* Calculate fractional component of frequency */
-			fret = ((uint64_t) (parent_freq_hz / clkod_plld)) * m_frac_mult;
-			frem = ((uint64_t) (parent_freq_hz % clkod_plld)) * m_frac_mult;
+			fret = ((uint64_t) parent_freq_hz / clkod_plld) * m_frac_mult;
+			frem = ((uint64_t) parent_freq_hz % clkod_plld) * m_frac_mult;
 			fret += frem / (uint64_t) clkod_plld;
 			frem = frem % (uint64_t) clkod_plld;
 
@@ -587,7 +587,7 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 			ret64 += fret >> PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_BITS;
 			rem += frem >> PLL_16FFT_FREQ_CTRL1_FB_DIV_FRAC_BITS;
 
-			ret64 += (uint64_t) (((uint32_t) rem) / clkod_plld);
+			ret64 += ((uint64_t) rem) / clkod_plld;
 			rem = ((uint64_t) rem) % clkod_plld;
 		}
 
@@ -870,15 +870,15 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 		 *
 		 * Note: We break up the calculation in order to avoid a div64.
 		 */
-		clkod_plld = (uint32_t) (soc_pll_table[data_pll->pll_entries[i]].plld *
-					 soc_pll_table[data_pll->pll_entries[i]].clkod);
+		clkod_plld = soc_pll_table[data_pll->pll_entries[i]].plld *
+			     soc_pll_table[data_pll->pll_entries[i]].clkod;
 
-			actual64 = ((uint64_t) (input / clkod_plld)) *
+			actual64 = ((uint64_t) input / clkod_plld) *
 				soc_pll_table[data_pll->pll_entries[i]].pllm;
-			rem64 = ((uint64_t) (input % clkod_plld)) *
+			rem64 = ((uint64_t) input % clkod_plld) *
 				soc_pll_table[data_pll->pll_entries[i]].pllm;
 
-			actual64 += (uint64_t) (((uint32_t) rem64) / clkod_plld);
+			actual64 += ((uint64_t) rem64) / clkod_plld;
 			rem = ((uint32_t) rem64) % clkod_plld;
 
 			if (soc_pll_table[data_pll->pll_entries[i]].pllfm != 0UL) {
@@ -900,27 +900,27 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 				}
 
 				/* Calculate fractional component of frequency */
-				fret = ((uint64_t) (input / clkod_plld)) *
+				fret = ((uint64_t) input / clkod_plld) *
 					soc_pll_table[data_pll->pll_entries[i]].pllfm;
-				frem = ((uint64_t) (input % clkod_plld)) *
+				frem = ((uint64_t) input % clkod_plld) *
 					soc_pll_table[data_pll->pll_entries[i]].pllfm;
 				if (frem >= clkod_plld) {
-					fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
-					frem =	(uint64_t) (((uint32_t) frem) % clkod_plld);
+					fret += ((uint64_t) frem) / clkod_plld;
+					frem = ((uint64_t) frem) % clkod_plld;
 				}
 				fret *= stride;
 				frem *= stride;
 				if (frem >= clkod_plld) {
-					fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
-					frem =	(uint64_t) (((uint32_t) frem) % clkod_plld);
+					fret += ((uint64_t) frem) / clkod_plld;
+					frem = ((uint64_t) frem) % clkod_plld;
 				}
-				frem += (uint64_t) (((uint32_t) (fret & pllfm_mask)) * clkod_plld);
+				frem += ((uint64_t) (fret & pllfm_mask)) * clkod_plld;
 
 				/* Add fractional part */
 				actual64 += fret >> pllfm_bits;
 				rem += (uint32_t) (frem >> pllfm_bits);
 
-				actual64 += (uint64_t) (((uint32_t) rem) / clkod_plld);
+				actual64 += ((uint64_t) rem) / clkod_plld;
 				rem += ((uint32_t) rem) % clkod_plld;
 			}
 
