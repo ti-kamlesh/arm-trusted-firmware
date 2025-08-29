@@ -622,10 +622,8 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 		(void)clk_pll_16fft_bypass(pll_clk, true);
 	}
 
-	if (ret) {
-		/* Disable the PLL */
-		(void)clk_pll_16fft_disable_pll(pll);
-	}
+	/* Disable the PLL */
+	(void)clk_pll_16fft_disable_pll(pll);
 
 	cfg = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CFG(pll->idx));
 	pll_type = (cfg & PLL_16FFT_CFG_PLL_TYPE_MASK) >> PLL_16FFT_CFG_PLL_TYPE_SHIFT;
@@ -676,19 +674,17 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 		ctrl |= PLL_16FFT_CTRL_DAC_EN;
 	}
 
-	if (ret) {
-		ti_clk_writel(freq_ctrl0,
-			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
-		ti_clk_writel(freq_ctrl1,
-			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
-		ti_clk_writel(div_ctrl,
-			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
-		ti_clk_writel(ctrl,
-			      (uint32_t) pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
-	}
+	ti_clk_writel(freq_ctrl0,
+		      (uint32_t) pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
+	ti_clk_writel(freq_ctrl1,
+		      (uint32_t) pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
+	ti_clk_writel(div_ctrl,
+		      (uint32_t) pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
+	ti_clk_writel(ctrl,
+		      (uint32_t) pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 
 	/* Program output divider */
-	if (div_clk && ret) {
+	if (div_clk) {
 		div_clk_data = clk_get_data(div_clk);
 		if (div_clk_data->drv != NULL) {
 			drv_div = container_of(div_clk_data->drv,
@@ -847,7 +843,6 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 	uint32_t div0_hz, div1_hz;
 	uint32_t freq = 0U;
 	uint32_t input;
-	bool pll_consider_done = false;
 	int32_t i;
 	uint32_t n;
 	uint64_t rem64;
@@ -868,16 +863,15 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 	n = data_div->n;
 
 	for (i = 0; data_pll->pll_entries[i] != PLL_TABLE_LAST; i++) {
-		if (!pll_consider_done) {
-			/*
-			 * Determine actual frequency given table entry would produce:
-			 *
-			 * actual = input * pllm / (plld * clkod)
-			 *
-			 * Note: We break up the calculation in order to avoid a div64.
-			 */
-			clkod_plld = (uint32_t) (soc_pll_table[data_pll->pll_entries[i]].plld *
-						 soc_pll_table[data_pll->pll_entries[i]].clkod);
+		/*
+		 * Determine actual frequency given table entry would produce:
+		 *
+		 * actual = input * pllm / (plld * clkod)
+		 *
+		 * Note: We break up the calculation in order to avoid a div64.
+		 */
+		clkod_plld = (uint32_t) (soc_pll_table[data_pll->pll_entries[i]].plld *
+					 soc_pll_table[data_pll->pll_entries[i]].clkod);
 
 			actual64 = ((uint64_t) (input / clkod_plld)) *
 				soc_pll_table[data_pll->pll_entries[i]].pllm;
@@ -930,8 +924,7 @@ static uint32_t clk_pll_16fft_internal_set_freq_from_pll_table(struct clk *pll_c
 				rem += ((uint32_t) rem) % clkod_plld;
 			}
 
-			actual = (uint32_t) actual64;
-		}
+		actual = (uint32_t) actual64;
 
 		/* Calculate 2 best potential dividers for HSDIV */
 		div0 = actual / target_hz;
@@ -1634,10 +1627,8 @@ static int32_t clk_pll_16fft_hsdiv_init(struct clk *clkp)
 			hsdiv_ctrl &= ~PLL_16FFT_HSDIV_CTRL_CLKOUT_EN;
 			ti_clk_writel(hsdiv_ctrl, data_reg->reg);
 
-			if (ret == SUCCESS) {
-				if (!drv_div->set_div(clkp, data_div->default_div)) {
-					ret = -EINVAL;
-				}
+			if (!drv_div->set_div(clkp, data_div->default_div)) {
+				ret = -EINVAL;
 			}
 
 			/* Enable HSDIV */
