@@ -310,7 +310,7 @@ static bool clk_pll_16fft_check_lock(const struct clk_data_pll_16fft *pll)
 {
 	uint32_t stat;
 
-	stat = readl(pll->base + (uint32_t) PLL_16FFT_STAT(pll->idx));
+	stat = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_STAT(pll->idx));
 	return (stat & PLL_16FFT_STAT_LOCK) != 0U;
 }
 
@@ -319,7 +319,7 @@ static int32_t clk_pll_16fft_enable_pll(const struct clk_data_pll_16fft *pll)
 	uint32_t ctrl;
 	int32_t err = SUCCESS;
 
-	ctrl = readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 
 	if ((ctrl & PLL_16FFT_CTRL_PLL_EN) == 0U) {
 		ctrl |= PLL_16FFT_CTRL_PLL_EN;
@@ -337,7 +337,7 @@ static int32_t clk_pll_16fft_disable_pll(const struct clk_data_pll_16fft *pll)
 	uint32_t ctrl;
 	int32_t err = SUCCESS;
 
-	ctrl = readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 
 	if ((ctrl & PLL_16FFT_CTRL_PLL_EN) != 0U) {
 		ctrl &= ~PLL_16FFT_CTRL_PLL_EN;
@@ -494,7 +494,7 @@ static bool clk_pll_16fft_is_bypass(const struct clk_data_pll_16fft *pll)
 	uint32_t ctrl;
 
 	/* IDLE Bypass */
-	ctrl = readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 	ret = (ctrl & PLL_16FFT_CTRL_BYPASS_EN) != 0U;
 
 	return ret;
@@ -513,7 +513,7 @@ static int32_t clk_pll_16fft_bypass(struct clk *clock_ptr, bool bypass)
 	pll = container_of(data_pll, const struct clk_data_pll_16fft,
 			   data_pll);
 
-	ctrl = readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 	if (bypass) {
 		/* Enable bypass */
 		ctrl |= PLL_16FFT_CTRL_BYPASS_EN;
@@ -543,9 +543,9 @@ static uint32_t clk_pll_16fft_get_freq_internal(struct clk *clock_ptr,
 	data_pll = container_of(clock_data->data, const struct clk_data_pll,
 				data);
 	pll = container_of(data_pll, const struct clk_data_pll_16fft, data_pll);
-	freq_ctrl0 = readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
-	freq_ctrl1 = readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
-	div_ctrl = readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
+	freq_ctrl0 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
+	freq_ctrl1 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
+	div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 
 	pllm = freq_ctrl0 & PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MSK;
 	pllm >>= PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT;
@@ -675,13 +675,13 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 		}
 	}
 
-	cfg = readl(pll->base + (uint32_t) PLL_16FFT_CFG(pll->idx));
+	cfg = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CFG(pll->idx));
 	pll_type = (cfg & PLL_16FFT_CFG_PLL_TYPE_MASK) >> PLL_16FFT_CFG_PLL_TYPE_SHIFT;
 
 	/* Program the new rate */
-	freq_ctrl0 = readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
-	freq_ctrl1 = readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
-	div_ctrl = readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
+	freq_ctrl0 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
+	freq_ctrl1 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
+	div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 
 	freq_ctrl0 &= ~PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MSK;
 	freq_ctrl0 |= pllm << PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_SHIFT;
@@ -693,7 +693,7 @@ static bool clk_pll_16fft_program_freq(struct clk *pll_clk,
 	div_ctrl |= plld << PLL_16FFT_DIV_CTRL_REF_DIV_SHIFT;
 
 	/* Make sure we have fractional support if required */
-	ctrl = readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
+	ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_CTRL(pll->idx));
 
 	/* Don't use internal bypass,it is not glitch free. Always prefer glitchless bypass */
 	ctrl &= ~PLL_16FFT_CTRL_INTL_BYP_EN;
@@ -831,9 +831,9 @@ static uint32_t clk_pll_16fft_internal_set_freq(struct clk *pll_clk,
 
 	was_bypass = clk_pll_16fft_is_bypass(pll);
 
-	freq_ctrl0 = readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
-	freq_ctrl1 = readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
-	div_ctrl = readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
+	freq_ctrl0 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL0(pll->idx));
+	freq_ctrl1 = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_FREQ_CTRL1(pll->idx));
+	div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 
 	/* Check current values */
 	prev_pllm = freq_ctrl0 & PLL_16FFT_FREQ_CTRL0_FB_DIV_INT_MSK;
@@ -1513,7 +1513,7 @@ static bool clk_pll_16fft_postdiv_set_div(struct clk *clock_ptr, uint32_t d)
 		pll = container_of(data_pll, const struct clk_data_pll_16fft,
 				   data_pll);
 
-		div_ctrl = readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
+		div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 		div_ctrl &= ~PLL_16FFT_DIV_CTRL_POST_DIV2_MASK;
 		div_ctrl &= ~PLL_16FFT_DIV_CTRL_POST_DIV1_MASK;
 
@@ -1554,7 +1554,7 @@ static uint32_t clk_pll_16fft_postdiv_get_div(struct clk *clock_ptr)
 		pll = container_of(data_pll,
 				   const struct clk_data_pll_16fft, data_pll);
 
-		div_ctrl = readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
+		div_ctrl = (uint32_t)readl(pll->base + (uint32_t) PLL_16FFT_DIV_CTRL(pll->idx));
 		post_div1 = div_ctrl & PLL_16FFT_DIV_CTRL_POST_DIV1_MASK;
 		post_div1 >>= PLL_16FFT_DIV_CTRL_POST_DIV1_SHIFT;
 		post_div2 = div_ctrl & PLL_16FFT_DIV_CTRL_POST_DIV2_MASK;
