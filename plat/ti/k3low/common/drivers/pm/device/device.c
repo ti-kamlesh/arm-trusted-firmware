@@ -221,7 +221,7 @@ int32_t devices_deinit(uint8_t pm_devgrp)
 			struct device *dev = &soc_devices[i];
 			const struct dev_data *data = get_dev_data(dev);
 
-			flag_enabled = (dev->flags & DEV_FLAG_ENABLED_MASK) != 0UL;
+			flag_enabled = (dev->flags & DEV_FLAG_ENABLED_MASK) != 0U;
 
 			dev->flags &= ~DEV_FLAG_RETENTION;
 
