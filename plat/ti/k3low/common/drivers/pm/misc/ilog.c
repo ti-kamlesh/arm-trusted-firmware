@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright (c) Timothy B. Terriberry (tterribe@xiph.org) 2001-2009 */
+#define ILOG_IMPLEMENTATION
 #include "ilog.h"
 #include <limits.h>
 
