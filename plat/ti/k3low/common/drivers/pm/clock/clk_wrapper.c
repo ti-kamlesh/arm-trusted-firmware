@@ -9,6 +9,7 @@
 #include <pm.h>
 #include <common/debug.h>
 #include <clk_wrapper.h>
+#include <string.h>
 
 int32_t scmi_handler_clock_prepare(uint32_t dev_id, uint32_t clk_id)
 {
@@ -57,7 +58,7 @@ int32_t scmi_handler_clock_get_state(uint32_t dev_id, uint32_t clk_id)
 	ret = get_clock_handler(&req);
 	if (ret == 0) {
 		/* Copy response data from req buffer to resp structure */
-		resp = *(struct tisci_msg_get_clock_resp *)&req;
+		(void)memcpy(&resp, &req, sizeof(resp));
 		return (int32_t)resp.programmed_state;
 	}
 	return 0;
@@ -90,7 +91,7 @@ uint64_t scmi_handler_clock_get_rate(uint32_t dev_id, uint32_t clk_id)
 	ret = get_freq_handler(&req);
 	if (ret == 0) {
 		/* Copy response data from req buffer to resp structure */
-		resp = *(struct tisci_msg_get_freq_resp *)&req;
+		(void)memcpy(&resp, &req, sizeof(resp));
 		return resp.freq_hz;
 	}
 	return 0U;
@@ -110,7 +111,7 @@ int32_t scmi_handler_clock_get_num_clock_parents(uint32_t dev_id,
 	ret = get_num_clock_parents_handler(&req);
 	if (ret == 0) {
 		/* Copy response data from req buffer to resp structure */
-		resp = *(struct tisci_msg_get_num_clock_parents_resp *)&req;
+		(void)memcpy(&resp, &req, sizeof(resp));
 		return (int32_t)resp.num_parents;
 	}
 	return 0;
@@ -143,7 +144,7 @@ int32_t scmi_handler_clock_get_clock_parent(uint32_t dev_id, uint32_t clk_id,
 	status = get_clock_parent_handler(&req);
 	if (status == 0) {
 		/* Copy response data from req buffer to resp structure */
-		resp = *(struct tisci_msg_get_clock_parent_resp *)&req;
+		(void)memcpy(&resp, &req, sizeof(resp));
 		*parent_id = (uint32_t)resp.parent;
 	} else {
 		*parent_id = 0U;
