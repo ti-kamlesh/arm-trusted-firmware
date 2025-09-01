@@ -99,9 +99,9 @@ void device_set_state(struct device *device_ptr, uint8_t host_idx, bool enable)
 	was_enabled = (device_ptr->flags & DEV_FLAG_ENABLED_MASK) != 0UL;
 
 	if (enable) {
-		device_ptr->flags |= DEV_FLAG_ENABLED(host_idx);
+		device_ptr->flags |= (uint32_t)DEV_FLAG_ENABLED(host_idx);
 	} else {
-		device_ptr->flags &= ~DEV_FLAG_ENABLED(host_idx);
+		device_ptr->flags &= ~(uint32_t)DEV_FLAG_ENABLED(host_idx);
 	}
 
 	/*
@@ -109,7 +109,7 @@ void device_set_state(struct device *device_ptr, uint8_t host_idx, bool enable)
 	 * on enabled flag.
 	 */
 	if (host_idx != DEV_POWER_ON_ENABLED_HOST_IDX) {
-		device_ptr->flags &= ~DEV_FLAG_POWER_ON_ENABLED;
+		device_ptr->flags &= ~(uint32_t)DEV_FLAG_POWER_ON_ENABLED;
 	}
 
 	is_enabled = (device_ptr->flags & DEV_FLAG_ENABLED_MASK) != 0UL;
@@ -124,7 +124,7 @@ void device_set_state(struct device *device_ptr, uint8_t host_idx, bool enable)
 
 void device_set_retention(struct device *device_ptr, bool retention)
 {
-	bool is_retention = (bool) !!(device_ptr->flags & DEV_FLAG_RETENTION);
+	bool is_retention = ((device_ptr->flags & DEV_FLAG_RETENTION) != 0U);
 
 	if (retention == is_retention) {
 		/* Do nothing  - return */
@@ -133,7 +133,7 @@ void device_set_retention(struct device *device_ptr, bool retention)
 			device_ptr->flags |= DEV_FLAG_RETENTION;
 			soc_device_ret_enable(device_ptr);
 		} else {
-			device_ptr->flags &= ~DEV_FLAG_RETENTION;
+			device_ptr->flags &= ~(uint32_t)DEV_FLAG_RETENTION;
 			soc_device_ret_disable(device_ptr);
 		}
 	}
