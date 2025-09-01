@@ -55,8 +55,8 @@ unsigned int scmi_handler_device_state_get(uint32_t dev_id)
         (void)memcpy(&resp, &req, sizeof(req));
 	ret = get_device_handler(&resp);
 	if (ret == 0/* SUCCESS */) {
-		if ((resp.programmed_state == TISCI_MSG_VALUE_DEVICE_SW_STATE_ON) &&
-		   (resp.current_state == TISCI_MSG_VALUE_DEVICE_HW_STATE_ON)) {
+		if ((resp.programmed_state == (uint8_t)TISCI_MSG_VALUE_DEVICE_SW_STATE_ON) &&
+		   (resp.current_state == (uint8_t)TISCI_MSG_VALUE_DEVICE_HW_STATE_ON)) {
 			state = POWER_STATE_ON;
 		} else {
 			state = POWER_STATE_OFF;
