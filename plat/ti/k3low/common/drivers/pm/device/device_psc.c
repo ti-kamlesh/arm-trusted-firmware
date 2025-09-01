@@ -304,13 +304,13 @@ static void soc_device_disable_internal_flags_iterate(struct device *psc_dev,
 
 	if (psc != NULL) {
 		for (idx = 0U; idx < psc->pd_count; idx++) {
-			struct psc_pd *pd = psc->powerdomains + idx;
+			struct psc_pd *pd = &psc->powerdomains[idx];
 
 			pd->use_count = 0U;
 			pd->pwr_up_enabled = false;
 		}
 		for (idx = 0; idx < psc->module_count; idx++) {
-			struct lpsc_module *temp = psc->modules + idx;
+			struct lpsc_module *temp = &psc->modules[idx];
 
 			temp->use_count = 0U;
 			temp->ret_count = 0U;
@@ -324,7 +324,7 @@ static void soc_device_disable_internal_flags_iterate(struct device *psc_dev,
 
 		psc->data->pds_enabled = 0U;
 		idx = lpsc_module_idx(psc_dev, module_p);
-		data = psc->mod_data + idx;
+		data = &psc->mod_data[idx];
 
 		if ((data->flags & LPSC_DEPENDS) != 0UL) {
 			const struct psc_drv_data *depends_psc;
@@ -334,7 +334,7 @@ static void soc_device_disable_internal_flags_iterate(struct device *psc_dev,
 			if (depends_dev != NULL) {
 				depends_psc = to_psc_drv_data(get_drv_data(depends_dev));
 				if (depends_psc != NULL && module_p != NULL) {
-					module_p = depends_psc->modules + (lpsc_idx_t) data->depends;
+					module_p = &depends_psc->modules[(lpsc_idx_t) data->depends];
 					soc_device_disable_internal_flags_iterate(depends_dev, module_p);
 				}
 			}
@@ -490,7 +490,7 @@ static int32_t soc_device_verify_mapping(const struct psc_drv_data *psc,
 	 * generated at compile time.
 	 */
 	if (dev->mod != PSC_LPSC_NONE) {
-		const struct lpsc_module_data *mdata = psc->mod_data + dev->mod;
+		const struct lpsc_module_data *mdata = &psc->mod_data[dev->mod];
 		uint32_t i;
 
 		if ((mdata->flags & LPSC_DEVICES_LIST) != 0UL) {
