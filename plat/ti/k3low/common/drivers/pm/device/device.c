@@ -107,7 +107,6 @@ int32_t devices_init(void)
 
 		done = true;
 		progress = false;
-		dev = soc_devices;
 
 		for (idx = 0U; idx < soc_device_count; idx++) {
 			devgrp_t devgrp;
