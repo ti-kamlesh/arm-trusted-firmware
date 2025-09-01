@@ -94,6 +94,7 @@ void pm_trace_debug(uint32_t action, uint32_t val)
 			break;
 		default:
 			VERBOSE("Message not handled\n");
+			break;
 		}
 		break;
 	case TRACE_PM_ACTION_MSG_PARAM_DEV_CLK_ID:
