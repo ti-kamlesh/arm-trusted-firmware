@@ -618,7 +618,7 @@ static void lpsc_module_sync_state(struct device *dev, struct lpsc_module *modul
 	}
 
 	/* Notify of gain of functionality transitions after we do them */
-	if (get_en || get_ret) {
+	if (get_ret || get_en) {
 		lpsc_module_notify_resume(dev, module);
 	}
 
