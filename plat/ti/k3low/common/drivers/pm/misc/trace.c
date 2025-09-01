@@ -15,8 +15,9 @@ void pm_trace_debug(uint32_t action, uint32_t val)
 		/* There are few traces with 0x7x values but are
 		 * not ACTION FAIL scenarios
 		 */
-		if (local_action < 0x31U)
+		if (local_action < 0x31U) {
 			VERBOSE("ACTION FAIL\n");
+		}
 	}
 
 	switch (local_action) {
