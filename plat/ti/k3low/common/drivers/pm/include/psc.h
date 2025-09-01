@@ -149,13 +149,13 @@ struct lpsc_module {
 				      .flags = PSC_PD_EXISTS |	\
 				      PSC_PD_DEPENDS }
 
-pd_idx_t psc_pd_idx(struct device *psc_dev, struct psc_pd *pd);
+pd_idx_t psc_pd_idx(struct device *psc_dev, const struct psc_pd *pd);
 void psc_pd_wait(struct device *psc_dev, struct psc_pd *pd);
 uint32_t psc_pd_get_state(struct device *psc_dev, struct psc_pd *pd);
 void psc_pd_get(struct device *psc_dev, struct psc_pd *pd);
 void psc_pd_put(struct device *psc_dev, struct psc_pd *pd);
 
-lpsc_idx_t lpsc_module_idx(struct device *psc_dev, struct lpsc_module *module);
+lpsc_idx_t lpsc_module_idx(struct device *psc_dev, const struct lpsc_module *module);
 void lpsc_module_get(struct device *psc_dev, struct lpsc_module *module);
 void lpsc_module_put(struct device *psc_dev, struct lpsc_module *module);
 void lpsc_module_ret_get(struct device *psc_dev, struct lpsc_module *module);
@@ -265,7 +265,7 @@ bool lpsc_module_get_local_reset(struct device *psc_dev,
  * True if module reset is asserted for this module, false if otherwise.
  */
 bool lpsc_module_get_module_reset(struct device *psc_dev,
-				  struct lpsc_module *module);
+				  const struct lpsc_module *module);
 
 /**
  * \brief Get the module state from a PSC module.
