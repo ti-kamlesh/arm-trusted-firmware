@@ -178,7 +178,7 @@ void device_clk_set_ssc(struct device *dev, dev_clk_idx_t clk_idx, bool allow)
 	if (!dev_clkp) {
 		/* Nothing to do */
 	} else {
-		is_allowed = (bool) !!(dev_clkp->flags & DEV_CLK_FLAG_ALLOW_SSC);
+		is_allowed = ((dev_clkp->flags & DEV_CLK_FLAG_ALLOW_SSC) != 0U);
 		if (is_allowed == allow) {
 			/* Nothing to do */
 		} else {
@@ -228,7 +228,7 @@ void device_clk_set_freq_change(struct device *dev, dev_clk_idx_t clk_idx,
 	if (!dev_clkp) {
 		/* Nothing to do */
 	} else {
-		is_allowed = (bool) !!(dev_clkp->flags & DEV_CLK_FLAG_ALLOW_FREQ_CHANGE);
+		is_allowed = ((dev_clkp->flags & DEV_CLK_FLAG_ALLOW_FREQ_CHANGE) != 0U);
 		if (is_allowed == allow) {
 			/* Nothing to do */
 		} else {
@@ -271,7 +271,7 @@ void device_clk_set_input_term(struct device *dev, dev_clk_idx_t clk_idx,
 	if (!dev_clkp) {
 		/* Do nothing  - return */
 	} else {
-		is_term = (bool) !!(dev_clkp->flags & DEV_CLK_FLAG_INPUT_TERM);
+		is_term = ((dev_clkp->flags & DEV_CLK_FLAG_INPUT_TERM) != 0U);
 		if (is_term == enable) {
 			/* Do nothing  - return */
 		} else {
