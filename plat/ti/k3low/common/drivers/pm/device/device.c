@@ -144,7 +144,7 @@ int32_t devices_init(void)
 						 ((((uint32_t) (-ret)) &
 						   TRACE_PM_VAL_DEV_INIT_ERR_MASK) <<
 						  TRACE_PM_VAL_DEV_INIT_ERR_SHIFT) |
-						 ((((uint16_t) idx) &
+						 ((((uint32_t) idx) &
 						   TRACE_PM_VAL_DEV_INIT_DEVICE_ID_MASK) <<
 						  TRACE_PM_VAL_DEV_INIT_DEVICE_ID_SHIFT));
 					errors = true;
