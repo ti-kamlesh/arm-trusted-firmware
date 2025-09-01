@@ -20,14 +20,14 @@
  *   note="\url{http://supertech.csail.mit.edu/papers/debruijn.pdf}"
  *   }
  */
-static __maybe_unused const unsigned char DEBRUIJN_IDX32[32] = {
+static __maybe_unused const uint8_t DEBRUIJN_IDX32[32] = {
 	0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8,
 	31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9
 };
 
 /* We always compile these in, in case someone takes address of function. */
 
-int ilog32(uint32_t _v)
+int32_t ilog32(uint32_t _v)
 {
 	/*
 	 * On a Pentium M, this branchless version tested as the fastest version without
@@ -56,26 +56,26 @@ int ilog32(uint32_t _v)
 	/*This de Bruijn sequence version is faster if you have a fast multiplier.*/
 #else
 	uint32_t v = _v;
-	int ret;
+	int32_t ret;
 
-	ret = (int)(v > 0U);
+	ret = (int32_t)(v > 0U);
 	v |= v >> 1;
 	v |= v >> 2;
 	v |= v >> 4;
 	v |= v >> 8;
 	v |= v >> 16;
 	v = (v >> 1)+1U;
-	ret += (int)DEBRUIJN_IDX32[(v*0x77CB531U >> 27)&0x1FU];
+	ret += (int32_t)DEBRUIJN_IDX32[(v*0x77CB531U >> 27)&0x1FU];
 	return ret;
 #endif
 }
 
-int ilog32_nz(uint32_t _v)
+int32_t ilog32_nz(uint32_t _v)
 {
 	return ilog32(_v);
 }
 
-int ilog64(uint64_t _v)
+int32_t ilog64(uint64_t _v)
 {
 #if defined(ILOG_NODEBRUIJN)
 	uint32_t v;
@@ -121,16 +121,16 @@ int ilog64(uint64_t _v)
 	return ret;
 	/*Otherwise do it in one 64-bit operation.*/
 #else
-	static const unsigned char DEBRUIJN_IDX64[64] = {
+	static const uint8_t DEBRUIJN_IDX64[64] = {
 		0, 1, 2, 7, 3, 13, 8, 19, 4, 25, 14, 28, 9, 34, 20, 40,
 		5, 17, 26, 38, 15, 46, 29, 48, 10, 31, 35, 54, 21, 50, 41, 57,
 		63,  6, 12, 18, 24, 27, 33, 39, 16, 37, 45, 47, 30, 53, 49, 56,
 		62, 11, 23, 32, 36, 44, 52, 55, 61, 22, 43, 51, 60, 42, 59, 58
 	};
 	uint64_t v = _v;
-	int ret;
+	int32_t ret;
 
-	ret = (int)(v > 0U);
+	ret = (int32_t)(v > 0U);
 	v |= v >> 1;
 	v |= v >> 2;
 	v |= v >> 4;
@@ -138,13 +138,13 @@ int ilog64(uint64_t _v)
 	v |= v >> 16;
 	v |= v >> 32;
 	v = (v >> 1)+1U;
-	ret += (int)DEBRUIJN_IDX64[(v*0x218A392CD3D5DBFULL >> 58)&0x3FU];
+	ret += (int32_t)DEBRUIJN_IDX64[(v*0x218A392CD3D5DBFULL >> 58)&0x3FU];
 	return ret;
 #endif
 #endif
 }
 
-int ilog64_nz(uint64_t _v)
+int32_t ilog64_nz(uint64_t _v)
 {
 	return ilog64(_v);
 }
