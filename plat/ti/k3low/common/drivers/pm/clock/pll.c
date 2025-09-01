@@ -541,7 +541,7 @@ static inline void pll_consider_fractional(struct pll_consider_data *data,
 	}
 
 	if (found_best) {
-		pll_consider(data, curr_pllm, best_pllfm, stride);
+		(void)pll_consider(data, curr_pllm, best_pllfm, stride);
 	}
 }
 
