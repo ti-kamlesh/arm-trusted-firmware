@@ -273,7 +273,7 @@ void devices_drop_power_up_ref(void)
 	dev_idx_t idx;
 
 	for (idx = 0U; idx < soc_device_count; idx++) {
-		struct device *dev = soc_devices + idx;
+		struct device *dev = &soc_devices[idx];
 
 		if (dev->initialized != 0U) {
 			device_set_state(dev, DEV_POWER_ON_ENABLED_HOST_IDX, false);
