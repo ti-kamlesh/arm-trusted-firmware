@@ -15,18 +15,18 @@ uint64_t pm_div64(uint64_t *remainder64, uint32_t b32)
 	uint64_t result64;
 
 	if (*remainder64 == 0ULL) {
-		result64 = 0ULL;
+		result64 = (uint64_t)0ULL;
 	} else {
 		if (b32 == 0U) {
 			/* Generate exception */
-			result64 = 1ULL / (uint64_t) b32;
+			result64 = (uint64_t)(1ULL / (uint64_t) b32);
 		} else {
 			a64 = *remainder64;
 
 			ah32 = (uint32_t) (a64 >> 32U);
 			al32 = (uint32_t) (a64 & 0xffffffffULL);
 
-			result64 = 0ULL;
+			result64 = (uint64_t)0ULL;
 
 			/* Check if b * 2^32 fits at least once */
 			if (ah32 >= b32) {
