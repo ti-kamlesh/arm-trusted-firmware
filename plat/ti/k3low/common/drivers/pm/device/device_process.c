@@ -65,7 +65,7 @@ int32_t set_device_handler(struct tisci_msg_set_device_req *msg_recv)
 			/* It's ok if we already have the device enabled */
 			mask &= ~DEV_FLAG_ENABLED(host_idx);
 			/* It's also ok if the device in on due to power up en */
-			mask &= (uint64_t) ~DEV_FLAG_POWER_ON_ENABLED;
+			mask &= ~((uint64_t)DEV_FLAG_POWER_ON_ENABLED);
 			enabled = (dev->flags & mask) >> DEV_FLAG_ENABLED_BIT;
 			if (enabled != 0UL) {
 				uint8_t i;
