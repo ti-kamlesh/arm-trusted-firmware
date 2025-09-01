@@ -114,8 +114,6 @@ static void pll_consider_entry(struct pll_consider_data *data,
 			if (frem >= clkod_plld) {
 				fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
 				frem = frem % (uint64_t) clkod_plld;
-			} else {
-				/* Do Nothing */
 			}
 
 			fret *= stride;
@@ -123,8 +121,6 @@ static void pll_consider_entry(struct pll_consider_data *data,
 			if (frem >= clkod_plld) {
 				fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
 				frem = (uint64_t) (((uint32_t) frem) % clkod_plld);
-			} else {
-				/* Do Nothing */
 			}
 
 			frem += (uint64_t) (((uint32_t) (fret & pllfm_mask)) * clkod_plld);
