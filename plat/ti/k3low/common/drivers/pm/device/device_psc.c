@@ -545,7 +545,7 @@ static int32_t soc_device_init_internal(struct device *dev)
 		}
 	}
 
-	if (psc != NULL) {
+	if (psc_dev != NULL) {
 		/* We are our own PSC */
 		ret = soc_device_verify_mapping(psc, dev_id, &devdata->soc);
 	} else if (devdata->soc.psc_idx == PSC_DEV_MULTIPLE) {
