@@ -64,7 +64,7 @@ int ilog32(uint32_t _v)
 	_v |= _v >> 8;
 	_v |= _v >> 16;
 	_v = (_v >> 1)+1;
-	ret += DEBRUIJN_IDX32[_v*0x77CB531U >> 27&0x1F];
+	ret += DEBRUIJN_IDX32[(_v*0x77CB531U >> 27)&0x1F];
 	return ret;
 #endif
 }
@@ -136,7 +136,7 @@ int ilog64(uint64_t _v)
 	_v |= _v >> 16;
 	_v |= _v >> 32;
 	_v = (_v >> 1)+1;
-	ret += DEBRUIJN_IDX64[_v*0x218A392CD3D5DBF >> 58&0x3F];
+	ret += DEBRUIJN_IDX64[(_v*0x218A392CD3D5DBF >> 58)&0x3F];
 	return ret;
 #endif
 #endif
