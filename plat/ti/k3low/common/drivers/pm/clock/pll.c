@@ -1167,8 +1167,8 @@ static inline void pll_internal_calc(struct pll_consider_data *consider_data)
 
 uint32_t pll_calc(struct clk *clkp, const struct pll_data *data,
 		  uint32_t input, uint32_t output, uint32_t min, uint32_t max,
-		  uint32_t *plld, uint32_t *pllm, uint32_t *pllfm,
-		  uint32_t *clkod)
+		  uint32_t * const plld, uint32_t * const pllm, uint32_t * const pllfm,
+		  uint32_t * const clkod)
 {
 	uint32_t ret = 0U;
 
