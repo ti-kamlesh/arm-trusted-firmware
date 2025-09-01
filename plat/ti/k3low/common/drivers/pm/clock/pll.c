@@ -84,13 +84,13 @@ static void pll_consider_entry(struct pll_consider_data *data,
 		 *
 		 * Note: We break up the calculation in order to avoid a div64.
 		 */
-		clkod_plld = (uint32_t) (entry->plld * entry->clkod);
+		clkod_plld = entry->plld * entry->clkod;
 
 		actual64 = ((uint64_t) (data->input / clkod_plld)) * entry->pllm;
-		rem64 = ((uint64_t) (data->input % clkod_plld)) * entry->pllm;
+		rem64 = (uint64_t)(data->input % clkod_plld) * entry->pllm;
 
-		actual64 += (uint64_t) (((uint32_t) rem64) / clkod_plld);
-		rem = ((uint32_t) rem64) % clkod_plld;
+		actual64 += (uint32_t)rem64 / clkod_plld;
+		rem = (uint32_t)rem64 % clkod_plld;
 
 		if (entry->pllfm != 0UL) {
 			uint64_t fret;
@@ -109,27 +109,27 @@ static void pll_consider_entry(struct pll_consider_data *data,
 			}
 
 			/* Calculate fractional component of frequency */
-			fret = ((uint64_t) (data->input / clkod_plld)) * entry->pllfm;
-			frem = ((uint64_t) (data->input % clkod_plld)) * entry->pllfm;
+			fret = (uint64_t)(data->input / clkod_plld) * entry->pllfm;
+			frem = (uint64_t)(data->input % clkod_plld) * entry->pllfm;
 			if (frem >= clkod_plld) {
-				fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
-				frem = frem % (uint64_t) clkod_plld;
+				fret += (uint32_t)frem / clkod_plld;
+				frem = frem % clkod_plld;
 			}
 
 			fret *= stride;
 			frem *= stride;
 			if (frem >= clkod_plld) {
-				fret += (uint64_t) (((uint32_t) frem) / clkod_plld);
-				frem = (uint64_t) (((uint32_t) frem) % clkod_plld);
+				fret += (uint32_t)frem / clkod_plld;
+				frem = (uint32_t)frem % clkod_plld;
 			}
 
-			frem += (uint64_t) (((uint32_t) (fret & pllfm_mask)) * clkod_plld);
+			frem += (uint32_t)(fret & pllfm_mask) * clkod_plld;
 
 			actual64 += fret >> pllfm_bits;
-			rem += (uint32_t) (frem >> pllfm_bits);
+			rem += (uint32_t)(frem >> pllfm_bits);
 
-			actual64 += (uint64_t) (((uint32_t) rem) / clkod_plld);
-			rem += ((uint32_t) rem) % clkod_plld;
+			actual64 += (uint32_t)rem / clkod_plld;
+			rem += (uint32_t)rem % clkod_plld;
 		}
 
 	}
@@ -215,11 +215,11 @@ static enum consider_result pll_consider(struct pll_consider_data *data,
 		 * avoid a div64. We save the remainder so we can round the
 		 * result down and up.
 		 */
-		result64 = ((uint64_t) (data->input / rem_div)) * curr_pllm;
-		rem64 = ((uint64_t) (data->input % rem_div)) * curr_pllm;
+		result64 = (uint64_t)(data->input / rem_div) * curr_pllm;
+		rem64 = (uint64_t)(data->input % rem_div) * curr_pllm;
 
-		result64 += (uint64_t) (((uint32_t) rem64) / rem_div);
-		rem = ((uint32_t) rem64) % rem_div;
+		result64 += (uint32_t)rem64 / rem_div;
+		rem = (uint32_t)rem64 % rem_div;
 
 		if (curr_pllfm != 0UL) {
 			uint64_t fret;
@@ -231,16 +231,16 @@ static enum consider_result pll_consider(struct pll_consider_data *data,
 			mask = (uint32_t) (1UL << bits) - 1U;
 
 			/* Calculate fractional part of frequency */
-			fret = ((uint64_t) (data->input / rem_div)) * curr_pllfm;
-			frem = ((uint64_t) (data->input % rem_div)) * curr_pllfm;
-			fret += ((uint32_t) frem) / rem_div;
-			frem = (uint64_t) (((uint32_t) frem) % rem_div);
+			fret = (uint64_t)(data->input / rem_div) * curr_pllfm;
+			frem = (uint64_t)(data->input % rem_div) * curr_pllfm;
+			fret += (uint32_t)frem / rem_div;
+			frem = (uint32_t)frem % rem_div;
 
 			/* Fold in multiplier */
 			fret *= stride;
 			frem *= stride;
-			fret += (uint64_t) (((uint32_t) frem) / rem_div);
-			frem = (uint64_t) (((uint32_t) frem) % rem_div);
+			fret += (uint32_t)frem / rem_div;
+			frem = (uint32_t)frem % rem_div;
 
 			/* Fold fractional part back into remainder */
 			frem += (fret & (uint64_t) mask) * rem_div;
@@ -475,12 +475,12 @@ static inline void pll_consider_fractional(struct pll_consider_data *data,
 
 		test_pllm = curr_pllm + stride;
 
-		test_vco = ((uint64_t) (data->input / data->curr_plld)) * test_pllm;
-		test_vco_rem = ((uint64_t) (data->input % data->curr_plld)) * test_pllm;
-		uint32_t extra = ((uint32_t) test_vco_rem) / test_pllm;
+		test_vco = (uint64_t)(data->input / data->curr_plld) * test_pllm;
+		test_vco_rem = (uint64_t)(data->input % data->curr_plld) * test_pllm;
+		uint32_t extra = (uint32_t)test_vco_rem / test_pllm;
 
 		test_vco += extra;
-		test_vco_rem -= (uint64_t) (extra * test_pllm);
+		test_vco_rem -= (uint64_t)(extra * test_pllm);
 		if (test_vco > data->vco_max) {
 			highest_pllfm--;
 		} else if ((test_vco == data->vco->max_hz) && (test_vco_rem != 0UL)) {
@@ -1077,8 +1077,7 @@ static inline void pll_internal_calc(struct pll_consider_data *consider_data)
 					 * Adjust the remainder according to our
 					 * position within the stride.
 					 */
-					frem += (uint64_t) ((ideal_pllm - low_pllm) *
-							    consider_data->input);
+					frem += (ideal_pllm - low_pllm) * consider_data->input;
 					frem /= stride;
 				}
 				estimate_pllfm = (uint32_t) ((frem * input_inverse64) >> 32U);
