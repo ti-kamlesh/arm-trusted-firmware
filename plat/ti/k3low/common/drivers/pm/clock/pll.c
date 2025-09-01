@@ -500,7 +500,7 @@ static inline void pll_consider_fractional(struct pll_consider_data *data,
 	 *
 	 * pllm_rem * pllfm range = pllfm * input
 	 */
-	rem_target = (uint64_t) (((uint64_t) pllm_rem) * (1UL << data->data->pllfm_bits));
+	rem_target = ((uint64_t) pllm_rem) * (1ULL << data->data->pllfm_bits);
 
 	/* Start at the lowest and walk it up to the highest */
 	pllfm_input = ((uint64_t) lowest_pllfm) * data->input;
