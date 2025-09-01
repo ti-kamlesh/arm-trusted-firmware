@@ -20,8 +20,8 @@ int32_t scmi_handler_clock_prepare(uint32_t dev_id, uint32_t clk_id)
 	flags |= TISCI_MSG_FLAG_CLOCK_ALLOW_FREQ_CHANGE;
 	flags |= TISCI_MSG_FLAG_CLOCK_INPUT_TERM;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.hdr.flags = flags;
 	req.hdr.host = HOST_ID_TIFS;
 	req.state = TISCI_MSG_VALUE_CLOCK_SW_STATE_REQ;
@@ -36,8 +36,8 @@ int32_t scmi_handler_clock_unprepare(uint32_t dev_id, uint32_t clk_id)
 
 	flags |= TISCI_MSG_FLAG_CLOCK_ALLOW_FREQ_CHANGE;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.hdr.flags = flags;
 	req.hdr.host = HOST_ID_TIFS;
 	req.state = TISCI_MSG_VALUE_CLOCK_SW_STATE_AUTO;
@@ -51,8 +51,8 @@ int32_t scmi_handler_clock_get_state(uint32_t dev_id, uint32_t clk_id)
 	struct tisci_msg_get_clock_resp resp;
 	int32_t ret;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.hdr.host = HOST_ID_TIFS;
 
 	ret = get_clock_handler(&req);
@@ -69,8 +69,8 @@ int32_t scmi_handler_clock_set_rate(uint32_t dev_id, uint32_t clk_id,
 {
 	struct tisci_msg_set_freq_req req;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.min_freq_hz = target_freq / 10 * 9;
 	req.target_freq_hz = target_freq;
 	req.max_freq_hz = target_freq / 10 * 11;
@@ -84,8 +84,8 @@ uint64_t scmi_handler_clock_get_rate(uint32_t dev_id, uint32_t clk_id)
 	struct tisci_msg_get_freq_resp resp;
 	int32_t ret;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.hdr.host = HOST_ID_TIFS;
 
 	ret = get_freq_handler(&req);
@@ -104,8 +104,8 @@ int32_t scmi_handler_clock_get_num_clock_parents(uint32_t dev_id,
 	struct tisci_msg_get_num_clock_parents_resp resp;
 	int32_t ret;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.hdr.host = HOST_ID_TIFS;
 
 	ret = get_num_clock_parents_handler(&req);
@@ -122,10 +122,10 @@ int32_t scmi_handler_clock_set_clock_parent(uint32_t dev_id, uint32_t clk_id,
 {
 	struct tisci_msg_set_clock_parent_req req;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.hdr.host = HOST_ID_TIFS;
-	req.parent = parent_id;
+	req.parent = (uint8_t)parent_id;
 
 	return set_clock_parent_handler(&req);
 }
@@ -137,8 +137,8 @@ int32_t scmi_handler_clock_get_clock_parent(uint32_t dev_id, uint32_t clk_id,
 	struct tisci_msg_get_clock_parent_resp resp;
 	int32_t status = 0;
 
-	req.device = dev_id;
-	req.clk = clk_id;
+	req.device = (uint8_t)dev_id;
+	req.clk = (uint8_t)clk_id;
 	req.hdr.host = HOST_ID_TIFS;
 
 	status = get_clock_parent_handler(&req);
