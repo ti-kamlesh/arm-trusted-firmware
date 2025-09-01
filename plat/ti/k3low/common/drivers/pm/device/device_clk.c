@@ -736,8 +736,7 @@ void device_clk_init(struct device *dev, dev_clk_idx_t clk_idx)
 		 * For clocks with this flag set, default all dev_clk's to
 		 * allow. Otherwise default all dev_clk's to block.
 		 */
-		if ((clock_data != NULL) && ((clock_data->flags &
-					      CLK_DATA_FLAG_ALLOW_FREQ_CHANGE) != 0UL)) {
+		if ((clock_data->flags & CLK_DATA_FLAG_ALLOW_FREQ_CHANGE) != 0UL) {
 			dev_clkp->flags |= DEV_CLK_FLAG_ALLOW_FREQ_CHANGE;
 		}
 	}
