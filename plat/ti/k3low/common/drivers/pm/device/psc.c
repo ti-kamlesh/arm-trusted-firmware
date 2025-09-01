@@ -881,7 +881,6 @@ static void lpsc_module_clk_put(struct device *dev, struct lpsc_module *mod,
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, mod);
 	const struct lpsc_module_data *data = &psc->mod_data[idx];
-	bool wait_val = wait;
 
 	/* Put clock dependency - currently only one clock supported */
 	if (data->clock_dep[0] != 0U) {
@@ -892,7 +891,7 @@ static void lpsc_module_clk_put(struct device *dev, struct lpsc_module *mod,
 			 * We have to wait for the transition to complete
 			 * taking a clock away.
 			 */
-			if (wait_val) {
+			if (wait) {
 				lpsc_module_wait(dev, mod);
 			}
 			clk_put(clkp);
@@ -1192,8 +1191,6 @@ static int32_t psc_initialize_modules(struct device *dev)
 		if (0U == (psc->mod_data[idx].flags & LPSC_MODULE_EXISTS)) {
 			continue;
 		}
-
-		v = psc_read(dev, PSC_MDCTL((uint32_t) idx));
 
 		i = PSC_TRANSITION_TIMEOUT;
 		i--;
