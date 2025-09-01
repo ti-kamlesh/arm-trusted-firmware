@@ -29,7 +29,7 @@
  *		return 1U << ilog32(i-1);
  *	}
  */
-int ilog32(uint32_t _v) CONST_FUNCTION;
+int32_t ilog32(uint32_t _v) CONST_FUNCTION;
 
 /**
  * ilog32_nz - Integer binary logarithm of a non-zero 32-bit value.
@@ -48,7 +48,7 @@ int ilog32(uint32_t _v) CONST_FUNCTION;
  *		return ilog32_nz(i) - 1;
  *	}
  */
-int ilog32_nz(uint32_t _v) CONST_FUNCTION;
+int32_t ilog32_nz(uint32_t _v) CONST_FUNCTION;
 
 /**
  * ilog64 - Integer binary logarithm of a 64-bit value.
@@ -60,7 +60,7 @@ int ilog32_nz(uint32_t _v) CONST_FUNCTION;
  * See Also:
  *	ilog64_nz(), ilog32()
  */
-int ilog64(uint64_t _v) CONST_FUNCTION;
+int32_t ilog64(uint64_t _v) CONST_FUNCTION;
 
 /**
  * ilog64_nz - Integer binary logarithm of a non-zero 64-bit value.
@@ -72,7 +72,7 @@ int ilog64(uint64_t _v) CONST_FUNCTION;
  * See Also:
  *	ilog64(), ilog32_nz()
  */
-int ilog64_nz(uint64_t _v) CONST_FUNCTION;
+int32_t ilog64_nz(uint64_t _v) CONST_FUNCTION;
 
 /**
  * STATIC_ILOG_32 - The integer logarithm of an (unsigned int, 32-bit) constant.
@@ -108,21 +108,21 @@ int ilog64_nz(uint64_t _v) CONST_FUNCTION;
  */
 #if INT_MAX >= 2147483647 && HAVE_BUILTIN_CLZ
 #define builtin_ilog32_nz(v) \
-	(((int)sizeof(unsigned int)*CHAR_BIT) - __builtin_clz(v))
+	(((int32_t)sizeof(unsigned int)*CHAR_BIT) - __builtin_clz(v))
 #elif LONG_MAX >= 2147483647L && HAVE_BUILTIN_CLZL
 #define builtin_ilog32_nz(v) \
-	(((int)sizeof(unsigned int)*CHAR_BIT) - __builtin_clzl(v))
+	(((int32_t)sizeof(unsigned int)*CHAR_BIT) - __builtin_clzl(v))
 #endif
 
 #if INT_MAX >= 9223372036854775807LL && HAVE_BUILTIN_CLZ
 #define builtin_ilog64_nz(v) \
-	(((int)sizeof(unsigned int)*CHAR_BIT) - __builtin_clz(v))
+	(((int32_t)sizeof(unsigned int)*CHAR_BIT) - __builtin_clz(v))
 #elif LONG_MAX >= 9223372036854775807LL && HAVE_BUILTIN_CLZL
 #define builtin_ilog64_nz(v) \
-	(((int)sizeof(unsigned long)*CHAR_BIT) - __builtin_clzl(v))
+	(((int32_t)sizeof(unsigned long)*CHAR_BIT) - __builtin_clzl(v))
 #elif HAVE_BUILTIN_CLZLL
 #define builtin_ilog64_nz(v) \
-	(((int)sizeof(unsigned long long)*CHAR_BIT) - __builtin_clzll(v))
+	(((int32_t)sizeof(unsigned long long)*CHAR_BIT) - __builtin_clzll(v))
 #endif
 
 #ifndef ILOG_IMPLEMENTATION
