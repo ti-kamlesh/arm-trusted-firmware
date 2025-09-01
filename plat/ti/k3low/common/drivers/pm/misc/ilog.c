@@ -25,10 +25,6 @@ static __maybe_unused const unsigned char DEBRUIJN_IDX32[32] = {
 };
 
 /* We always compile these in, in case someone takes address of function. */
-#undef ilog32_nz
-#undef ilog32
-#undef ilog64_nz
-#undef ilog64
 
 int ilog32(uint32_t _v)
 {
