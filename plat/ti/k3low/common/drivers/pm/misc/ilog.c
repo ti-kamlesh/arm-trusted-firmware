@@ -116,7 +116,7 @@ int ilog64(uint64_t _v)
 	v  |= v >> 8;
 	v  |= v >> 16;
 	v = (v >> 1)+1;
-	ret += (int)DEBRUIJN_IDX32[v*0x77CB531U >> 27&0x1FU];
+	ret += (int)DEBRUIJN_IDX32[(v*0x77CB531U >> 27)&0x1FU];
 	return ret;
 	/*Otherwise do it in one 64-bit operation.*/
 #else
