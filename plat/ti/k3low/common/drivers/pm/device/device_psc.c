@@ -327,17 +327,16 @@ static void soc_device_disable_internal_flags_iterate(struct device *psc_dev,
 		data = psc->mod_data + idx;
 
 		if ((data->flags & LPSC_DEPENDS) != 0UL) {
-			const struct psc_drv_data *depends_psc = psc;
-			struct device *depends_dev = psc_dev;
+			const struct psc_drv_data *depends_psc;
+			struct device *depends_dev;
 
-			if ((depends_dev != NULL) || (depends_psc != NULL)) {
-				depends_dev = psc_lookup((psc_idx_t) data->depends_psc_idx);
+			depends_dev = psc_lookup((psc_idx_t) data->depends_psc_idx);
+			if (depends_dev != NULL) {
 				depends_psc = to_psc_drv_data(get_drv_data(depends_dev));
-			}
-
-			if (depends_dev && module_p) {
-				module_p = depends_psc->modules + (lpsc_idx_t) data->depends;
-				soc_device_disable_internal_flags_iterate(depends_dev, module_p);
+				if (depends_psc != NULL && module_p != NULL) {
+					module_p = depends_psc->modules + (lpsc_idx_t) data->depends;
+					soc_device_disable_internal_flags_iterate(depends_dev, module_p);
+				}
 			}
 		}
 	}
