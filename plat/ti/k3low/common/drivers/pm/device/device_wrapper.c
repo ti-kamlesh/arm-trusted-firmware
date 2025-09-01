@@ -11,8 +11,8 @@
 #include <device_wrapper.h>
 #include <string.h>
 
-#define POWER_STATE_ON	((uint32_t)0U << 30)
-#define POWER_STATE_OFF ((uint32_t)1U << 30)
+#define POWER_STATE_ON	(0U << 30U)
+#define POWER_STATE_OFF (1U << 30U)
 
 int32_t scmi_handler_device_state_set_on(uint32_t dev_id)
 {
