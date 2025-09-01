@@ -194,7 +194,7 @@ static void pd_initiate(struct device *dev, struct psc_pd *pd)
 	}
 
 	/* Note: This is a state machine reg */
-	psc_write(dev, BIT(psc_idx % 32U), psc_ptcmd);
+	psc_write(dev, (uint32_t) BIT(psc_idx % 32U), psc_ptcmd);
 }
 
 /**
@@ -262,7 +262,7 @@ void psc_pd_get(struct device *dev, struct psc_pd *pd)
 				psc_pd_wait(dev, pd);
 			}
 
-			psc->data->pds_enabled |= BIT(idx);
+			psc->data->pds_enabled |= (uint32_t) BIT(idx);
 		}
 	}
 }
@@ -331,7 +331,7 @@ void psc_pd_put(struct device *dev, struct psc_pd *pd)
 							   (pd_idx_t) psc->pd_data[idx].depends));
 			}
 
-			psc->data->pds_enabled &= ~BIT(idx);
+			psc->data->pds_enabled &= ~((uint32_t) BIT(idx));
 		}
 	}
 }
@@ -388,7 +388,7 @@ static void lpsc_module_notify_suspend(struct device *dev, struct lpsc_module *m
 		}
 	}
 
-	psc->data->mods_enabled[idx / 32UL] |= BIT(idx % 32UL);
+	psc->data->mods_enabled[idx / 32UL] |= (uint32_t) BIT(idx % 32UL);
 }
 
 static void lpsc_module_notify_resume(struct device *dev, struct lpsc_module *module)
@@ -398,7 +398,7 @@ static void lpsc_module_notify_resume(struct device *dev, struct lpsc_module *mo
 
 	/* No resume functionality yet required */
 
-	psc->data->mods_enabled[idx / 32UL] &= ~BIT(idx % 32UL);
+	psc->data->mods_enabled[idx / 32UL] &= ~((uint32_t) BIT(idx % 32UL));
 }
 
 /**
