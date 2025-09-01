@@ -119,7 +119,7 @@ static void psc_write(struct device *dev, uint32_t val, uint32_t reg)
 	}
 }
 
-pd_idx_t psc_pd_idx(struct device *dev, struct psc_pd *pd)
+pd_idx_t psc_pd_idx(struct device *dev, const struct psc_pd *pd)
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	ptrdiff_t diff = pd - psc->powerdomains;
@@ -141,7 +141,7 @@ static const struct psc_pd_data *get_psc_pd_data(struct device *dev,
 	return psc->pd_data + psc_pd_idx(dev, pd);
 }
 
-lpsc_idx_t lpsc_module_idx(struct device *dev, struct lpsc_module *module)
+lpsc_idx_t lpsc_module_idx(struct device *dev, const struct lpsc_module *module)
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	ptrdiff_t diff = module - psc->modules;
@@ -778,7 +778,7 @@ bool lpsc_module_get_local_reset(struct device *dev, struct lpsc_module *module)
 }
 
 bool lpsc_module_get_module_reset(struct device *dev __unused,
-				  struct lpsc_module *module)
+				  const struct lpsc_module *module)
 {
 	return module->mrst_active == 1U;
 }
