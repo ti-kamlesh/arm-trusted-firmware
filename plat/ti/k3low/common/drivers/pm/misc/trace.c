@@ -8,16 +8,18 @@
 
 void pm_trace_debug(uint32_t action, uint32_t val)
 {
-	if ((action & TRACE_PM_ACTION_FAIL) != 0U) {
-		action &= ~TRACE_PM_ACTION_FAIL;
+	uint32_t local_action = action;
+
+	if ((local_action & TRACE_PM_ACTION_FAIL) != 0U) {
+		local_action &= ~TRACE_PM_ACTION_FAIL;
 		/* There are few traces with 0x7x values but are
 		 * not ACTION FAIL scenarios
 		 */
-		if (action < 0x31)
+		if (local_action < 0x31U)
 			VERBOSE("ACTION FAIL\n");
 	}
 
-	switch (action) {
+	switch (local_action) {
 	case TRACE_PM_ACTION_DEVICE_ON:
 		VERBOSE("DEVICE_ON\n");
 		VERBOSE("Device ID = %d\n", val);
