@@ -177,7 +177,7 @@ void psc_pd_wait(struct device *dev, struct psc_pd *pd)
 				 (uint32_t) (((uint32_t)
 					      ((to_psc_drv_data(get_drv_data(dev)))->psc_idx) <<
 					      TRACE_PM_VAL_PSC_SHIFT) |
-					     ((uint16_t) psc_pd_idx(dev, pd) <<
+					     ((uint32_t) psc_pd_idx(dev, pd) <<
 					      TRACE_PM_VAL_PD_SHIFT) | TRACE_PM_VAL_PD_POS1));
 		}
 	}
@@ -229,7 +229,7 @@ void psc_pd_get(struct device *dev, struct psc_pd *pd)
 
 	pm_trace(TRACE_PM_ACTION_PD_GET,
 		 ((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-		 (idx << TRACE_PM_VAL_PD_SHIFT) |
+		 ((uint32_t) idx << TRACE_PM_VAL_PD_SHIFT) |
 		 (pd->use_count & TRACE_PM_VAL_MAX_PSC_DATA));
 
 	if ((pd->use_count++) != 0U) {
@@ -299,7 +299,7 @@ void psc_pd_put(struct device *dev, struct psc_pd *pd)
 
 	pm_trace(TRACE_PM_ACTION_PD_PUT,
 		 ((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-		 (idx << TRACE_PM_VAL_PD_SHIFT) |
+		 ((uint32_t) idx << TRACE_PM_VAL_PD_SHIFT) |
 		 (pd->use_count & TRACE_PM_VAL_MAX_PSC_DATA));
 
 	if ((--pd->use_count) != 0U) {
@@ -543,7 +543,7 @@ static void lpsc_module_sync_state(struct device *dev, struct lpsc_module *modul
 		if (!depends_dev) {
 			pm_trace(TRACE_PM_ACTION_PSC_INVALID_DEP_DATA | TRACE_PM_ACTION_FAIL,
 				 (uint32_t) (((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-					     ((uint16_t) data->depends_psc_idx <<
+					     ((uint32_t) data->depends_psc_idx <<
 					      TRACE_PM_VAL_PD_SHIFT) | TRACE_PM_VAL_PD_POS1));
 		} else {
 			/*
@@ -619,7 +619,7 @@ static void lpsc_module_sync_state(struct device *dev, struct lpsc_module *modul
 		if (!depends_dev) {
 			pm_trace(TRACE_PM_ACTION_PSC_INVALID_DEP_DATA | TRACE_PM_ACTION_FAIL,
 				 (uint32_t) (((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-					     ((uint16_t) data->depends_psc_idx <<
+					     ((uint32_t) data->depends_psc_idx <<
 					      TRACE_PM_VAL_PD_SHIFT) |
 					     TRACE_PM_VAL_PD_POS2));
 		} else if (domain_reset && (depends_dev == dev)) {
@@ -896,7 +896,7 @@ static void lpsc_module_get_internal(struct device *dev,
 	if (use) {
 		pm_trace(TRACE_PM_ACTION_MODULE_GET,
 			 ((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-			 ((uint16_t) lpsc_module_idx(dev, module) << TRACE_PM_VAL_LPSC_SHIFT) |
+			 ((uint32_t) lpsc_module_idx(dev, module) << TRACE_PM_VAL_LPSC_SHIFT) |
 			 (module->use_count & TRACE_PM_VAL_MAX_PSC_DATA));
 		module->use_count++;
 		if (module->use_count == 1U) {
@@ -908,7 +908,7 @@ static void lpsc_module_get_internal(struct device *dev,
 	if (ret) {
 		pm_trace(TRACE_PM_ACTION_RETENTION_GET,
 			 (uint32_t) (((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-				     ((uint16_t) lpsc_module_idx(dev, module) <<
+				     ((uint32_t) lpsc_module_idx(dev, module) <<
 				      TRACE_PM_VAL_LPSC_SHIFT) |
 				     (module->ret_count & TRACE_PM_VAL_MAX_PSC_DATA)));
 		module->ret_count++;
@@ -934,7 +934,7 @@ static void lpsc_module_put_internal(struct device *dev,
 	if (use) {
 		pm_trace(TRACE_PM_ACTION_MODULE_PUT,
 			 (uint32_t) (((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-				     ((uint16_t) lpsc_module_idx(dev, module) <<
+				     ((uint32_t) lpsc_module_idx(dev, module) <<
 				      TRACE_PM_VAL_LPSC_SHIFT) |
 				     (module->use_count & TRACE_PM_VAL_MAX_PSC_DATA)));
 		module->use_count--;
@@ -946,7 +946,7 @@ static void lpsc_module_put_internal(struct device *dev,
 	if (ret) {
 		pm_trace(TRACE_PM_ACTION_RETENTION_PUT,
 			 (uint32_t) (((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-				     ((uint16_t) lpsc_module_idx(dev, module) <<
+				     ((uint32_t) lpsc_module_idx(dev, module) <<
 				      TRACE_PM_VAL_LPSC_SHIFT) |
 				     (module->ret_count & TRACE_PM_VAL_MAX_PSC_DATA)));
 		module->ret_count--;
@@ -1072,7 +1072,7 @@ static int32_t psc_initialize_pds(struct device *dev)
 
 		pm_trace(TRACE_PM_ACTION_PD_INIT,
 			 (uint32_t) (((uint32_t) psc->psc_idx << TRACE_PM_VAL_PSC_SHIFT) |
-				     ((uint16_t) idx << TRACE_PM_VAL_PD_SHIFT)));
+				     ((uint32_t) idx << TRACE_PM_VAL_PD_SHIFT)));
 		psc_pd_wait(dev, pd);
 		state = (uint8_t) (psc_read(dev, PSC_PDSTAT((uint32_t) idx)) & PDSTAT_STATE_MASK);
 
@@ -1190,7 +1190,7 @@ static int32_t psc_initialize_modules(struct device *dev)
 		if (i == 0) {
 			pm_trace(TRACE_PM_ACTION_PSC_TRANSITION_TIMEOUT | TRACE_PM_ACTION_FAIL,
 				 (uint32_t) ((((uint32_t) psc->psc_idx) << TRACE_PM_VAL_PSC_SHIFT) |
-					     ((uint16_t) idx << TRACE_PM_VAL_PD_SHIFT) |
+					     ((uint32_t) idx << TRACE_PM_VAL_PD_SHIFT) |
 					     TRACE_PM_VAL_PD_POS3));
 		}
 
