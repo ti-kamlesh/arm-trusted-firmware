@@ -847,10 +847,10 @@ static void lpsc_module_clk_get(struct device *dev, struct lpsc_module *mod)
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, mod);
 	const struct lpsc_module_data *data = &psc->mod_data[idx];
-	uint32_t i;
 
-	for (i = 0U; i < ARRAY_SIZE(data->clock_dep); i++) {
-		struct clk *clkp = clk_lookup(data->clock_dep[i]);
+	/* Get clock dependency - currently only one clock supported */
+	if (data->clock_dep[0] != 0U) {
+		struct clk *clkp = clk_lookup(data->clock_dep[0]);
 
 		if (clkp != NULL) {
 			(void) clk_get(clkp);
@@ -881,11 +881,11 @@ static void lpsc_module_clk_put(struct device *dev, struct lpsc_module *mod,
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, mod);
 	const struct lpsc_module_data *data = &psc->mod_data[idx];
-	uint32_t i;
 	bool wait_val = wait;
 
-	for (i = 0U; i < ARRAY_SIZE(data->clock_dep); i++) {
-		struct clk *clkp = clk_lookup(data->clock_dep[i]);
+	/* Put clock dependency - currently only one clock supported */
+	if (data->clock_dep[0] != 0U) {
+		struct clk *clkp = clk_lookup(data->clock_dep[0]);
 
 		if (clkp != NULL) {
 			/*
@@ -894,7 +894,6 @@ static void lpsc_module_clk_put(struct device *dev, struct lpsc_module *mod,
 			 */
 			if (wait_val) {
 				lpsc_module_wait(dev, mod);
-				wait_val = false;
 			}
 			clk_put(clkp);
 		}
