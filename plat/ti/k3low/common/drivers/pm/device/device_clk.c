@@ -67,7 +67,7 @@ bool device_clk_set_gated(struct device *dev, dev_clk_idx_t clk_idx, bool gated)
 	} else {
 		bool is_gated;
 
-		is_gated = (((uint32_t) (dev_clkp->flags) & DEV_CLK_FLAG_DISABLE) > 0U ?
+		is_gated = ((((uint32_t) (dev_clkp->flags) & DEV_CLK_FLAG_DISABLE) > 0U) ?
 			    true : false);
 		if (is_gated != gated) {
 			is_enabled = (dev->flags & DEV_FLAG_ENABLED_MASK) != 0UL;
