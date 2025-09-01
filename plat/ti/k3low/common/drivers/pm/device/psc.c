@@ -145,7 +145,7 @@ pd_idx_t psc_pd_idx(struct device *dev, const struct psc_pd *pd)
 static inline struct psc_pd *psc_idx2pd(const struct psc_drv_data *psc,
 					pd_idx_t id)
 {
-	return psc->powerdomains + id;
+	return &psc->powerdomains[id];
 }
 
 static const struct psc_pd_data *get_psc_pd_data(struct device *dev,
@@ -153,7 +153,7 @@ static const struct psc_pd_data *get_psc_pd_data(struct device *dev,
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 
-	return psc->pd_data + psc_pd_idx(dev, pd);
+	return &psc->pd_data[psc_pd_idx(dev, pd)];
 }
 
 lpsc_idx_t lpsc_module_idx(struct device *dev, const struct lpsc_module *module)
@@ -167,7 +167,7 @@ lpsc_idx_t lpsc_module_idx(struct device *dev, const struct lpsc_module *module)
 static inline struct lpsc_module *psc_idx2mod(const struct psc_drv_data *psc,
 					      lpsc_idx_t id)
 {
-	return psc->modules + id;
+	return &psc->modules[id];
 }
 
 void psc_pd_wait(struct device *dev, struct psc_pd *pd)
@@ -379,7 +379,7 @@ static void lpsc_module_notify_suspend(struct device *dev, struct lpsc_module *m
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t i;
 	uint32_t idx = lpsc_module_idx(dev, mod);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	struct device *sub_dev;
 
 	/*
@@ -438,7 +438,7 @@ static void lpsc_module_sync_state(struct device *dev, struct lpsc_module *modul
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t mdctl;
 	uint32_t idx = lpsc_module_idx(dev, module);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	struct psc_pd *pd = psc_idx2pd(psc, (pd_idx_t) data->powerdomain);
 	uint8_t state;		     /* Target module state */
 	uint8_t old_state;	     /* Original module state */
@@ -679,7 +679,7 @@ void lpsc_module_set_reset_iso(struct device *dev, struct lpsc_module *module,
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, module);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	bool is_enabled;
 	uint32_t mdctl;
 
@@ -705,7 +705,7 @@ bool lpsc_module_get_reset_iso(struct device *dev, struct lpsc_module *module)
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, module);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	bool ret;
 
 	if (0U == (data->flags & LPSC_HAS_RESET_ISO)) {
@@ -722,7 +722,7 @@ void lpsc_module_set_local_reset(struct device *dev, struct lpsc_module *module,
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, module);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	bool is_enabled;
 	uint32_t mdctl;
 
@@ -781,7 +781,7 @@ bool lpsc_module_get_local_reset(struct device *dev, struct lpsc_module *module)
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, module);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	bool ret;
 
 	if (0U == (data->flags & LPSC_HAS_LOCAL_RESET)) {
@@ -802,7 +802,7 @@ void lpsc_module_wait(struct device *dev, struct lpsc_module *module)
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, module);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	struct psc_pd *pd = psc_idx2pd(psc, (pd_idx_t) data->powerdomain);
 
 	int32_t i = PSC_TRANSITION_TIMEOUT;
@@ -846,7 +846,7 @@ static void lpsc_module_clk_get(struct device *dev, struct lpsc_module *mod)
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, mod);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	uint32_t i;
 
 	for (i = 0U; i < ARRAY_SIZE(data->clock_dep); i++) {
@@ -880,7 +880,7 @@ static void lpsc_module_clk_put(struct device *dev, struct lpsc_module *mod,
 {
 	const struct psc_drv_data *psc = to_psc_drv_data(get_drv_data(dev));
 	uint32_t idx = lpsc_module_idx(dev, mod);
-	const struct lpsc_module_data *data = psc->mod_data + idx;
+	const struct lpsc_module_data *data = &psc->mod_data[idx];
 	uint32_t i;
 	bool wait_val = wait;
 
