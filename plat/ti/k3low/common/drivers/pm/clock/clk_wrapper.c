@@ -71,9 +71,9 @@ int32_t scmi_handler_clock_set_rate(uint32_t dev_id, uint32_t clk_id,
 
 	req.device = (uint8_t)dev_id;
 	req.clk = (uint8_t)clk_id;
-	req.min_freq_hz = target_freq / 10 * 9;
+	req.min_freq_hz = target_freq / 10U * 9U;
 	req.target_freq_hz = target_freq;
-	req.max_freq_hz = target_freq / 10 * 11;
+	req.max_freq_hz = target_freq / 10U * 11U;
 	req.hdr.host = HOST_ID_TIFS;
 
 	return set_freq_handler(&req);
