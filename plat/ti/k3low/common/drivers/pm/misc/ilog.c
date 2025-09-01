@@ -38,7 +38,7 @@ int ilog32(uint32_t _v)
 	int ret;
 	int m;
 
-	ret = _v > 0;
+	ret = (int)(_v > 0);
 	m = (_v > 0xFFFFU)<<4;
 	_v >>  = m;
 	ret |= m;
@@ -57,7 +57,7 @@ int ilog32(uint32_t _v)
 #else
 	int ret;
 
-	ret = _v > 0;
+	ret = (int)(_v > 0);
 	_v |= _v >> 1;
 	_v |= _v >> 2;
 	_v |= _v >> 4;
