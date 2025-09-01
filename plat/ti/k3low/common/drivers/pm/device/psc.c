@@ -22,10 +22,25 @@
 #define PSC_PTCMD_H		0x124U
 #define PSC_PTSTAT		0x128U
 #define PSC_PTSTAT_H		0x12CU
-#define PSC_PDSTAT(domain)	(0x200U + (4U * (domain)))
-#define PSC_PDCTL(domain)	(0x300U + (4U * (domain)))
-#define PSC_MDSTAT(id)		(0x800U + (4U * (id)))
-#define PSC_MDCTL(id)		(0xa00U + (4U * (id)))
+static inline uint32_t PSC_PDSTAT(uint32_t domain)
+{
+	return 0x200U + (4U * domain);
+}
+
+static inline uint32_t PSC_PDCTL(uint32_t domain)
+{
+	return 0x300U + (4U * domain);
+}
+
+static inline uint32_t PSC_MDSTAT(uint32_t id)
+{
+	return 0x800U + (4U * id);
+}
+
+static inline uint32_t PSC_MDCTL(uint32_t id)
+{
+	return 0xa00U + (4U * id);
+}
 
 #define MDSTAT_STATE_MASK		0x3fU
 #define MDSTAT_BUSY_MASK		0x30U
