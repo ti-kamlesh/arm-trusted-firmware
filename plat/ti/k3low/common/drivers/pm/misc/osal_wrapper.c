@@ -5,6 +5,7 @@
  */
 
 #include <drivers/delay_timer.h>
+#include <osal/osal_clock_user.h>
 
 void osal_delay(uint64_t usecs)
 {
