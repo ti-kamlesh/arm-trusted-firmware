@@ -216,7 +216,7 @@ static void psc_pd_clk_get(const struct psc_pd_data *data)
 		struct clk *clkp = clk_lookup(data->clock_dep[i]);
 
 		if (clkp != NULL) {
-			clk_get(clkp);
+			(void) clk_get(clkp);
 		}
 	}
 }
@@ -838,7 +838,7 @@ static void lpsc_module_clk_get(struct device *dev, struct lpsc_module *mod)
 		struct clk *clkp = clk_lookup(data->clock_dep[i]);
 
 		if (clkp != NULL) {
-			clk_get(clkp);
+			(void) clk_get(clkp);
 		}
 	}
 }
