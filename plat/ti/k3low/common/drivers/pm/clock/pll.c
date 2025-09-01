@@ -233,7 +233,7 @@ static enum consider_result pll_consider(struct pll_consider_data *data,
 			/* Calculate fractional part of frequency */
 			fret = (uint64_t)(data->input / rem_div) * curr_pllfm;
 			frem = (uint64_t)(data->input % rem_div) * curr_pllfm;
-			fret += (uint32_t)frem / rem_div;
+			fret += (uint64_t)((uint32_t)frem / rem_div);
 			frem = (uint32_t)frem % rem_div;
 
 			/* Fold in multiplier */
