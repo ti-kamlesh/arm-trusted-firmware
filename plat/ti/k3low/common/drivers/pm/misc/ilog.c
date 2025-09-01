@@ -38,7 +38,7 @@ int ilog32(uint32_t _v)
 	int ret;
 	int m;
 
-	ret = (int)(_v > 0);
+	ret = (int)(_v > 0U);
 	m = (_v > 0xFFFFU)<<4;
 	_v >>  = m;
 	ret |= m;
@@ -63,8 +63,8 @@ int ilog32(uint32_t _v)
 	_v |= _v >> 4;
 	_v |= _v >> 8;
 	_v |= _v >> 16;
-	_v = (_v >> 1)+1;
-	ret += DEBRUIJN_IDX32[(_v*0x77CB531U >> 27)&0x1F];
+	_v = (_v >> 1)+1U;
+	ret += (int)DEBRUIJN_IDX32[(_v*0x77CB531U >> 27)&0x1FU];
 	return ret;
 #endif
 }
@@ -81,7 +81,7 @@ int ilog64(uint64_t _v)
 	int	 ret;
 	int	 m;
 
-	ret = _v > 0;
+	ret = (int)(_v > 0U);
 	m = (_v > 0xFFFFFFFFU)<<5;
 	v = (uint32_t)(_v >> m);
 	ret |= m;
@@ -106,7 +106,7 @@ int ilog64(uint64_t _v)
 	int	 ret;
 	int	 m;
 
-	ret = _v > 0;
+	ret = (int)(_v > 0U);
 	m = (_v > 0xFFFFFFFFU)<<5;
 	v = (uint32_t)(_v >> m);
 	ret |= m;
@@ -116,7 +116,7 @@ int ilog64(uint64_t _v)
 	v  |= v >> 8;
 	v  |= v >> 16;
 	v = (v >> 1)+1;
-	ret += DEBRUIJN_IDX32[v*0x77CB531U >> 27&0x1F];
+	ret += (int)DEBRUIJN_IDX32[v*0x77CB531U >> 27&0x1FU];
 	return ret;
 	/*Otherwise do it in one 64-bit operation.*/
 #else
@@ -135,8 +135,8 @@ int ilog64(uint64_t _v)
 	_v |= _v >> 8;
 	_v |= _v >> 16;
 	_v |= _v >> 32;
-	_v = (_v >> 1)+1;
-	ret += DEBRUIJN_IDX64[(_v*0x218A392CD3D5DBF >> 58)&0x3F];
+	_v = (_v >> 1)+1U;
+	ret += (int)DEBRUIJN_IDX64[(_v*0x218A392CD3D5DBFULL >> 58)&0x3FU];
 	return ret;
 #endif
 #endif
