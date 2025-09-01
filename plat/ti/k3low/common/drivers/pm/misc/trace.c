@@ -8,7 +8,7 @@
 
 void pm_trace_debug(uint32_t action, uint32_t val)
 {
-	if (action & TRACE_PM_ACTION_FAIL) {
+	if ((action & TRACE_PM_ACTION_FAIL) != 0U) {
 		action &= ~TRACE_PM_ACTION_FAIL;
 		/* There are few traces with 0x7x values but are
 		 * not ACTION FAIL scenarios
