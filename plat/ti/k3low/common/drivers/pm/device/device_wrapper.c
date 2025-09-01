@@ -40,13 +40,13 @@ int32_t scmi_handler_device_state_set_off(uint32_t dev_id)
 	return set_device_handler(&req);
 }
 
-unsigned int scmi_handler_device_state_get(uint32_t dev_id)
+uint32_t scmi_handler_device_state_get(uint32_t dev_id)
 {
 	struct tisci_msg_get_device_resp resp = {0};
 	struct tisci_msg_get_device_req req;
 	uint32_t flags = 0;
-	int ret = 0/* SUCCESS */;
-	unsigned int state = POWER_STATE_ON;
+	int32_t ret = 0/* SUCCESS */;
+	uint32_t state = POWER_STATE_ON;
 
 	req.id = dev_id;
 	req.hdr.flags = flags;
