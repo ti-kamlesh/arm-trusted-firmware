@@ -272,5 +272,6 @@ void pm_trace_debug(uint32_t action, uint32_t val)
 		break;
 	default:
 		VERBOSE("Trace not handled\n");
+		break;
 	}
 }
