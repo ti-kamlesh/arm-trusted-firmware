@@ -23,7 +23,7 @@ struct dev_clk *get_dev_clk(struct device *dev, dev_clk_idx_t idx)
 		uint32_t offset = data->dev_clk_idx;
 
 		if (clk_id_valid(devgrp->dev_clk_data[offset + idx].clk)) {
-			ret = devgrp->dev_clk + offset + idx;
+			ret = &devgrp->dev_clk[offset + idx];
 		}
 	}
 
@@ -40,7 +40,7 @@ const struct dev_clk_data *get_dev_clk_data(struct device *dev,
 	if ((idx < data->n_clocks) && (devgrp != NULL)) {
 		uint32_t offset = data->dev_clk_idx;
 
-		ret = devgrp->dev_clk_data + offset + idx;
+		ret = &devgrp->dev_clk_data[offset + idx];
 	}
 
 	return ret;
