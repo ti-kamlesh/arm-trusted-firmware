@@ -26,7 +26,7 @@ void pm_devgroup_set_enabled(devgrp_t groups)
 
 bool pm_devgroup_is_enabled(devgrp_t groups)
 {
-	return (pm_devgroups_enabled & (uint32_t)groups) != 0U;
+	return true;
 }
 
 /**
