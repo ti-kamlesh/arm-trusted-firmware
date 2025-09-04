@@ -42,7 +42,7 @@ int32_t scmi_handler_device_state_set_off(uint32_t dev_id)
 
 unsigned int scmi_handler_device_state_get(uint32_t dev_id)
 {
-	struct tisci_msg_get_device_resp resp = {0};
+	struct tisci_msg_get_device_resp resp;
 	struct tisci_msg_get_device_req req;
 	uint32_t flags = 0;
 	int ret = 0/* SUCCESS */;
