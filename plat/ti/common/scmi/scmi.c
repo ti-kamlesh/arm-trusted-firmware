@@ -15,7 +15,6 @@
 #include <lib/utils_def.h>
 
 #include <clk.h>
-#include <clk_wrapper.h>
 #include <device.h>
 #include <devices.h>
 #include <clocks.h>

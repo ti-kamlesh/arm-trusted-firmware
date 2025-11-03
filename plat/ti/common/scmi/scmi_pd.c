@@ -18,7 +18,7 @@
 #include <lib/utils_def.h>
 
 #include <clk.h>
-#include <device_wrapper.h>
+#include <device_handler.h>
 #include <device.h>
 #include <devices.h>
 #include <clocks.h>
@@ -44,7 +44,8 @@ const char *plat_scmi_pd_get_name(unsigned int agent_id __unused,
 unsigned int plat_scmi_pd_get_state(unsigned int agent_id __unused,
 				    unsigned int pd_id __unused)
 {
-	return scmi_handler_device_state_get(scmi_power_domains[pd_id].id);
+	bool is_on = get_device_handler(scmi_power_domains[pd_id].id);
+	return is_on ? POWER_STATE_ON : POWER_STATE_OFF;
 }
 
 int32_t plat_scmi_pd_set_state(unsigned int agent_id __unused,
@@ -54,19 +55,20 @@ int32_t plat_scmi_pd_set_state(unsigned int agent_id __unused,
 {
 	int ret = SCMI_SUCCESS;
 
-	ret = scmi_handler_device_state_get(scmi_power_domains[pd_id].id);
+	bool current_state = get_device_handler(scmi_power_domains[pd_id].id);
+	unsigned int current_power_state = current_state ? POWER_STATE_ON : POWER_STATE_OFF;
 	/*
 	 * First, check if the device state even needs to be changed, otherwise do nothing and
 	 * return SCMI_SUCCESS
 	 */
-	if (ret == POWER_STATE_ON && state == POWER_STATE_OFF) {
+	if (current_power_state == POWER_STATE_ON && state == POWER_STATE_OFF) {
 		VERBOSE("\n%s: Disabling PD: agent_id = %d, pd = %d, state to set = 0x%x\n",
 			__func__, agent_id, pd_id, state);
-		ret = scmi_handler_device_state_set_off(scmi_power_domains[pd_id].id);
-	} else if (ret == POWER_STATE_OFF && state == POWER_STATE_ON) {
+		ret = set_device_handler(scmi_power_domains[pd_id].id, false);
+	} else if (current_power_state == POWER_STATE_OFF && state == POWER_STATE_ON) {
 		VERBOSE("\n%s: Enabling PD: agent_id = %d, pd = %d, state to set = 0x%x\n",
 			__func__, agent_id, pd_id, state);
-		ret = scmi_handler_device_state_set_on(scmi_power_domains[pd_id].id);
+		ret = set_device_handler(scmi_power_domains[pd_id].id, true);
 	} else {
 		ret = SCMI_SUCCESS;
 	}

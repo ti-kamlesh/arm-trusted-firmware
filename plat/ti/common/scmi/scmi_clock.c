@@ -12,11 +12,12 @@
 #include <lib/utils.h>
 #include <lib/utils_def.h>
 
-#include <clk_wrapper.h>
+#include <clk_handler.h>
 #include <device.h>
 #include <devices.h>
 #include <clocks.h>
 #include <device_clk.h>
+#include <tisci/pm/tisci_pm_clock.h>
 
 #include <scmi_clk_data.h>
 
@@ -48,7 +49,7 @@ int32_t plat_scmi_clock_set_rate(unsigned int agent_id,
 	if (clock == 0)
 		return 0;
 
-	ret = scmi_handler_clock_set_rate(clock->dev_id, clock->clock_id, rate);
+	ret = set_freq_handler(clock->dev_id, clock->clock_id, rate);
 	if (ret) {
 		WARN("%s: Failed to set freq with scmi_id = %d rate = %ld\n",
 		     __func__, scmi_id, rate);
@@ -99,7 +100,7 @@ unsigned long plat_scmi_clock_get_rate(unsigned int agent_id,
 	if (!clock)
 		return SCMI_NOT_SUPPORTED;
 
-	rate = scmi_handler_clock_get_rate(clock->dev_id, clock->clock_id);
+	rate = get_freq_handler(clock->dev_id, clock->clock_id);
 	return rate;
 }
 
@@ -121,12 +122,12 @@ int32_t plat_scmi_clock_get_state(unsigned int agent_id,
 	 * Also, PM framework can return unreq and auto state, linux expect req and auto state,
 	 * for auto and req state, return value is always enabled
 	 */
-	return !!scmi_handler_clock_get_state(clock->dev_id, clock->clock_id);
+	return !!get_clock_handler(clock->dev_id, clock->clock_id);
 }
 
 int32_t plat_scmi_clock_set_state(unsigned int agent_id,
 				  unsigned int scmi_id,
-				  bool enable_not_disable)
+				  bool enable)
 {
 	ti_scmi_clock_t *clock;
 
@@ -135,14 +136,9 @@ int32_t plat_scmi_clock_set_state(unsigned int agent_id,
 		return SCMI_NOT_SUPPORTED;
 
 	VERBOSE("%s: agent_id = %d, scmi_id = %d, enable: %d\n",
-		__func__, agent_id, scmi_id, enable_not_disable);
-	if (enable_not_disable) {
-		return scmi_handler_clock_prepare(clock->dev_id, clock->clock_id);
-	} else {
-		return scmi_handler_clock_unprepare(clock->dev_id, clock->clock_id);
-	}
+		__func__, agent_id, scmi_id, enable);
 
-	return SCMI_INVALID_PARAMETERS;
+	return set_clock_handler(clock->dev_id, clock->clock_id, enable);
 }
 
 int32_t plat_scmi_clock_get_possible_parents(unsigned int agent_id,
@@ -158,8 +154,8 @@ int32_t plat_scmi_clock_get_possible_parents(unsigned int agent_id,
 	if (clock == 0)
 		return SCMI_NOT_FOUND;
 
-	*nb_elts = (uint64_t)scmi_handler_clock_get_num_clock_parents(clock->dev_id,
-									clock->clock_id);
+	*nb_elts = (uint64_t)get_num_clock_parents_handler(clock->dev_id,
+							   clock->clock_id);
 	if (plat_possible_parents) {
 		/*
 		 * It doesn't make sense for a mux to have just 1 parent,
@@ -197,11 +193,11 @@ int32_t plat_scmi_clock_get_parent(unsigned int agent_id,
 	if (clock == 0)
 		return SCMI_NOT_FOUND;
 
-	status = scmi_handler_clock_get_clock_parent(clock->dev_id, clock->clock_id, parent_id);
+	status = get_clock_parent_handler(clock->dev_id, clock->clock_id, parent_id);
 	if (status)
 		return SCMI_GENERIC_ERROR;
 
-	n_parents = scmi_handler_clock_get_num_clock_parents(clock->dev_id, clock->clock_id);
+	n_parents = get_num_clock_parents_handler(clock->dev_id, clock->clock_id);
 	if (n_parents > 1) {
 		/* Loop through the parents to identify the parent that matches the returned ID */
 		for (int i = 1; i <= n_parents; i++) {
@@ -235,8 +231,8 @@ int32_t plat_scmi_clock_set_parent(unsigned int agent_id,
 		return SCMI_NOT_FOUND;
 
 	parent = ti_scmi_get_clock(agent_id, parent_id);
-	status = scmi_handler_clock_set_clock_parent(clock->dev_id, clock->clock_id,
-						     parent->clock_id);
+	status = set_clock_parent_handler(clock->dev_id, clock->clock_id,
+					  parent->clock_id);
 	if (status)
 		return SCMI_GENERIC_ERROR;
 
