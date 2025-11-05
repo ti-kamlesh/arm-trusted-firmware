@@ -17,7 +17,6 @@
 #include <devices.h>
 #include <clocks.h>
 #include <device_clk.h>
-#include <tisci/pm/tisci_pm_clock.h>
 
 #include <scmi_clk_data.h>
 
