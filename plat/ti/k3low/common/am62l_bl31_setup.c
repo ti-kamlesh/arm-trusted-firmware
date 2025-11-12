@@ -6,7 +6,6 @@
  */
 
 #include <common/debug.h>
-#include <device_wrapper.h>
 #include <plat_private.h>
 #include <plat_scmi_def.h>
 #include <ti_sci.h>
