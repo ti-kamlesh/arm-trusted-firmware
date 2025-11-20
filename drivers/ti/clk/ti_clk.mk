@@ -8,5 +8,6 @@ INCLUDES += -Idrivers/ti/common/include \
 	    -Idrivers/ti/common/pm/include \
 	    -Idrivers/ti/clk/include
 
-BL31_SOURCES += drivers/ti/clk/ti_clk_mux.c
+BL31_SOURCES += drivers/ti/clk/ti_clk_mux.c    				\
+		drivers/ti/clk/ti_clk_div.c
 
