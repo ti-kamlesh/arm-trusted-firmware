@@ -10,5 +10,7 @@ INCLUDES += -Idrivers/ti/common/include \
 
 BL31_SOURCES += drivers/ti/clk/ti_clk_mux.c    				\
 		drivers/ti/clk/ti_clk_div.c				\
-		drivers/ti/clk/ti_clk_fixed.c
+		drivers/ti/clk/ti_clk_fixed.c				\
+		drivers/ti/clk/ti_clk_pllctrl.c    			\
+		drivers/ti/clk/ti_pll.c
 
