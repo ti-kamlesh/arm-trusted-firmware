@@ -17,13 +17,13 @@
 #include <lib/utils.h>
 #include <lib/utils_def.h>
 
-#include <clk.h>
 #include <device_handler.h>
 #include <device.h>
 #include <devices.h>
 #include <clocks.h>
 #include <device_clk.h>
 #include <device_pm.h>
+#include <ti_clk.h>
 
 #include <scmi_pd_data.h>
 
