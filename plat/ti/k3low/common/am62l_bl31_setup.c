@@ -69,5 +69,7 @@ int ti_soc_init(void)
 		return ret;
 	}
 
+        clk_handler_init();
+
 	return 0;
 }
