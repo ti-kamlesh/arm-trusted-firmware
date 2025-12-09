@@ -77,11 +77,11 @@ struct scmi_msg_channel *plat_scmi_get_channel(unsigned int agent_id)
 void ti_clk_and_dev_init(void)
 {
 	VERBOSE("%s started!\n", __func__);
-	if (clk_init()) {
+	if (ti_clk_init()) {
 		WARN("%s: Clock init failed!\n", __func__);
 	}
 
-	if (devices_init()) {
+	if (ti_devices_init()) {
 		WARN("%s: Devices init failed!\n", __func__);
 	}
 }

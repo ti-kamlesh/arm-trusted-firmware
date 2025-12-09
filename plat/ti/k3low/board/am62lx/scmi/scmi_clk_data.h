@@ -1,3 +1,7 @@
+#include <scmi_clock.h>
+#include <devices.h>
+#include <clocks.h>
+
 #define AM62L_SCMI_CLOCK(_dev_id, _clock_id, _name)		\
 	{							\
 		.dev_id	= _dev_id,				\
@@ -555,4 +559,6 @@ ti_scmi_clock_t clock_table[] = {
 	// AM62L_SCMI_CLOCK_PARENT(AM62LX_DEV_WKUP_TIMER1_CLKSEL_VD, AM62LX_DEV_WKUP_TIMER1_CLKSEL_VD_CLK_PARENT_GLUELOGIC_RCOSC_CLK_1P0V_97P65K3, str(WKUP_TIMER1_CLKSEL_VD)),
 	// AM62L_SCMI_CLOCK_MUX(AM62LX_DEV_WKUP_TIMER1_CLKSEL_VD, AM62LX_DEV_WKUP_TIMER1_CLKSEL_VD_CLK, str(WKUP_TIMER1_CLKSEL_VD)),
 };
+
+const size_t clock_table_size = ARRAY_SIZE(clock_table);
 

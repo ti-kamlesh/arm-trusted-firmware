@@ -26,6 +26,7 @@ K3_TI_SCI_TRANSPORT	:=	\
 				drivers/ti/ipc/mailbox.c		\
 
 BL31_SOURCES		+=	\
+				drivers/clk/clk.c				\
 				drivers/delay_timer/delay_timer.c		\
 				drivers/delay_timer/generic_delay_timer.c	\
 				${K3_PSCI_SOURCES}				\
