@@ -7,6 +7,5 @@
 PLAT_INCLUDES += -I${PLAT_PATH}/common/pm/include/
 
 include drivers/ti/clk/ti_clk.mk
-include ${PLAT_PATH}/common/pm/clock/clock.mk
 include ${PLAT_PATH}/common/pm/device/device.mk
 
