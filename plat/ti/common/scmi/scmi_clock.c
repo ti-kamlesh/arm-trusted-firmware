@@ -14,10 +14,10 @@
 #include <lib/utils_def.h>
 
 #include <ti_clk_handler.h>
-#include <device.h>
+#include <ti_device.h>
 #include <devices.h>
 #include <clocks.h>
-#include <device_clk.h>
+#include <ti_device_clk.h>
 
 #include <scmi_clk_data.h>
 

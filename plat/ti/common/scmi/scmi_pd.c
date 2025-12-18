@@ -17,12 +17,12 @@
 #include <lib/utils.h>
 #include <lib/utils_def.h>
 
-#include <device_handler.h>
-#include <device.h>
+#include <ti_device_handler.h>
+#include <ti_device.h>
 #include <devices.h>
 #include <clocks.h>
-#include <device_clk.h>
-#include <device_pm.h>
+#include <ti_device_clk.h>
+#include <ti_device_pm.h>
 #include <ti_clk.h>
 
 #include <scmi_pd_data.h>
