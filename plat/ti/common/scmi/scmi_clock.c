@@ -15,8 +15,8 @@
 
 #include <ti_clk_handler.h>
 #include <ti_device.h>
-#include <devices.h>
-#include <clocks.h>
+#include <ti_devices.h>
+#include <ti_clocks.h>
 #include <ti_device_clk.h>
 
 #include <scmi_clk_data.h>

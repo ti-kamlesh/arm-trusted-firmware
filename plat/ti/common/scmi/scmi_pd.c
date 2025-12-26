@@ -19,8 +19,8 @@
 
 #include <ti_device_handler.h>
 #include <ti_device.h>
-#include <devices.h>
-#include <clocks.h>
+#include <ti_devices.h>
+#include <ti_clocks.h>
 #include <ti_device_clk.h>
 #include <ti_device_pm.h>
 #include <ti_clk.h>

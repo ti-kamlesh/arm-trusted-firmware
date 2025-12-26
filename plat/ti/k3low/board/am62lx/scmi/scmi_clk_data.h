@@ -1,6 +1,6 @@
 #include <scmi_clock.h>
-#include <devices.h>
-#include <clocks.h>
+#include <ti_devices.h>
+#include <ti_clocks.h>
 
 #define AM62L_SCMI_CLOCK(_dev_id, _clock_id, _name)		\
 	{							\
