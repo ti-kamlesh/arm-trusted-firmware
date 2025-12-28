@@ -17,7 +17,8 @@ K3_HW_CONFIG_BASE ?= 0x88000000
 $(eval $(call add_define,K3_HW_CONFIG_BASE))
 
 include ${PLAT_PATH}/../common/scmi/ti_scmi.mk
-include ${PLAT_PATH}/common/pm/pm.mk
+include drivers/ti/clk/ti_clk.mk
+include drivers/ti/pd/ti_pd.mk
 include ${PLAT_PATH}/board/am62lx/pm/soc_pm.mk
 
 BL31_SOURCES		+=	\
