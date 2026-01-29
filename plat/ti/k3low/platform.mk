@@ -21,6 +21,7 @@ PLAT_INCLUDES +=	\
 			-Idrivers/scmi-msg				\
 			-Iplat/ti/common/include			\
 			-Iplat/ti/common/scmi				\
+			-I${PLAT_PATH}/common/drivers/fwl		\
 
 K3_PSCI_SOURCES		+=	\
 				${PLAT_PATH}/common/am62l_psci.c	\
@@ -36,3 +37,4 @@ BL31_SOURCES		+=	\
 				${K3_TI_SCI_TRANSPORT}				\
 				${PLAT_PATH}/common/am62l_bl31_setup.c		\
 				${PLAT_PATH}/common/am62l_topology.c		\
+				${PLAT_PATH}/common/drivers/fwl/fwl.c		\
