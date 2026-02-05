@@ -25,6 +25,7 @@
 #include <ti_atomic.h>
 #include <ti_clk_mux.h>
 #include <ti_container_of.h>
+#include <ti_device.h>
 
 uint32_t ti_clk_value_set_freq(struct ti_clk *clkp, uint32_t target_hz,
 			    uint32_t min_hz,
@@ -386,9 +387,23 @@ int32_t ti_clk_init(void)
 {
 	bool progress;
 	bool contents;
+	bool enabled = true;
 	int32_t last_error = 0;
 	uint32_t i;
 	uint32_t clock_count = soc_clock_count;
+
+	for (i = 0U; i < soc_devgroup_count; i++) {
+		devgrp_t devgrp;
+
+		/* Translate compressed internal representation to bitfield */
+		devgrp = (devgrp_t) BIT(i - 1U);
+
+		/* First disabled devgroup, stop at this clock index */
+		if (enabled && !ti_pm_devgroup_is_enabled(devgrp)) {
+			clock_count = soc_devgroups[i].clk_idx;
+			enabled = false;
+		}
+	}
 
 	contents = false;
 	progress = false;
