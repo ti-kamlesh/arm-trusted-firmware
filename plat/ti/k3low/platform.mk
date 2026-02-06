@@ -10,6 +10,9 @@ TARGET_BOARD	?=	am62lx
 # modify BUILD_PLAT to point to board specific build directory
 BUILD_PLAT := $(abspath ${BUILD_BASE})/${PLAT}/${TARGET_BOARD}/${BUILD_TYPE}
 
+# Force inline atomic operations instead of library calls
+TF_CFLAGS_aarch64	+=	-mno-outline-atomics
+
 include plat/ti/common/plat_common.mk
 include ${PLAT_PATH}/board/${TARGET_BOARD}/board.mk
 
