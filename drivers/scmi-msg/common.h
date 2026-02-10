@@ -28,7 +28,6 @@
  */
 #define COPY_NAME_IDENTIFIER(_dst_array, _name)				\
 	do {								\
-		assert(strlen(_name) < sizeof(_dst_array));		\
 		strlcpy((_dst_array), (_name), sizeof(_dst_array));	\
 	} while (0)
 
