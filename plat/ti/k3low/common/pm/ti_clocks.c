@@ -631,11 +631,11 @@ static const struct ti_clk_parent clk_MAIN_OBSCLK0_MUX_SEL_parents[16] = {
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
@@ -679,15 +679,15 @@ static const struct ti_clk_parent clk_MAIN_OBSCLK0_MUX_SEL_parents[16] = {
 		3,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 };
@@ -823,7 +823,7 @@ static const struct ti_clk_parent clk_MAIN_TIMERCLKn_SEL_out0_parents[16] = {
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
@@ -847,19 +847,19 @@ static const struct ti_clk_parent clk_MAIN_TIMERCLKn_SEL_out0_parents[16] = {
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 };
@@ -1113,7 +1113,7 @@ static const struct ti_clk_data_mux_reg clk_data_MCASPn_CLKSEL_AUXCLK_out2 = {
 };
 static const struct ti_clk_parent clk_WKUP_CLKOUT_SEL_parents[8] = {
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
@@ -1211,7 +1211,7 @@ static const struct ti_clk_parent clk_WKUP_GTCCLK_SEL_parents[8] = {
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
@@ -1227,7 +1227,7 @@ static const struct ti_clk_parent clk_WKUP_GTCCLK_SEL_parents[8] = {
 		2,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 };
@@ -1263,7 +1263,7 @@ static const struct ti_clk_parent clk_WKUP_OBSCLK_MUX_SEL_parents[16] = {
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
@@ -1303,23 +1303,23 @@ static const struct ti_clk_parent clk_WKUP_OBSCLK_MUX_SEL_parents[16] = {
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 	{
-		0,
+		CLK_AM62LX_RESERVED,
 		1,
 	},
 };
@@ -3583,6 +3583,11 @@ struct ti_clk soc_clocks[] = {
 			CLK_AM62LX_SAM62_PLL_CTRL_WRAP_WKUP_0_SYSCLKOUT_CLK,
 			1,
 		},
+	},
+	[CLK_AM62LX_RESERVED] = {
+		.flags = 0,
+		.drv = &ti_clk_drv_fixed,
+		.range_idx = AM62LX_FREQ_RANGE_ANY,
 	},
 };
 

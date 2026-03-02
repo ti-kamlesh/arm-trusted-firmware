@@ -91,6 +91,9 @@ struct ti_dev_clk_data {
 	/* For mux, the number of parents, for parents the index for the mux */
 	uint8_t idx;
 
+	/** For mux, the number of reserved parent slots */
+	uint8_t n_reserved_parents;
+
 	/* Which SoC clock this plugs into */
 	uint16_t clk;
 };
@@ -118,10 +121,11 @@ struct ti_dev_clk {
 		  .modify_parent_freq	= 1U }
 
 /* Declare a device clock of type mux */
-#define TI_DEV_CLK_MUX(base, id, parent, _div, n_parents)[(base) + (id)] = \
+#define TI_DEV_CLK_MUX(base, id, parent, _div, n_parents, n_reserved)[(base) + (id)] = \
 		{ .clk = (parent), .div = (_div),			\
 		  .type = TI_DEV_CLK_TABLE_TYPE_MUX,			\
 		  .idx = (n_parents),					\
+		  .n_reserved_parents = (n_reserved),			\
 		  .modify_parent_freq = 1U }
 
 /*
