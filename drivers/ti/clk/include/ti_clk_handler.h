@@ -17,10 +17,10 @@
 #define TI_CLK_HANDLER_H
 
 /**
- *  \brief  Initialize the clock handler and register clk_ops
+ * ti_clk_handler_init() - Initialize the clock handler and register clk_ops
  *
- *  This function registers the TI clock operations with the generic
- *  clock framework. Must be called before using the clock API.
+ * Registers the TI clock operations with the generic clock framework.
+ * Must be called before using the clock API.
  */
 void ti_clk_handler_init(void);
 

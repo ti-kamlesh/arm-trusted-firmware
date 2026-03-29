@@ -33,13 +33,13 @@
 #include <drivers/clk.h>
 #include <scmi_clock.h>
 
-/**
+/*
  * The IP does not require this clock, it can be disabled, regardless of the
  * state of the device
  */
 #define TI_CLOCK_SW_STATE_UNREQ	0
 
-/**
+/*
  * Allow the system controller to automatically manage the state of this clock.
  * If the device is enabled, then the clock is enabled. If the device is set to
  * off or retention, then the clock is internally set as not being required
