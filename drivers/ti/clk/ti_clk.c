@@ -23,6 +23,7 @@
 
 #include <ti_clk.h>
 #include <ti_clk_mux.h>
+#include <ti_device.h>
 
 uint32_t ti_clk_value_set_freq(struct ti_clk *clkp, uint32_t target_hz,
 			       uint32_t min_hz,
@@ -403,6 +404,19 @@ int32_t ti_clk_init(void)
 	struct ti_clk *clkp;
 	uint8_t clk_flags;
 	int32_t curr;
+	devgrp_t devgrp;
+
+	/* soc_devgroups[0] is unused; real entries start at index TI_PM_DEVGRP_00 (1U) */
+	for (i = 1U; i < soc_devgroup_count; i++) {
+		/* Translate compressed internal representation to bitfield */
+		devgrp = (devgrp_t) BIT(i - 1U);
+
+		/* First disabled devgroup, stop at this clock index */
+		if (ti_pm_devgroup_is_enabled(devgrp) == false) {
+			clock_count = soc_devgroups[i].clk_idx;
+			break;
+		}
+	}
 
 	contents = false;
 	progress = false;
