@@ -65,3 +65,10 @@ BL31_SOURCES		+= \
 				${PLAT_PATH}/common/am62l_topology.c \
 				${PLAT_PATH}/common/drivers/firewall/firewall_config.c \
 
+BL1_SOURCES		+= \
+				${PLAT_PATH}/common/am62l_bl1_setup.c \
+				${PLAT_PATH}/common/am62l_psc_minimal.c \
+				plat/ti/common/k3_helpers.S \
+				drivers/io/io_storage.c \
+				${K3_LPDDR4_SOURCES} \
+				${K3_TI_SCI_TRANSPORT} \

@@ -20,6 +20,12 @@
 
 #define WKUP_CTRL_MMR0_DEVICE_RESET_OFFSET	UL(0x54000)
 
+#define BL1_RO_BASE	0x70800000 /* SRAM base address used as readonly segment */
+#define BL1_RO_LIMIT	0x7080BFFF /* end of readonly segment */
+
+#define	BL1_RW_BASE	0x7080D000 /* RW segment for data, stack and others */
+#define	BL1_RW_LIMIT	0x70810000 /* end of RW segment */
+
 #define BL2_BASE	0x80000000 /* BL2 base at start of DDR memory */
 #define BL2_LIMIT	0x100000000 /* BL2 limit */
 
