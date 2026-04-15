@@ -108,7 +108,7 @@ int32_t ti_set_device_handler(uint32_t dev_id, bool enable)
 			}
 			VERBOSE("EXCLUSIVE_BUSY: dev_id=%d req_host=%d holder_host=%d\n",
 				dev_id, host_id, enabled_host_id);
-#endif
+#endif /* LOG_LEVEL >= LOG_LEVEL_VERBOSE */
 			return -EINVAL;
 		}
 	}
@@ -128,11 +128,11 @@ int32_t ti_set_device_handler(uint32_t dev_id, bool enable)
 	}
 
 	/* Ordering to void unnecessary PD transations */
-	if (retention) {
+	if (retention == true) {
 		ti_device_set_retention(dev, retention);
 	}
 	ti_device_set_state(dev, host_idx, enable);
-	if (!retention) {
+	if (retention == false) {
 		ti_device_set_retention(dev, retention);
 	}
 	/* Check the device state after processing device_set_state function */
