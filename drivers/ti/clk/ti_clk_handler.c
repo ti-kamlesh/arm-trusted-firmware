@@ -201,8 +201,8 @@ static int32_t ti_set_freq_handler(uint32_t dev_id, uint32_t clk_id, uint64_t ta
 	}
 
 	if (!ti_device_clk_set_freq(dev, clkidx, (uint32_t) min_freq_hz,
-				 (uint32_t) target_freq,
-				 (uint32_t) max_freq_hz)) {
+				    (uint32_t) target_freq,
+				    (uint32_t) max_freq_hz)) {
 		return -EINVAL;
 	}
 
