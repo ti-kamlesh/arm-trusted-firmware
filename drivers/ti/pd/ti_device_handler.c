@@ -22,14 +22,12 @@
 #include <ti_host_idx_mapping.h>
 #include <ti_psc.h>
 
-#define TI_DEVICE_RESET_ISO	    BIT(9)
 #define TI_DEVICE_HW_STATE_OFF	    0
 #define TI_DEVICE_HW_STATE_TRANS    2
 
 int32_t ti_set_device_handler(uint32_t dev_id, bool enable)
 {
 	struct ti_device *dev = NULL;
-	uint32_t flags = 0U;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 	bool retention;
 	uint8_t host_idx;
@@ -64,64 +62,8 @@ int32_t ti_set_device_handler(uint32_t dev_id, bool enable)
 		return -EINVAL;
 	}
 
-	if ((flags & TI_DEVICE_EXCLUSIVE) != 0UL) {
-		/* Make sure no one else has the device enabled */
-		uint64_t mask = TI_DEV_FLAG_ENABLED_MASK;
-		uint64_t enabled;
-		/* It's ok if we already have the device enabled */
-		mask &= ~TI_DEV_FLAG_ENABLED(host_idx);
-		/* It's also ok if the device in on due to power up en */
-		mask &= ~((uint64_t)TI_DEV_FLAG_POWER_ON_ENABLED);
-		enabled = (dev->flags & mask) >> TI_DEV_FLAG_ENABLED_BIT;
-		if (enabled != 0UL) {
-#if LOG_LEVEL >= LOG_LEVEL_VERBOSE
-			uint8_t i;
-			/*
-			 * Note, rather than trying to fit the enabled
-			 * bit field in the trace message, just pick
-			 * single host to include.
-			 */
-			for (i = 0U; i < (sizeof(enabled) * 8U); i++) {
-				if ((enabled & 1UL) != 0UL) {
-					break;
-				}
-				enabled >>= 1UL;
-			}
-			uint32_t enabled_host_id = 0U;
-			/*
-			 * Do a reverse lookup. Find host ID from
-			 * host index.
-			 */
-			if (i != (sizeof(enabled) * 8U)) {
-				uint8_t j;
-
-				for (j = 0U; j < soc_host_indexes_count; j++) {
-					if (soc_host_indexes[j] == i) {
-						enabled_host_id = j;
-						break;
-					}
-				}
-			}
-			VERBOSE("EXCLUSIVE_BUSY: dev_id=%d req_host=%d holder_host=%d\n",
-				dev_id, host_id, enabled_host_id);
-#endif /* LOG_LEVEL >= LOG_LEVEL_VERBOSE */
-			return -EINVAL;
-		}
-	}
-
-	if ((flags & TI_DEVICE_EXCLUSIVE) != 0UL) {
-		/* Only this host may modify device */
-		dev->exclusive = host_idx;
-	} else {
-		/* Allow any host to modify device */
-		dev->exclusive = 0U;
-	}
-
-	if ((flags & TI_DEVICE_RESET_ISO) != 0UL) {
-		ti_device_set_reset_iso(dev, true);
-	} else {
-		ti_device_set_reset_iso(dev, false);
-	}
+	/* Allow any host to modify device */
+	dev->exclusive = 0U;
 
 	/* Ordering to void unnecessary PD transations */
 	if (retention == true) {
@@ -135,10 +77,9 @@ int32_t ti_set_device_handler(uint32_t dev_id, bool enable)
 	current_device_state = ti_device_get_state(dev);
 	if (state == TI_DEVICE_SW_STATE_ON) {
 		if (current_device_state != TI_DEVICE_HW_STATE_ON) {
-			ret = -EIO;
+			return -EIO;
 		}
-	} else if ((state == TI_DEVICE_SW_STATE_RETENTION) ||
-		   (state == TI_DEVICE_SW_STATE_AUTO_OFF)) {
+	} else {
 		if (current_device_state == TI_DEVICE_HW_STATE_TRANS) {
 			/* Device with multiple psc's might be in transition state during the
 			 * requested state is off/retention because of some psc's sibling devices
@@ -148,11 +89,9 @@ int32_t ti_set_device_handler(uint32_t dev_id, bool enable)
 			 */
 			if (((struct ti_dev_data *)(ti_get_dev_data(dev)))->soc.psc_idx !=
 			      TI_PSC_DEV_MULTIPLE) {
-				ret = -EIO;
+				return -EIO;
 			}
 		}
-	} else {
-		ret = -EIO;
 	}
 
 	return 0;
@@ -195,7 +134,7 @@ bool ti_get_device_handler(uint32_t dev_id)
 	}
 
 	if ((programmed_state == (uint8_t)TI_DEVICE_SW_STATE_ON) &&
-	   (current_state == (uint8_t)TI_DEVICE_HW_STATE_ON)) {
+	    (current_state == (uint8_t)TI_DEVICE_HW_STATE_ON)) {
 		return true;
 	}
 

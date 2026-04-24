@@ -53,7 +53,7 @@ extern const size_t clock_table_size;
 static int32_t ti_set_clock_state(uint32_t dev_id, uint32_t clk_id, bool enable)
 {
 	struct ti_device *dev = NULL;
-	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t) clk_id;
+	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t)clk_id;
 	int32_t ret;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 
@@ -65,27 +65,17 @@ static int32_t ti_set_clock_state(uint32_t dev_id, uint32_t clk_id, bool enable)
 		return ret;
 	}
 
-	if (!ti_device_clk_set_gated(dev, clkidx, false)) {
+	if (!ti_device_clk_set_gated(dev, clkidx, !enable)) {
 		return -EINVAL;
 	}
 
 	return 0;
 }
 
-static int32_t ti_enable_clock_handler(uint32_t dev_id, uint32_t clk_id)
-{
-	return ti_set_clock_state(dev_id, clk_id, true);
-}
-
-static int32_t ti_disable_clock_handler(uint32_t dev_id, uint32_t clk_id)
-{
-	return ti_set_clock_state(dev_id, clk_id, false);
-}
-
 static int32_t ti_get_clock_handler(uint32_t dev_id, uint32_t clk_id)
 {
 	struct ti_device *dev = NULL;
-	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t) clk_id;
+	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t)clk_id;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 	uint8_t prog;
 	int32_t ret;
@@ -97,9 +87,9 @@ static int32_t ti_get_clock_handler(uint32_t dev_id, uint32_t clk_id)
 		return 0;
 	}
 
-	prog = (uint8_t) (ti_device_clk_get_sw_gated(dev, clkidx) ?
-			  TI_CLOCK_SW_STATE_UNREQ :
-			  TI_CLOCK_SW_STATE_AUTO);
+	prog = (uint8_t)(ti_device_clk_get_sw_gated(dev, clkidx) ?
+			 TI_CLOCK_SW_STATE_UNREQ :
+			 TI_CLOCK_SW_STATE_AUTO);
 
 	return (int32_t)prog;
 }
@@ -107,8 +97,8 @@ static int32_t ti_get_clock_handler(uint32_t dev_id, uint32_t clk_id)
 static int32_t ti_set_clock_parent_handler(uint32_t dev_id, uint32_t clk_id, uint32_t parent_id)
 {
 	struct ti_device *dev = NULL;
-	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t) clk_id;
-	ti_dev_clk_idx_t parent = (ti_dev_clk_idx_t) parent_id;
+	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t)clk_id;
+	ti_dev_clk_idx_t parent = (ti_dev_clk_idx_t)parent_id;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 	int32_t ret;
 
@@ -130,7 +120,7 @@ static int32_t ti_set_clock_parent_handler(uint32_t dev_id, uint32_t clk_id, uin
 static int32_t ti_get_clock_parent_handler(uint32_t dev_id, uint32_t clk_id, uint32_t *parent_id)
 {
 	struct ti_device *dev = NULL;
-	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t) clk_id;
+	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t)clk_id;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 	ti_dev_clk_idx_t parent;
 	int32_t ret;
@@ -151,14 +141,14 @@ static int32_t ti_get_clock_parent_handler(uint32_t dev_id, uint32_t clk_id, uin
 		return -EINVAL;
 	}
 
-	*parent_id = (uint32_t) parent;
+	*parent_id = (uint32_t)parent;
 	return 0;
 }
 
 static int32_t ti_get_num_clock_parents_handler(uint32_t dev_id, uint32_t clk_id)
 {
 	struct ti_device *dev = NULL;
-	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t) clk_id;
+	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t)clk_id;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 	ti_dev_clk_idx_t num_parents;
 	int32_t ret;
@@ -177,32 +167,38 @@ static int32_t ti_get_num_clock_parents_handler(uint32_t dev_id, uint32_t clk_id
 		return 0;
 	}
 
-	return (int32_t) num_parents;
+	return (int32_t)num_parents;
 }
 
 static int32_t ti_set_freq_handler(uint32_t dev_id, uint32_t clk_id, uint64_t target_freq)
 {
 	struct ti_device *dev = NULL;
-	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t) clk_id;
-	uint64_t min_freq_hz = target_freq / 10U * 9U;
-	uint64_t max_freq_hz = target_freq / 10U * 11U;
+	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t)clk_id;
+	uint64_t min_freq_hz;
+	uint64_t max_freq_hz;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 	int32_t ret;
 
 	VERBOSE("SET_FREQ: clk_id=%d dev_id=%d\n", clkidx, dev_id);
+
+	if (target_freq > (uint64_t)UINT32_MAX) {
+		return -EINVAL;
+	}
+
+	min_freq_hz = target_freq / 10U * 9U;
+	max_freq_hz = target_freq / 10U * 11U;
+	if (max_freq_hz > (uint64_t)UINT32_MAX) {
+		max_freq_hz = (uint64_t)UINT32_MAX;
+	}
 
 	ret = ti_device_prepare_exclusive(host_id, dev_id, NULL, &dev);
 	if (ret != 0) {
 		return ret;
 	}
 
-	if ((min_freq_hz > target_freq) || (target_freq > max_freq_hz)) {
-		return -EINVAL;
-	}
-
-	if (!ti_device_clk_set_freq(dev, clkidx, (uint32_t) min_freq_hz,
-				    (uint32_t) target_freq,
-				    (uint32_t) max_freq_hz)) {
+	if (!ti_device_clk_set_freq(dev, clkidx, (uint32_t)min_freq_hz,
+				    (uint32_t)target_freq,
+				    (uint32_t)max_freq_hz)) {
 		return -EINVAL;
 	}
 
@@ -212,7 +208,7 @@ static int32_t ti_set_freq_handler(uint32_t dev_id, uint32_t clk_id, uint64_t ta
 static uint64_t ti_get_freq_handler(uint32_t dev_id, uint32_t clk_id)
 {
 	struct ti_device *dev = NULL;
-	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t) clk_id;
+	ti_dev_clk_idx_t clkidx = (ti_dev_clk_idx_t)clk_id;
 	uint8_t host_id = TI_HOST_ID_TIFS;
 	int32_t ret;
 
@@ -244,7 +240,7 @@ static int ti_clk_enable(unsigned long scmi_id)
 		return -EINVAL;
 	}
 
-	return ti_enable_clock_handler(clock->dev_id, clock->clock_id);
+	return ti_set_clock_state(clock->dev_id, clock->clock_id, true);
 }
 
 static void ti_clk_disable(unsigned long scmi_id)
@@ -256,7 +252,7 @@ static void ti_clk_disable(unsigned long scmi_id)
 		return;
 	}
 
-	ti_disable_clock_handler(clock->dev_id, clock->clock_id);
+	ti_set_clock_state(clock->dev_id, clock->clock_id, false);
 }
 
 static bool ti_clk_is_enabled(unsigned long scmi_id)
@@ -291,6 +287,10 @@ static int ti_clk_set_rate(unsigned long scmi_id, unsigned long rate,
 
 	clock = ti_scmi_id_to_clock(scmi_id);
 	if (clock == NULL) {
+		return -EINVAL;
+	}
+
+	if ((rate < clock->rates[0]) || (rate > clock->rates[1])) {
 		return -EINVAL;
 	}
 

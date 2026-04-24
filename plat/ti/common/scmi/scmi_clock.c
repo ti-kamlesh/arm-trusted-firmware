@@ -112,15 +112,6 @@ int32_t plat_scmi_clock_get_state(unsigned int agent_id __unused,
 		return SCMI_NOT_SUPPORTED;
 	}
 
-	/*
-	 * FIXME: clk_is_enabled() conflates enabled state and status in its
-	 * return value; the API should use an output pointer for state and
-	 * return a proper status code. Send an upstream fix.
-	 *
-	 * Also, the PM framework can return unrequested and auto states, but
-	 * Linux expects requested and auto states; for auto and requested
-	 * state the return value is always enabled.
-	 */
 	return clk_is_enabled(scmi_id) ? 1 : 0;
 }
 

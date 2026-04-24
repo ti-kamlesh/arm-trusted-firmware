@@ -8,21 +8,12 @@
  * Device Handler API
  *
  * This header provides device state handler functions and constants for
- * managing device states, retention modes, and exclusive device ownership
- * as part of the power management subsystem.
+ * managing device states and retention modes as part of the power management
+ * subsystem.
  */
 
 #ifndef TI_DEVICE_HANDLER_H
 #define TI_DEVICE_HANDLER_H
-
-/*
- * Claim a device exclusively. When passed with STATE_RETENTION or STATE_ON,
- * it will claim the device exclusively. If another host already has this
- * device set to STATE_RETENTION or STATE_ON, the message will fail. Once
- * successful, other hosts attempting to set STATE_RETENTION or STATE_ON
- * will fail.
- */
-#define TI_DEVICE_EXCLUSIVE	      BIT(10)
 
 /*
  * Turn device off when possible. This must be used in conjunction with
